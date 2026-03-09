@@ -24,16 +24,18 @@ Adds 6 slash commands to any Claude Code project:
 
 ## Install
 
+**One-liner** (run from your project directory):
+
 ```bash
-git clone https://github.com/YOUR_USERNAME/quangflow.git
-cd quangflow
-bash install.sh /path/to/your/project
+curl -fsSL https://raw.githubusercontent.com/DuongMQuang/quangflow/main/remote-install.sh | bash
 ```
 
-Or from within your project:
+**Manual**:
 
 ```bash
-bash /path/to/quangflow/install.sh .
+git clone https://github.com/DuongMQuang/quangflow.git
+cd quangflow
+bash install.sh /path/to/your/project
 ```
 
 ### What Gets Installed
