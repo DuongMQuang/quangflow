@@ -27,12 +27,12 @@ echo ""
 
 # QuangFlow files to remove
 COMMANDS=(
-  "qf-1.md"
-  "qf-2.md"
-  "qf-3.md"
-  "qf-4.md"
-  "qf-c.md"
-  "qf-s.md"
+  "qf-1::brainstorm.md"
+  "qf-2::design.md"
+  "qf-3::handoff.md"
+  "qf-4::verify.md"
+  "qf-c::cook.md"
+  "qf-s::status.md"
 )
 
 AGENTS=(

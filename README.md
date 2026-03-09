@@ -8,12 +8,12 @@ Adds 6 slash commands to any Claude Code project:
 
 | Command | Phase | Purpose |
 |---------|-------|---------|
-| `/qf-1 <idea>` | 1. Requirements | Clarifying questions, edge cases, milestone splits, team composition |
-| `/qf-2` | 2. Design | Architecture options with trade-offs, design pattern research, scalability gates |
-| `/qf-3` | 3. Handoff | Execution artifacts (ROADMAP, REQUIREMENTS finalization), SHIP/REFINE/SOLO gate |
-| `/qf-4` | 4. Verify | Test generation, requirements traceability, gap detection, remediation |
-| `/qf-c` | Orchestrator | Launches agent team pipeline (domain-engineer -> devs -> tech-lead -> tester -> PM) |
-| `/qf-s` | Status | Session-aware status reporter with resume context |
+| `/qf-1::brainstorm <idea>` | 1. Requirements | Clarifying questions, edge cases, milestone splits, team composition |
+| `/qf-2::design` | 2. Design | Architecture options with trade-offs, design pattern research, scalability gates |
+| `/qf-3::handoff` | 3. Handoff | Execution artifacts (ROADMAP, REQUIREMENTS finalization), SHIP/REFINE/SOLO gate |
+| `/qf-4::verify` | 4. Verify | Test generation, requirements traceability, gap detection, remediation |
+| `/qf-c::cook` | Orchestrator | Launches agent team pipeline (domain-engineer -> devs -> tech-lead -> tester -> PM) |
+| `/qf-s::status` | Status | Session-aware status reporter with resume context |
 
 ## Philosophy
 
@@ -62,7 +62,7 @@ Removes commands and agent files. Leaves `CLAUDE.md` and `plans/` intact.
 ```
 cd your-project
 claude
-/qf-1 user authentication with OAuth2 and JWT
+/qf-1::brainstorm user authentication with OAuth2 and JWT
 ```
 
 The PM will ask clarifying questions in batches, challenge your assumptions, recommend milestone splits, and suggest a team composition. Follow the phases:
@@ -114,8 +114,8 @@ plans/my-feature/
 - **Design pattern research**: Phase 2 evaluates applicable patterns (Repository, CQRS, etc.) with YAGNI checks.
 - **Test dependency chains**: Phase 4 runs tests in order (infra -> models -> services -> endpoints -> E2E), marks downstream tests as BLOCKED on failure.
 - **Gap detection**: Tech-lead classifies gaps as minor (fix inline) or major (remediation phase). User decides ADD/DEFER/IGNORE.
-- **Session resume**: `/qf-s` reads STATUS.md and tells you exactly where you left off and what command to run next.
-- **Context save**: `/qf-s save` snapshots state before `/clear` or `/exit`.
+- **Session resume**: `/qf-s::status` reads STATUS.md and tells you exactly where you left off and what command to run next.
+- **Context save**: `/qf-s::status save` snapshots state before `/clear` or `/exit`.
 - **Per-agent token tracking**: Pipeline logs each agent's token usage, tool calls, and duration to STATUS.md.
 - **Critical thinking**: Challenges assumptions in ALL phases, not just brainstorm.
 

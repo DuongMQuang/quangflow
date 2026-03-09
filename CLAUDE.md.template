@@ -5,7 +5,7 @@
 
 ## Conventions
 - All phase artifacts save to ./plans/{feature-slug}/
-- Feature slug derived from `/qf-1` arguments (kebab-case)
+- Feature slug derived from `/qf-1::brainstorm` arguments (kebab-case)
 - Milestone artifacts save to ./plans/{feature-slug}/milestone-{N}/
 
 ## Milestone System
@@ -41,14 +41,14 @@ Each milestone runs the full phase flow but scoped to its subset of requirements
 
 ## Phase Workflow
 This project uses a 4-phase QuangFlow per milestone:
-1. `/qf-1 <idea>` — requirements discovery + milestone split + team suggestion
-2. `/qf-2` — structural options + trade-offs + team refinement (per milestone)
-3. `/qf-3` — execution artifacts + SHIP/REFINE/SOLO gate (per milestone)
-4. `/qf-4` — QA/QC: tests, traceability, gap detection, remediation (per milestone)
+1. `/qf-1::brainstorm <idea>` — requirements discovery + milestone split + team suggestion
+2. `/qf-2::design` — structural options + trade-offs + team refinement (per milestone)
+3. `/qf-3::handoff` — execution artifacts + SHIP/REFINE/SOLO gate (per milestone)
+4. `/qf-4::verify` — QA/QC: tests, traceability, gap detection, remediation (per milestone)
 
 ### Supporting Commands
-- `/qf-c` — Team pipeline orchestrator (domain-engineer -> devs -> tech-lead -> tester -> PM)
-- `/qf-s` — NPC status reporter: progress, session resume, next command
+- `/qf-c::cook` — Team pipeline orchestrator (domain-engineer -> devs -> tech-lead -> tester -> PM)
+- `/qf-s::status` — NPC status reporter: progress, session resume, next command
 
 For milestone-2+, Phase 1 runs as scoped confirmation (not full brainstorm from scratch).
 
@@ -79,8 +79,8 @@ When user proposes a design, workflow, or architectural decision, you MUST:
 - If user says "just do it" mid-phase: flag what's being skipped, log to OPEN_QUESTIONS.md
 
 ### Rewind
-- If Phase 4 finds requirement-level issues, user can re-run `/qf-1` to revise
-- If Phase 4 finds code-level bugs only, fix and re-run `/qf-4`
+- If Phase 4 finds requirement-level issues, user can re-run `/qf-1::brainstorm` to revise
+- If Phase 4 finds code-level bugs only, fix and re-run `/qf-4::verify`
 
 ### Context Management
 - Monitor context window usage throughout the session
