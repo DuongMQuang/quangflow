@@ -58,9 +58,9 @@ EXISTING_COMMANDS=0
 EXISTING_AGENTS=0
 
 if [ -d "$COMMANDS_DIR" ]; then
-  for f in "$SCRIPT_DIR/commands/"*.md; do
-    fname="$(basename "$f")"
-    if [ -f "$COMMANDS_DIR/$fname" ]; then
+  for d in "$SCRIPT_DIR/commands/"*/; do
+    dname="$(basename "$d")"
+    if [ -d "$COMMANDS_DIR/$dname" ]; then
       EXISTING_COMMANDS=$((EXISTING_COMMANDS + 1))
     fi
   done
@@ -91,14 +91,18 @@ mkdir -p "$COMMANDS_DIR"
 mkdir -p "$AGENTS_DIR"
 mkdir -p "$PLANS_DIR"
 
-# --- Copy commands ---
+# --- Copy commands (subdirectory structure for cross-platform compatibility) ---
 info "Installing commands..."
 CMD_COUNT=0
-for f in "$SCRIPT_DIR/commands/"*.md; do
-  fname="$(basename "$f")"
-  cp "$f" "$COMMANDS_DIR/$fname"
-  ok "  $fname"
-  CMD_COUNT=$((CMD_COUNT + 1))
+for d in "$SCRIPT_DIR/commands/"*/; do
+  dname="$(basename "$d")"
+  mkdir -p "$COMMANDS_DIR/$dname"
+  for f in "$d"*.md; do
+    fname="$(basename "$f")"
+    cp "$f" "$COMMANDS_DIR/$dname/$fname"
+    ok "  $dname/$fname"
+    CMD_COUNT=$((CMD_COUNT + 1))
+  done
 done
 
 # --- Copy agent instructions ---

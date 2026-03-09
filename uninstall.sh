@@ -25,14 +25,14 @@ echo ""
 echo -e "${YELLOW}Target:${NC} $TARGET_DIR"
 echo ""
 
-# QuangFlow files to remove
-COMMANDS=(
-  "qf-1::brainstorm.md"
-  "qf-2::design.md"
-  "qf-3::handoff.md"
-  "qf-4::verify.md"
-  "qf-c::cook.md"
-  "qf-s::status.md"
+# QuangFlow directories/files to remove
+COMMAND_DIRS=(
+  "qf-1"
+  "qf-2"
+  "qf-3"
+  "qf-4"
+  "qf-c"
+  "qf-s"
 )
 
 AGENTS=(
@@ -52,10 +52,10 @@ fi
 echo ""
 REMOVED=0
 
-for f in "${COMMANDS[@]}"; do
-  if [ -f "$CLAUDE_DIR/commands/$f" ]; then
-    rm "$CLAUDE_DIR/commands/$f"
-    echo -e "  ${RED}removed${NC} commands/$f"
+for d in "${COMMAND_DIRS[@]}"; do
+  if [ -d "$CLAUDE_DIR/commands/$d" ]; then
+    rm -rf "$CLAUDE_DIR/commands/$d"
+    echo -e "  ${RED}removed${NC} commands/$d/"
     REMOVED=$((REMOVED + 1))
   fi
 done

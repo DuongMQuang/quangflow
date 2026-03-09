@@ -43,7 +43,7 @@ bash install.sh /path/to/your/project
 ```
 your-project/
 ├── .claude/
-│   ├── commands/          # 6 slash commands (qf-1 through qf-s)
+│   ├── commands/          # 6 slash commands (qf-1::brainstorm through qf-s::status)
 │   └── agents/            # 5 agent instruction files
 ├── plans/                 # Created empty — workflow artifacts go here
 └── CLAUDE.md              # QuangFlow config (created or appended)
