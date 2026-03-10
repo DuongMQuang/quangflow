@@ -1,9 +1,10 @@
 You are now entering Phase 4: Verify & QA.
 
 ## State Check
-- Scan ./plans/ for feature directories with finalized REQUIREMENTS.md and milestone directories containing ROADMAP.md
+- **Find project root**: Walk up from CWD looking for `./plans/` directory (check parent dirs up to 3 levels). Use the directory containing `./plans/` as project root.
+- Scan `{project-root}/plans/` for feature directories with finalized REQUIREMENTS.md and milestone directories containing ROADMAP.md
 - If multiple features found, ask user which feature
-- If missing, tell user: "No finalized requirements found. Run `/qf-3` first."
+- If missing, tell user: "No finalized requirements found. Run `/qf-3::handoff` first."
 
 ## Milestone Detection
 - Find the next milestone with ROADMAP.md but no QA-REPORT.md
@@ -12,7 +13,7 @@ You are now entering Phase 4: Verify & QA.
 
 ## Pre-flight: Implementation Check
 - Check if source code exists for this milestone's features
-- If no implementation found, tell user: "No implementation detected. Implement ROADMAP.md phases first, then re-run `/qf-4`."
+- If no implementation found, tell user: "No implementation detected. Implement ROADMAP.md phases first, then re-run `/qf-4::verify`."
 - Do NOT proceed if there's nothing to verify
 
 ## Pre-flight: Existing Tests Check
@@ -98,7 +99,7 @@ Present QA-REPORT.md + GAPS.md summary to user.
 - "All milestone-{N} requirements verified. No major gaps. Type SHIP to finalize."
 
 **If any FAIL:**
-- "Found test failures. Fix code and re-run `/qf-4`, or re-run `/qf-1` to revise requirements."
+- "Found test failures. Fix code and re-run `/qf-4::verify`, or re-run `/qf-1::brainstorm` to revise requirements."
 
 **If major gaps found:**
 - "Found {N} major gap(s) requiring attention:
@@ -111,7 +112,7 @@ Present QA-REPORT.md + GAPS.md summary to user.
 
 **If ADD selected for any gap:**
 - Append remediation phase(s) to ROADMAP.md
-- Tell user: "Remediation phase(s) added. Implement them, then re-run `/qf-4` to validate."
+- Tell user: "Remediation phase(s) added. Implement them, then re-run `/qf-4::verify` to validate."
 - Agent waits for re-run — does NOT auto-SHIP
 
 **If all gaps resolved (DEFER/IGNORE/previously ADDed and verified):**
@@ -144,5 +145,17 @@ When writing files, save silently. Do NOT print file contents to console — jus
 
 ## Next Step
 When user types SHIP:
-- If more milestones remain: "Milestone-{N} shipped! Next: run `/qf-2` to start milestone-{N+1}."
-- If last milestone: "All milestones complete. Project is verified and ready to ship."
+
+**If more milestones remain:**
+```
+Milestone-{N} shipped!
+**Next:** `/qf-2::design` — Design architecture for milestone-{N+1}
+  ↳ Skip? Jump to `/qf-3::handoff` if reusing same architecture (confirm first)
+  ↳ Also available: `/qf-s::status` (check status), `/qf-s::status save` (save context)
+```
+
+**If last milestone:**
+```
+All milestones complete. Project is verified and ready to ship.
+  ↳ Also available: `/qf-s::status` (final status), `/qf-s::status save` (archive context)
+```

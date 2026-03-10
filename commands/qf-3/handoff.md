@@ -1,10 +1,11 @@
 You are now entering Phase 3: Execution Handoff.
 
 ## State Check
-- Scan ./plans/ for feature directories with REQUIREMENTS.md and milestone directories containing DESIGN.md
+- **Find project root**: Walk up from CWD looking for `./plans/` directory (check parent dirs up to 3 levels). Use the directory containing `./plans/` as project root.
+- Scan `{project-root}/plans/` for feature directories with REQUIREMENTS.md and milestone directories containing DESIGN.md
 - If multiple features found, ask user which feature
-- If missing DESIGN.md, tell user: "No design found. Run `/qf-2` first."
-- If missing REQUIREMENTS.md, tell user: "No requirements found. Run `/qf-1 <idea>` first."
+- If missing DESIGN.md, tell user: "No design found. Run `/qf-2::design` first."
+- If missing REQUIREMENTS.md, tell user: "No requirements found. Run `/qf-1::brainstorm <idea>` first."
 
 ## Milestone Detection
 - Find the next milestone with DESIGN.md but no ROADMAP.md
@@ -92,8 +93,8 @@ After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` sett
    - Fall through to solo Next Step below
 
 6. On **SHIP**:
-   - Invoke `/qf-c ./plans/{feature-slug}/milestone-{N}/ROADMAP.md`
-   - `/qf-c` reads `team_composition` from REQUIREMENTS.md and executes the full pipeline
+   - Invoke `/qf-c::cook ./plans/{feature-slug}/milestone-{N}/ROADMAP.md`
+   - `/qf-c::cook` reads `team_composition` from REQUIREMENTS.md and executes the full pipeline
 
 7. **Domain Engineer Phase** (before devs start):
    If `domain-engineer` is in team_composition and not removed by user:
@@ -215,7 +216,7 @@ After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` sett
      - Changelog entries to add
 
      **Next Steps**
-     - Recommended actions before `/qf-4`
+     - Recommended actions before `/qf-4::verify`
      - If more milestones: what's needed for milestone-{N+1}
 
      **Session Resume** (for new session context)
@@ -227,7 +228,7 @@ After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` sett
      - Blockers: anything that needs user attention before resuming
 
    - Lead presents STATUS.md summary to user
-   - Tell user: "Implementation and testing complete. Status report at `plans/{slug}/milestone-{N}/STATUS.md`. Run `/qf-4` for final QA/QC and human verification."
+   - Tell user: "Implementation and testing complete. Status report at `plans/{slug}/milestone-{N}/STATUS.md`. Run `/qf-4::verify` for final QA/QC and human verification."
 
    **PM can also be spawned on-demand** by the lead at any checkpoint during the pipeline:
    - After domain-engineer completes (design checkpoint)
@@ -251,7 +252,20 @@ When a new session starts and user asks "where was I?" or similar:
 4. User can then run the suggested command to pick up where they left off
 
 ## Next Step
-Tell user: "Phase 3 complete for milestone-{N}. Artifacts saved to `./plans/{feature-slug}/milestone-{N}/`. Next steps:
-- **Solo:** Implement ROADMAP.md phases, then run `/qf-4` to QA/QC.
-- **Team:** Run `/qf-c ./plans/{feature-slug}/milestone-{N}/ROADMAP.md` to launch the team pipeline.
-After milestone-{N} is shipped, run `/qf-2` for milestone-{N+1} (if applicable)."
+Tell user: "Phase 3 complete for milestone-{N}. Artifacts saved to `./plans/{feature-slug}/milestone-{N}/`."
+
+Then suggest next command based on mode:
+
+**If team_mode: true:**
+```
+**Next:** `/qf-c::cook ./plans/{feature-slug}/milestone-{N}/ROADMAP.md` — Launch team pipeline (domain-engineer → devs → tech-lead → tester)
+  ↳ Skip? You can implement manually (Solo mode) — run `/qf-4::verify` after implementing
+  ↳ Also available: `/qf-s::status` (check status), `/qf-s::status save` (save context)
+```
+
+**If team_mode: false (Solo):**
+```
+**Next:** Implement ROADMAP.md phases manually, then run `/qf-4::verify` — QA/QC verification
+  ↳ Skip? `/qf-4::verify` can be skipped but gaps may go undetected
+  ↳ Also available: `/qf-s::status` (check status), `/qf-s::status save` (save context)
+```

@@ -12,7 +12,7 @@ When spawning a teammate, READ their instruction file and include it in the prom
 
 ## Pre-flight
 1. Read REQUIREMENTS.md for `team_mode` and `team_composition`
-2. If `team_mode: false` or missing: "Team mode not enabled. Enable in `/qf-1` or `/qf-3`."
+2. If `team_mode: false` or missing: "Team mode not enabled. Enable in `/qf-1::brainstorm` or `/qf-3::handoff`."
 3. Read ROADMAP.md for the current milestone
 4. Read DESIGN.md for architecture context
 5. Read CONTEXT.md if exists (locked decisions)
@@ -20,7 +20,7 @@ When spawning a teammate, READ their instruction file and include it in the prom
 
 ## Arguments
 ```
-/qf-c ./plans/{feature-slug}/milestone-{N}/ROADMAP.md
+/qf-c::cook ./plans/{feature-slug}/milestone-{N}/ROADMAP.md
 ```
 If no argument provided, auto-detect from `./plans/` (latest milestone without QA-REPORT.md).
 
@@ -138,7 +138,7 @@ After EACH agent completes, log its usage stats from the Agent tool response:
 Tell user:
 "Team pipeline complete for milestone-{N}.
 - STATUS.md: `plans/{slug}/milestone-{N}/STATUS.md`
-- Next: run `/qf-4` for final QA/QC."
+- Next: run `/qf-4::verify` for final QA/QC."
 
 Then print the Agent Usage table.
 

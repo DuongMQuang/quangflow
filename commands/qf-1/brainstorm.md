@@ -218,7 +218,14 @@ If multiple milestones, create milestone directories: ./plans/{feature-slug}/mil
 When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.
 
 ## Next Step
-Tell user: "Phase 1 complete. Draft saved to `./plans/{feature-slug}/REQUIREMENTS.md` with [N] milestone(s). Next: run `/qf-2` to explore architecture options for milestone-1."
+Tell user: "Phase 1 complete. Draft saved to `./plans/{feature-slug}/REQUIREMENTS.md` with [N] milestone(s)."
+
+Then suggest next command:
+```
+**Next:** `/qf-2::design` — Explore architecture options for milestone-1
+  ↳ Skip? Jump to `/qf-3::handoff` if you already know the architecture (not recommended for complex projects)
+  ↳ Also available: `/qf-s::status` (check status), `/qf-s::status save` (save context)
+```
 
 Start by asking the first batch of clarifying questions about:
 $ARGUMENTS
