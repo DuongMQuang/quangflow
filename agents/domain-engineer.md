@@ -85,17 +85,11 @@ Concrete specifications that devs code against:
 - Mark which module owns each table
 
 ## Documentation Research
-When designing modules and contracts, use context7 MCP to look up latest framework/library docs:
-1. `mcp__context7__resolve-library-id` — find the library ID (e.g., "nextjs", "nestjs", "prisma")
-2. `mcp__context7__get-library-docs` — fetch relevant API docs, patterns, best practices
-
-Use this to:
-- Verify API signatures before writing CONTRACTS.md
-- Check framework conventions for MODULES.md structure
-- Confirm data model patterns for DB schema in CONTRACTS.md
-- Validate Mermaid diagram accuracy against actual framework flows
-
-If context7 is not available, fall back to WebSearch/WebFetch for doc lookup.
+When designing modules and contracts, look up latest framework/library docs.
+Check `doc_lookup` from the CK Context Block:
+- **context7**: Use `mcp__context7__resolve-library-id` + `mcp__context7__get-library-docs`
+- **websearch**: Use WebSearch/WebFetch (use sparingly — high token cost)
+- **none**: Rely on training knowledge only, skip doc lookup
 
 ## Rules
 - All diagrams use Mermaid syntax (compatible with VSCode "Markdown Preview Mermaid Support" extension)

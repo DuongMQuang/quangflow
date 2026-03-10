@@ -11,6 +11,11 @@ This command can be run at ANY time, in ANY session.
 4. If no plans exist: "No active projects. Run `/qf-1::brainstorm <idea>` to start."
 5. If multiple features found: list them and ask which one
 
+## Version Check
+- Read `{project-root}/.claude/.quangflow-version` if it exists
+- Display version in status header: `**QuangFlow:** v{version}`
+- If file missing: display `**QuangFlow:** version unknown`
+
 ## Status Report
 Read the latest STATUS.md and present:
 
@@ -96,8 +101,10 @@ When ALL milestones have QA-REPORT.md (project is shipped), check for BUGLOG.md:
 ## Team Status
 If REQUIREMENTS.md has `team_mode: true`:
 - List team composition with roles
+- Read `PIPELINE-STATE.md` (if exists) for last completed stage and resume command
 - Report which pipeline stage was last active
 - Note if any agent tasks are pending/blocked
+- If pipeline was interrupted: show resume command from PIPELINE-STATE.md
 
 ## Multi-Milestone View
 If project has multiple milestones, show overview:
@@ -153,6 +160,18 @@ Examples:
 - **Next:** `/qf-5::maintain scan` — Scan logs for new bugs since last check
   ↳ Skip? New errors may go unnoticed.
   ↳ Also available: `/qf-5::maintain fix BUG-XXX` (fix specific bug), `/qf-s::status save` (save context)
+
+## Session Resume Protocol
+When a new session starts and user asks "where was I?", "status", or similar:
+1. Scan `./plans/` for feature directories with STATUS.md files
+2. Read the most recent STATUS.md -> "Session Resume" section
+3. Present to user:
+   - "**Project:** {feature-slug}"
+   - "**Milestone:** {N} of {total}"
+   - "**Last completed:** {last action}"
+   - "**Next command:** `{resume command}`"
+   - "**Blockers:** {any blockers or 'none'}"
+4. User can then run the suggested command to pick up where they left off
 
 ## Output Style
 - Keep it concise — this is a quick status check, not a full report

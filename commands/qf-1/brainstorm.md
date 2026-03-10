@@ -1,9 +1,117 @@
 You are now entering Phase 1: Requirements Brainstorm.
 
+## Quick Mode Detection (do this FIRST)
+Before starting the full brainstorm, analyze $ARGUMENTS for scope:
+
+**Signals of a small task** (any 2+ of these):
+- Description is 1 sentence or fewer
+- Mentions a single file, component, or endpoint
+- Uses words like "fix", "tweak", "add button", "update text", "change color"
+- No mention of multiple modules, services, or user roles
+- No mention of auth, database schema, or API design
+
+**If small task detected:**
+"This sounds like a small task. I can handle it in quick mode (skip design, milestones, team setup) or run the full brainstorm.
+
+- **Quick** — `/qf-q::quick {arguments}` (single-pass, solo, fast)
+- **Full** — Continue with full Phase 1 brainstorm (thorough, multi-round)
+
+Which do you prefer?"
+
+If user picks Quick: tell them to run `/qf-q::quick {arguments}` and stop.
+If user picks Full: proceed with setup below.
+If ambiguous scope: proceed with full brainstorm (err on thorough side).
+
 ## Setup
 - Derive a feature slug from $ARGUMENTS (kebab-case, e.g. "user-auth", "payment-flow")
 - Create directory: ./plans/{feature-slug}/
 - This slug is used by all subsequent phases
+
+## Project Type Detection (do this after setup)
+Ask the user:
+
+"Is this an **existing project** or a **new project from scratch**?
+
+1. **Existing project** — I'll scan the codebase first to understand what's already built
+2. **New project** — Starting fresh, no codebase to scan"
+
+### If Existing Project
+Ask scan depth:
+
+"How deep should I scan the codebase?
+
+- **Shallow** — Manifest files (package.json, etc.) + top-level directory structure. Fast, low token cost.
+- **Medium** — Shallow + main entry points, config files, and existing docs in `./docs/`. Recommended.
+- **Deep** — Medium + read key source files to understand patterns and architecture. Thorough but higher token cost."
+
+**Perform the scan based on user's choice:**
+
+#### Shallow Scan
+- Read manifest files: package.json, requirements.txt, go.mod, Cargo.toml, pyproject.toml, etc.
+- List top-level directory structure (1 level deep)
+- Read CLAUDE.md and README.md if they exist
+
+#### Medium Scan (includes Shallow)
+- Read main entry points: index.ts, main.py, app.ts, server.ts, etc.
+- Read config files: tsconfig.json, .env.example, docker-compose.yml, etc.
+- Read all docs in `./docs/` directory (if exists)
+- List `src/` structure (2 levels deep)
+
+#### Deep Scan (includes Medium)
+- Read key source files in each module directory (first file per directory)
+- Identify existing patterns: routing, middleware, DB access, state management
+- Note existing test setup and conventions
+
+**Present scan summary to user:**
+"Here's what I found in your codebase:
+- **Stack:** {detected stack}
+- **Structure:** {key directories and their purpose}
+- **Existing patterns:** {notable patterns found}
+- **Dependencies:** {key deps relevant to the new feature}
+
+This context will inform the design phase."
+
+**Inject into REQUIREMENTS.md** as an `## Existing Context` section containing:
+- Detected tech stack and versions
+- Project structure summary
+- Existing patterns and conventions
+- Dependencies relevant to the new feature
+- Any constraints imposed by the current architecture
+
+### If New Project
+- Skip codebase scan
+- Ask about intended tech stack in the first clarification batch
+- Note in REQUIREMENTS.md: `project_type: new`
+
+## Milestone-2+ Detection (check before full brainstorm)
+Before starting clarification rounds, check if REQUIREMENTS.md already exists for this feature slug.
+
+**If REQUIREMENTS.md exists with [M2]+ tags (subsequent milestone):**
+
+This is a scoped confirmation, NOT a full brainstorm. Skip:
+- Codebase scan (already done in milestone-1, context in REQUIREMENTS.md + CONTEXT.md)
+- Devil's advocate
+- Milestone splitting (already decided)
+- Team composition (already decided, can be refined in Phase 2)
+
+**Shortened flow:**
+1. Read REQUIREMENTS.md — find requirements tagged for the next unstarted milestone [M{N}]
+2. Read CONTEXT.md — understand locked decisions from previous milestones
+3. Present to user:
+
+   "Milestone-{N} requirements from Phase 1:
+   - REQ-XXX: {title} [M{N}]
+   - REQ-XXX: {title} [M{N}]
+   - ...
+
+   Context from previous milestones: {key locked decisions}
+
+   Any changes to these requirements? Or type APPROVE to proceed to design."
+
+4. If user wants changes: accept additions/removals/modifications, update REQUIREMENTS.md
+5. If user types APPROVE: proceed to Next Step (suggest `/qf-2::design`)
+
+**If no REQUIREMENTS.md exists:** proceed with full brainstorm below.
 
 ## Rules
 - Ask clarifying questions in BATCHES (max 5 per round)
@@ -215,7 +323,8 @@ Write REQUIREMENTS.md to ./plans/{feature-slug}/REQUIREMENTS.md containing:
 If multiple milestones, create milestone directories: ./plans/{feature-slug}/milestone-1/, milestone-2/, etc.
 
 ## Output Rule
-When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.
+- When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.
+- **Long content rule:** If content requiring user review/approval exceeds ~30 lines, write it to the appropriate plan file first, then present a concise summary (5-10 lines) in console with the file path. Let user read the file. Do NOT dump long content into console.
 
 ## Next Step
 Tell user: "Phase 1 complete. Draft saved to `./plans/{feature-slug}/REQUIREMENTS.md` with [N] milestone(s)."

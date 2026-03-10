@@ -141,7 +141,8 @@ Only if user requests deeper review after seeing QA-REPORT.md:
 Append findings to QA-REPORT.md under "Manual Review" section.
 
 ## Output Rule
-When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.
+- When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.
+- **Long content rule:** If content requiring user review/approval exceeds ~30 lines, write it to the appropriate plan file first, then present a concise summary (5-10 lines) in console with the file path. Let user read the file. Do NOT dump long content into console.
 
 ## Next Step
 When user types SHIP:
@@ -156,6 +157,8 @@ Milestone-{N} shipped!
 
 **If last milestone:**
 ```
-All milestones complete. Project is verified and ready to ship.
-  ↳ Also available: `/qf-s::status` (final status), `/qf-s::status save` (archive context)
+All milestones complete! Project enters maintenance mode.
+  => Report bugs: `/qf-5::maintain` (triage, investigate, fix)
+  => Smoke test: `/qf-t::test` (verify project runs end-to-end)
+  => Status: `/qf-s::status` (final status), `/qf-s::status save` (archive context)
 ```

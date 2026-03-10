@@ -12,6 +12,7 @@
 set -euo pipefail
 
 # --- Configuration ---
+QUANGFLOW_VERSION="1.0.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET_DIR="${1:-.}"  # Default: current directory
 
@@ -145,6 +146,10 @@ else
   ok "  CLAUDE.md created (edit Tech Stack and project-specific sections)"
 fi
 
+# --- Write version file ---
+echo "$QUANGFLOW_VERSION" > "$CLAUDE_DIR/.quangflow-version"
+ok "  Version $QUANGFLOW_VERSION written to .claude/.quangflow-version"
+
 # --- Summary ---
 echo ""
 echo "========================================"
@@ -161,8 +166,11 @@ echo "    /qf-1::brainstorm <idea>  — Phase 1: Requirements discovery"
 echo "    /qf-2::design             — Phase 2: Architecture design"
 echo "    /qf-3::handoff            — Phase 3: Execution handoff"
 echo "    /qf-4::verify             — Phase 4: QA & verification"
+echo "    /qf-q::quick               — Quick mode for small tasks (single-pass)"
+echo "    /qf-5::maintain            — Phase 5: Post-ship bug fix & triage"
 echo "    /qf-c::cook               — Team pipeline orchestrator"
 echo "    /qf-s::status             — Project status & session resume"
+echo "    /qf-t::test               — Smoke test: real integration tests"
 echo ""
 echo "  Get started:"
 echo "    cd $TARGET_DIR"

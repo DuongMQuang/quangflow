@@ -73,6 +73,43 @@ Agent waits. Does nothing until user picks an option.
 
 ## On Choice
 Write DESIGN.md to ./plans/{feature-slug}/milestone-{N}/DESIGN.md containing:
+
+### Architecture Overview Diagram (MUST be first section after title)
+Include a Mermaid diagram at the top of DESIGN.md showing the high-level architecture:
+- **Use `graph LR` (left-to-right)** — group by layer: Frontend → Backend → Storage → External
+- Each subgraph = one layer (FE, BE, DB, External). Readers instantly see which concern each box belongs to.
+- Module-level only — no individual components. Detail diagrams come later in `design/` subfolder.
+- Max 8-12 nodes total. Keep it scannable.
+- Data flow arrows between layers with brief labels.
+
+Example structure in DESIGN.md:
+```
+# Milestone {N} — Design
+...
+## Architecture Overview
+\`\`\`mermaid
+graph LR
+  subgraph FE["Frontend"]
+    ...
+  end
+  subgraph BE["Backend"]
+    ...
+  end
+  subgraph DB["Storage"]
+    ...
+  end
+  subgraph EXT["External"]
+    ...
+  end
+  FE -->|requests| BE
+  BE -->|read/write| DB
+  ...
+\`\`\`
+```
+
+This diagram gives readers instant visual context before reading detailed sections.
+
+### Remaining sections:
 - Chosen option with full rationale
 - Rejected options and why
 - Tension analysis results
@@ -111,7 +148,8 @@ If REQUIREMENTS.md has `team_mode: true`, refine the team based on the chosen ar
 **Skip this section entirely if `team_mode: false` or not set.**
 
 ## Output Rule
-When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.
+- When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.
+- **Long content rule:** If content requiring user review/approval exceeds ~30 lines, write it to the appropriate plan file first, then present a concise summary (5-10 lines) in console with the file path. Let user read the file. Do NOT dump long content into console.
 
 ## Next Step
 Tell user: "Phase 2 complete for milestone-{N}. Design saved to `./plans/{feature-slug}/milestone-{N}/DESIGN.md`."

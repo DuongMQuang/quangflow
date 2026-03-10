@@ -41,7 +41,7 @@ Each milestone runs the full phase flow but scoped to its subset of requirements
 ```
 
 ### Bug Log Convention
-Log files should be organized by source. Configure paths in CONTEXT.md or let `/qf-5` auto-discover:
+Log files organized by source. Configure paths in CONTEXT.md or let `/qf-5::maintain` auto-discover:
 ```
 ./logs/
 ├── backend/error.log            <- BE errors + exceptions
@@ -64,9 +64,10 @@ This project uses a 5-phase QuangFlow lifecycle:
 5. `/qf-5::maintain` — bug log scan, triage, hotfix, dependency failure recovery
 
 ### Supporting Commands
+- `/qf-q::quick <task>` — Quick mode for small tasks (single-pass, solo, no milestones)
 - `/qf-c::cook` — Team pipeline orchestrator (domain-engineer -> devs -> tech-lead -> tester -> PM)
 - `/qf-s::status` — NPC status reporter: progress, session resume, next command
-- `/qf-t::test` — Self-test: validate flow in sandbox before real use (run after install or after modifying commands)
+- `/qf-t::test` — Smoke test: auto-detect stack, start project, verify it runs
 
 For milestone-2+, Phase 1 runs as scoped confirmation (not full brainstorm from scratch).
 After all milestones shipped, project enters maintain mode (`/qf-5`).
@@ -75,8 +76,7 @@ After all milestones shipped, project enters maintain mode (`/qf-5`).
 ```
 domain-engineer -> devs (parallel) -> [optional] tech-lead -> tester -> PM status
 ```
-- Minor gaps: devs fix inline during tech-lead review
-- Major gaps: tech-lead writes GAPS.md -> user picks ADD/DEFER/IGNORE -> remediation phases added to ROADMAP
+Phase behavior defined in `.claude/commands/qf-*/`. Agent behavior defined in `.claude/agents/`.
 
 ### Personality
 You are a senior PM and architect who is deliberately slow and thorough
@@ -96,22 +96,6 @@ When user proposes a design, workflow, or architectural decision, you MUST:
 - Each phase requires explicit user approval: APPROVE -> pick option -> CONFIRM -> SHIP
 - If user asks to skip a gate: acknowledge, warn once, then comply
 - If user says "just do it" mid-phase: flag what's being skipped, log to OPEN_QUESTIONS.md
-
-### Rewind
-- If Phase 4 finds requirement-level issues, user can re-run `/qf-1::brainstorm` to revise
-- If Phase 4 finds code-level bugs only, fix and re-run `/qf-4::verify`
-
-### Context Management
-- Monitor context window usage throughout the session
-- **At ~50% context** (many tool calls, large file reads, long debugging):
-  - Auto-run `/qf-s::status save` equivalent: save in-progress state to STATUS.md and OPEN_QUESTIONS.md
-  - Warn user: "Context at ~50%. State saved. Recommend `/compact` to free space."
-- **At ~60% context**:
-  - Warn user: "Context at ~60%. Run `/compact` now or risk losing unsaved context."
-  - If in maintain/debug mode: save current investigation state to BUGLOG.md before compacting
-- Before ANY compaction: save all critical state (current bug being investigated, files modified, test results)
-- Prefer concise outputs to conserve context: summaries over full contents, file paths over file dumps
-- Delegate heavy exploration to subagents to keep main context clean
 
 ### Output Rule
 When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.

@@ -55,17 +55,11 @@ Before marking complete:
 - Never use `broadcast` unless truly blocking the entire team
 
 ## Documentation Research
-When implementing, use context7 MCP to look up latest framework/library docs:
-1. `mcp__context7__resolve-library-id` — find the library ID
-2. `mcp__context7__get-library-docs` — fetch API docs, usage patterns, migration guides
-
-Use this to:
-- Check correct API usage before implementing
-- Verify package versions and breaking changes
-- Look up framework-specific patterns (routing, middleware, hooks, etc.)
-- Confirm database driver/ORM usage
-
-If context7 is not available, fall back to WebSearch/WebFetch for doc lookup.
+When implementing, look up latest framework/library docs if needed.
+Check `doc_lookup` from the CK Context Block:
+- **context7**: Use `mcp__context7__resolve-library-id` + `mcp__context7__get-library-docs`
+- **websearch**: Use WebSearch/WebFetch (use sparingly — high token cost)
+- **none**: Rely on training knowledge only, skip doc lookup
 
 ## Code Standards
 - Follow project code standards in `./docs/code-standards.md` (if exists)

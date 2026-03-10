@@ -54,17 +54,11 @@ Do NOT just test what code does. Test what REQUIREMENTS.md says should happen:
 - **Cover the edge cases from Phase 1**: These were discussed for a reason
 
 ## Documentation Research
-When generating tests, use context7 MCP to look up testing framework docs:
-1. `mcp__context7__resolve-library-id` — find testing library ID (e.g., "jest", "vitest", "pytest")
-2. `mcp__context7__get-library-docs` — fetch testing API, matchers, setup patterns
-
-Use this to:
-- Verify correct test runner syntax and configuration
-- Look up assertion/matcher APIs
-- Check mocking/stubbing patterns for the project's framework
-- Confirm E2E testing tool usage (Playwright, Cypress, etc.)
-
-If context7 is not available, fall back to WebSearch/WebFetch for doc lookup.
+When generating tests, look up testing framework docs if needed.
+Check `doc_lookup` from the CK Context Block:
+- **context7**: Use `mcp__context7__resolve-library-id` + `mcp__context7__get-library-docs`
+- **websearch**: Use WebSearch/WebFetch (use sparingly — high token cost)
+- **none**: Rely on training knowledge only, skip doc lookup
 
 ## Test File Organization
 ```

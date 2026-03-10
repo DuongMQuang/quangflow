@@ -220,6 +220,24 @@ When bugs are dispatched (sequential or parallel), update BUGLOG.md entries:
 
 ---
 
+## Escalation — Requirement-Level Issues
+During investigation, if a bug reveals a missing or incorrect requirement (not just a code bug):
+
+1. Log it in BUGLOG.md with tag `ESCALATION: requirement gap`
+2. Present to user:
+   "This bug points to a requirement gap — not just a code issue:
+   - **Gap:** {description of what's missing}
+   - **Impact:** {which flows are affected}
+
+   Options:
+   - **Fix here** — Patch it in maintain mode (quick fix, may not be complete)
+   - **Escalate** — Run `/qf-1::brainstorm` to properly scope this as a new requirement (uses the short milestone-2+ confirmation flow)"
+
+3. If user picks **Escalate**: stop maintain flow, tell user to run `/qf-1::brainstorm {feature-slug}` which will use the milestone-2+ short confirmation flow to add the new requirement properly
+4. If user picks **Fix here**: proceed with the fix as a normal bug
+
+---
+
 ## Hotfix Flow (`/qf-5 fix BUG-XXX`)
 
 Lighter than full qf-1→4 cycle. No brainstorm, no milestone, no team pipeline.

@@ -1,10 +1,10 @@
 # QuangFlow
 
-A 4-phase workflow framework for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) that turns your AI assistant into a deliberate, structured project manager and architect.
+A 5-phase workflow framework for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) that turns your AI assistant into a deliberate, structured project manager and architect.
 
 ## What It Does
 
-Adds 6 slash commands to any Claude Code project:
+Adds 8 slash commands to any Claude Code project:
 
 | Command | Phase | Purpose |
 |---------|-------|---------|
@@ -12,8 +12,11 @@ Adds 6 slash commands to any Claude Code project:
 | `/qf-2::design` | 2. Design | Architecture options with trade-offs, design pattern research, scalability gates |
 | `/qf-3::handoff` | 3. Handoff | Execution artifacts (ROADMAP, REQUIREMENTS finalization), SHIP/REFINE/SOLO gate |
 | `/qf-4::verify` | 4. Verify | Test generation, requirements traceability, gap detection, remediation |
+| `/qf-q::quick <task>` | Quick | Single-pass for small tasks — skip design, milestones, team setup |
+| `/qf-5::maintain` | 5. Maintain | Post-ship bug fix, log scan, triage, parallel hotfix via dev agents |
 | `/qf-c::cook` | Orchestrator | Launches agent team pipeline (domain-engineer -> devs -> tech-lead -> tester -> PM) |
 | `/qf-s::status` | Status | Session-aware status reporter with resume context |
+| `/qf-t::test` | Smoke Test | Auto-detect stack, generate integration scripts, verify real module interactions |
 
 ## Philosophy
 

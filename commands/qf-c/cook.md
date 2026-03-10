@@ -17,18 +17,96 @@ When spawning a teammate, READ their instruction file and include it in the prom
 4. Read DESIGN.md for architecture context
 5. Read CONTEXT.md if exists (locked decisions)
 6. Read all agent instruction files from `.claude/agents/`
+7. **MCP & Doc Lookup Detection:**
+   - Check if `mcp__context7__resolve-library-id` is available (try calling it)
+   - If available: set `doc_lookup: context7` — inject into every agent prompt
+   - If NOT available: ask user:
+     "context7 MCP not available. Agents can use WebSearch to look up framework docs, but this consumes significant tokens.
+     - **Enable WebSearch** — agents use WebSearch/WebFetch for doc lookup (higher token usage)
+     - **Disable doc lookup** — agents rely on their training knowledge only (faster, cheaper)
+     Which do you prefer?"
+   - Set `doc_lookup: websearch` or `doc_lookup: none` based on user choice
+   - Inject `doc_lookup` setting into every agent prompt via the CK Context Block
 
 ## Arguments
 ```
-/qf-c::cook ./plans/{feature-slug}/milestone-{N}/ROADMAP.md
+/qf-c::cook                                          — Full pipeline (auto-detect milestone)
+/qf-c::cook ./plans/{slug}/milestone-{N}/ROADMAP.md  — Full pipeline for specific milestone
+/qf-c::cook --skip domain-engineer                   — Skip specific stage(s)
+/qf-c::cook --only tester                            — Run only specific stage(s)
+/qf-c::cook --from tech-lead                         — Resume from a specific stage
 ```
 If no argument provided, auto-detect from `./plans/` (latest milestone without QA-REPORT.md).
+
+## Partial Pipeline
+Supports `--skip`, `--only`, and `--from` flags for partial execution.
+
+**Stage order:** domain-engineer -> devs -> tech-lead -> tester -> pm
+
+### --skip {stage}
+Skip one or more stages. Comma-separated for multiple: `--skip domain-engineer,tech-lead`
+- Cannot skip `devs` (nothing to test/review without implementation)
+- Cannot skip `pm` (always runs — use `--only` instead if you truly don't want it)
+
+### --only {stage}
+Run only the specified stage(s). Comma-separated for multiple: `--only tester,pm`
+
+**Dependency check before running:**
+| Stage | Requires | Check |
+|-------|----------|-------|
+| domain-engineer | DESIGN.md | File exists |
+| devs | DESIGN.md | File exists |
+| tech-lead | Dev output | Source files exist for this milestone |
+| tester | Dev output | Source files exist for this milestone |
+| pm | Any stage completed | STATUS.md or any milestone artifact exists |
+
+If dependency not met, warn:
+"Cannot run `{stage}` — requires `{dependency}` to complete first. Run `/qf-c::cook --from {dependency}` instead?"
+
+### --from {stage}
+Resume pipeline from a specific stage, running it and all subsequent stages.
+- `--from tech-lead` runs: tech-lead -> tester -> pm
+- `--from tester` runs: tester -> pm
+- Useful after fixing bugs found by tech-lead or after manual code changes
 
 ## Team Creation
 
 CALL `TeamCreate(team_name: "{feature-slug}-m{N}")`
 
 If TeamCreate fails: "Agent Teams requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. Team mode not available."
+
+## Pipeline State Tracking
+Track pipeline progress in `plans/{feature-slug}/milestone-{N}/PIPELINE-STATE.md`.
+This enables crash recovery via `--from` flag.
+
+**Create/update after each stage completes:**
+```markdown
+# Pipeline State — {feature-slug} / Milestone {N}
+Updated: {timestamp}
+
+## Completed Stages
+- [x] domain-engineer — completed {timestamp}
+- [x] devs — completed {timestamp}, agents: dev-backend, dev-frontend
+- [ ] tech-lead
+- [ ] tester
+- [ ] pm
+
+## Last Completed Stage
+devs
+
+## Resume Command
+`/qf-c::cook --from tech-lead`
+```
+
+**On `--from` flag:**
+1. Read PIPELINE-STATE.md to verify the claimed stage was actually reached
+2. If state file missing: warn "No pipeline state found. Run full pipeline or use `--only`?"
+3. If requested stage hasn't been reached yet: warn "Stage `{stage}` requires `{previous}` to complete first."
+
+**On pipeline crash/interruption:**
+- PIPELINE-STATE.md preserves what completed
+- User runs `/qf-s::status` to see resume command
+- User runs `/qf-c::cook --from {next-stage}` to continue
 
 ## Pipeline Execution
 
@@ -138,7 +216,8 @@ After EACH agent completes, log its usage stats from the Agent tool response:
 Tell user:
 "Team pipeline complete for milestone-{N}.
 - STATUS.md: `plans/{slug}/milestone-{N}/STATUS.md`
-- Next: run `/qf-4::verify` for final QA/QC."
+- Next: run `/qf-4::verify` for final QA/QC
+- Smoke test: run `/qf-t::test` to verify the project starts and flows work end-to-end"
 
 Then print the Agent Usage table.
 
@@ -153,6 +232,7 @@ CK Context:
 - Active plan: plans/{feature-slug}/milestone-{N}/ROADMAP.md
 - Commits: conventional (feat:, fix:, docs:, refactor:, test:, chore:)
 - Refer to teammates by NAME, not agent ID
+- Doc lookup: {context7 | websearch | none}
 ```
 
 ## Error Recovery
