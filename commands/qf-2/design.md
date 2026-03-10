@@ -1,22 +1,19 @@
 You are now entering Phase 2: Design / Structure.
 
 ## State Check
-- **Find project root**: Walk up from CWD looking for `./plans/` directory (check parent dirs up to 3 levels). Use the directory containing `./plans/` as project root.
-- Scan `{project-root}/plans/` for feature directories containing REQUIREMENTS.md
-- If multiple found, ask user which feature to design for
-- If none found, tell user: "No requirements found. Run `/qf-1::brainstorm <idea>` first."
-- Read the REQUIREMENTS.md to understand what was agreed in Phase 1
+See `_shared.md → State Check Template`. Required artifact: REQUIREMENTS.md.
+If none found: "No requirements found. Run `/qf-1::brainstorm <idea>` first."
 
 ## Milestone Detection
-- Check REQUIREMENTS.md for milestone tags [M1], [M2], etc.
-- Check which milestone directories exist and which already have DESIGN.md
-- Auto-select the next milestone without a DESIGN.md
-- Confirm with user: "Designing for milestone-{N}. Correct?"
-- If single milestone project, skip this step
+See `_shared.md → Milestone Detection`. Target artifact: `DESIGN.md`.
 
 ## Scope
 Only consider requirements tagged for the current milestone.
 Reference project-level CONTEXT.md for any locked decisions from previous milestones.
+
+## Autopilot Mode Check
+See `_autopilot.md → Phase 2 — Design`. If `pm_mode: autopilot`: auto-pick best option, skip to review gate.
+If `hands-on` or not set: proceed with normal flow below.
 
 ## Tension Analysis (do this FIRST)
 List the "tension points" in this milestone's requirements:
@@ -148,8 +145,7 @@ If REQUIREMENTS.md has `team_mode: true`, refine the team based on the chosen ar
 **Skip this section entirely if `team_mode: false` or not set.**
 
 ## Output Rule
-- When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.
-- **Long content rule:** If content requiring user review/approval exceeds ~30 lines, write it to the appropriate plan file first, then present a concise summary (5-10 lines) in console with the file path. Let user read the file. Do NOT dump long content into console.
+See `_shared.md → Output Rule`.
 
 ## Next Step
 Tell user: "Phase 2 complete for milestone-{N}. Design saved to `./plans/{feature-slug}/milestone-{N}/DESIGN.md`."

@@ -5,7 +5,7 @@ Provide instant project status and session resumption context.
 This command can be run at ANY time, in ANY session.
 
 ## On Activation
-1. **Find project root**: Walk up from CWD looking for `./plans/` directory. If CWD is a subfolder (e.g., `project/frontend/`), check parent directories up to 3 levels until `./plans/` is found. Use the directory containing `./plans/` as the project root for all subsequent scans.
+1. Find project root — see `_shared.md → Project Root Detection`.
 2. Scan `{project-root}/plans/` for all feature directories
 3. For each feature, check for STATUS.md files in milestone directories
 4. If no plans exist: "No active projects. Run `/qf-1::brainstorm <idea>` to start."
@@ -178,4 +178,4 @@ When a new session starts and user asks "where was I?", "status", or similar:
 - Bold the next command so user can copy-paste immediately
 - If gaps/blockers exist, highlight them prominently
 - Always show the next command suggestion with skip/alternative options
-- **Long content rule:** If content requiring user review/approval exceeds ~30 lines, write it to the appropriate plan file first, then present a concise summary (5-10 lines) in console with the file path. Let user read the file. Do NOT dump long content into console.
+- See `_shared.md → Output Rule` for long content handling.

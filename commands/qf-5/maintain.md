@@ -148,6 +148,12 @@ Agent waits. Does nothing until user responds.
 
 ---
 
+## Autopilot Triage
+See `_autopilot.md → Phase 5 — Maintain`. If autopilot: auto-triage by severity, present plain summary, proceed on OK.
+On user objection: fall through to manual Triage Flow below.
+
+---
+
 ## Triage Flow (user types TRIAGE)
 
 For each NEW bug, starting with highest severity:
@@ -334,4 +340,4 @@ When user is done:
 - Print: "Maintenance session complete. {X} bugs fixed, {Y} deferred, {Z} new. Resume with `/qf-5` next session."
 
 ## Output Rule
-When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.
+See `_shared.md → Output Rule`.

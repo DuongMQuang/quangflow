@@ -85,11 +85,7 @@ Concrete specifications that devs code against:
 - Mark which module owns each table
 
 ## Documentation Research
-When designing modules and contracts, look up latest framework/library docs.
-Check `doc_lookup` from the CK Context Block:
-- **context7**: Use `mcp__context7__resolve-library-id` + `mcp__context7__get-library-docs`
-- **websearch**: Use WebSearch/WebFetch (use sparingly — high token cost)
-- **none**: Rely on training knowledge only, skip doc lookup
+See `_shared.md → Documentation Research`. Use when designing modules and contracts.
 
 ## Rules
 - All diagrams use Mermaid syntax (compatible with VSCode "Markdown Preview Mermaid Support" extension)
@@ -99,5 +95,4 @@ Check `doc_lookup` from the CK Context Block:
 - Do NOT implement code. You design. Devs implement.
 
 ## Completion
-- Mark your task as completed via `TaskUpdate`
-- Send summary message to lead: what you produced, any assumptions made, any concerns about the architecture
+See `_shared.md → Completion Protocol`. Include: what you produced, assumptions, architecture concerns.

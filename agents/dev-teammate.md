@@ -55,11 +55,7 @@ Before marking complete:
 - Never use `broadcast` unless truly blocking the entire team
 
 ## Documentation Research
-When implementing, look up latest framework/library docs if needed.
-Check `doc_lookup` from the CK Context Block:
-- **context7**: Use `mcp__context7__resolve-library-id` + `mcp__context7__get-library-docs`
-- **websearch**: Use WebSearch/WebFetch (use sparingly — high token cost)
-- **none**: Rely on training knowledge only, skip doc lookup
+See `_shared.md → Documentation Research`. Use when implementing features.
 
 ## Code Standards
 - Follow project code standards in `./docs/code-standards.md` (if exists)
@@ -68,9 +64,4 @@ Check `doc_lookup` from the CK Context Block:
 - Descriptive kebab-case file names
 
 ## Completion
-- Mark task completed via `TaskUpdate`
-- Send completion message to lead with:
-  - Files created/modified (list)
-  - Any deviations from plan (and why)
-  - Any concerns or potential issues
-  - Cross-boundary dependencies that need verification
+See `_shared.md → Completion Protocol`. Include: files changed, deviations from plan, concerns, cross-boundary deps.

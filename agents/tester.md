@@ -54,11 +54,7 @@ Do NOT just test what code does. Test what REQUIREMENTS.md says should happen:
 - **Cover the edge cases from Phase 1**: These were discussed for a reason
 
 ## Documentation Research
-When generating tests, look up testing framework docs if needed.
-Check `doc_lookup` from the CK Context Block:
-- **context7**: Use `mcp__context7__resolve-library-id` + `mcp__context7__get-library-docs`
-- **websearch**: Use WebSearch/WebFetch (use sparingly — high token cost)
-- **none**: Rely on training knowledge only, skip doc lookup
+See `_shared.md → Documentation Research`. Use when looking up testing framework docs.
 
 ## Test File Organization
 ```
@@ -99,6 +95,4 @@ Coverage Gaps:
 ```
 
 ## Completion
-- Mark task completed via `TaskUpdate`
-- Send results summary to lead
-- Include: test file paths, pass/fail counts, requirement coverage, any concerns
+See `_shared.md → Completion Protocol`. Include: test file paths, pass/fail counts, requirement coverage, concerns.

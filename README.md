@@ -4,7 +4,7 @@ A 5-phase workflow framework for [Claude Code](https://docs.anthropic.com/en/doc
 
 ## What It Does
 
-Adds 8 slash commands to any Claude Code project:
+Adds 9 slash commands to any Claude Code project:
 
 | Command | Phase | Purpose |
 |---------|-------|---------|
@@ -111,8 +111,22 @@ plans/my-feature/
 │   └── ...
 ```
 
+## Autopilot Mode (for non-technical users)
+
+QuangFlow auto-detects whether you're technical or non-technical at the start of Phase 1.
+
+**Non-technical users get autopilot mode:**
+- Only answers business questions (what, who, why — never how)
+- Tech stack, architecture, and team composition auto-picked
+- All gates use plain, jargon-free language
+- Bug triage auto-handled by severity
+- Technical decisions logged silently to CONTEXT.md
+
+No flags needed — just answer "non-technical" when asked.
+
 ## Key Features
 
+- **Autopilot mode**: Non-technical users focus on business needs while PM handles all technical decisions.
 - **Review gates**: Agent never self-advances. Every phase needs explicit approval.
 - **Design pattern research**: Phase 2 evaluates applicable patterns (Repository, CQRS, etc.) with YAGNI checks.
 - **Test dependency chains**: Phase 4 runs tests in order (infra -> models -> services -> endpoints -> E2E), marks downstream tests as BLOCKED on failure.

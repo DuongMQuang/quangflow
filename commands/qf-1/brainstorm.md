@@ -1,6 +1,31 @@
 You are now entering Phase 1: Requirements Brainstorm.
 
-## Quick Mode Detection (do this FIRST)
+## Autopilot Detection (do this FIRST)
+Before anything else, ask the user:
+
+"Before we start — are you technical (developer/engineer) or non-technical (PM, founder, designer)?
+
+1. **Technical** — Full control over architecture, tech stack, and design decisions
+2. **Non-technical** — I'll handle all technical decisions for you. You focus on what you want built."
+
+- If **Technical**: set `pm_mode: hands-on` — proceed with normal flow (all technical questions, design options, review gates)
+- If **Non-technical**: set `pm_mode: autopilot` — see `_autopilot.md` for full behavior.
+  Summary: business-only questions, auto-pick tech decisions, simplified gates.
+
+Write `pm_mode` into REQUIREMENTS.md metadata.
+
+### Hands-Free Mode Offer (autopilot only)
+See `_autopilot.md → Hands-Free Mode`. Offer restart with `claude --continue --dangerously-skip-permissions`.
+Save state to PIPELINE-STATE.md (see `_shared.md → PIPELINE-STATE Schema`).
+
+### Resume from PIPELINE-STATE (on restart)
+Check `./plans/*/milestone-*/PIPELINE-STATE.md` for `hands_free: true`.
+If found: skip Autopilot Detection, resume from last incomplete stage.
+If not found: proceed with Autopilot Detection above.
+
+---
+
+## Quick Mode Detection (do this SECOND)
 Before starting the full brainstorm, analyze $ARGUMENTS for scope:
 
 **Signals of a small task** (any 2+ of these):
@@ -156,13 +181,20 @@ Use `AskUserQuestion` with structured options + free-type:
 - Prefix assumptions with: `⚠️ ASSUMPTION: {assumption}. Will revisit if wrong.`
 
 ## Must Cover Before Closing Phase 1
+
+**Normal mode (hands-on):**
 - [ ] Core user problem (not feature)
 - [ ] Who are the users, what are their contexts
 - [ ] Success metric — how do we know this worked?
 - [ ] At least 3 edge cases discussed
 - [ ] Explicit list of what is OUT OF SCOPE
 
+**Autopilot mode:** See `_autopilot.md → Phase 1`. Business-only checklist, skip technical edge cases.
+
 ## Devil's Advocate
+**Autopilot mode:** Skip — see `_autopilot.md → Phase 1`.
+
+**Normal mode:**
 Before finalizing, you MUST challenge each requirement:
 "What assumption is this requirement making? What if that assumption is wrong?"
 
@@ -180,7 +212,10 @@ If project is small enough for single milestone, say so. User decides.
 Ask: "I recommend [1 | N] milestone(s). Here's the proposed split: [summary]. Do you agree, or want to adjust?"
 
 ## Review Gate
-Before writing files, you MUST:
+
+**Autopilot mode:** See `_autopilot.md → Phase 1` review gate.
+
+**Normal mode:**
 1. Present a summary: "Here's what I understood"
 2. Present devil's advocate challenges
 3. Present milestone split recommendation
@@ -190,6 +225,8 @@ Agent waits. Does nothing until user types APPROVE.
 
 ## Team Mode Preference
 After APPROVE, analyze the approved requirements to suggest an execution mode.
+
+**Autopilot shortcut:** See `_autopilot.md → Phase 1`. Auto-select Solo/Team based on layer count.
 
 ### Team Composition Analysis
 Scan all approved requirements and identify which **functional layers** are involved:
@@ -323,8 +360,7 @@ Write REQUIREMENTS.md to ./plans/{feature-slug}/REQUIREMENTS.md containing:
 If multiple milestones, create milestone directories: ./plans/{feature-slug}/milestone-1/, milestone-2/, etc.
 
 ## Output Rule
-- When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.
-- **Long content rule:** If content requiring user review/approval exceeds ~30 lines, write it to the appropriate plan file first, then present a concise summary (5-10 lines) in console with the file path. Let user read the file. Do NOT dump long content into console.
+See `_shared.md → Output Rule`.
 
 ## Next Step
 Tell user: "Phase 1 complete. Draft saved to `./plans/{feature-slug}/REQUIREMENTS.md` with [N] milestone(s)."

@@ -1,15 +1,12 @@
 You are now entering Phase 4: Verify & QA.
 
 ## State Check
-- **Find project root**: Walk up from CWD looking for `./plans/` directory (check parent dirs up to 3 levels). Use the directory containing `./plans/` as project root.
-- Scan `{project-root}/plans/` for feature directories with finalized REQUIREMENTS.md and milestone directories containing ROADMAP.md
-- If multiple features found, ask user which feature
-- If missing, tell user: "No finalized requirements found. Run `/qf-3::handoff` first."
+See `_shared.md → State Check Template`. Required artifact: finalized REQUIREMENTS.md + ROADMAP.md.
+If missing: "No finalized requirements found. Run `/qf-3::handoff` first."
 
 ## Milestone Detection
-- Find the next milestone with ROADMAP.md but no QA-REPORT.md
-- Confirm with user: "Verifying milestone-{N}. Correct?"
-- Read REQUIREMENTS.md (filter to current milestone's [M{N}] requirements), DESIGN.md, and CONTEXT.md
+See `_shared.md → Milestone Detection`. Target artifact: `QA-REPORT.md`.
+Read REQUIREMENTS.md (filter to [M{N}]), DESIGN.md, and CONTEXT.md.
 
 ## Pre-flight: Implementation Check
 - Check if source code exists for this milestone's features
@@ -92,6 +89,10 @@ Generate to ./plans/{feature-slug}/milestone-{N}/:
 - List: PASS / FAIL / WARN per requirement ID
 - List: GAP-IDs with severity and status
 
+## Autopilot Mode Check
+See `_autopilot.md → Phase 4 — Verify`. If autopilot: auto-fix, plain-language results, auto-triage gaps.
+If `hands-on` or not set: use normal review gate below.
+
 ## Review Gate
 Present QA-REPORT.md + GAPS.md summary to user.
 
@@ -141,8 +142,7 @@ Only if user requests deeper review after seeing QA-REPORT.md:
 Append findings to QA-REPORT.md under "Manual Review" section.
 
 ## Output Rule
-- When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.
-- **Long content rule:** If content requiring user review/approval exceeds ~30 lines, write it to the appropriate plan file first, then present a concise summary (5-10 lines) in console with the file path. Let user read the file. Do NOT dump long content into console.
+See `_shared.md → Output Rule`.
 
 ## Next Step
 When user types SHIP:

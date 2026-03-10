@@ -1,17 +1,13 @@
 You are now entering Phase 3: Execution Handoff.
 
 ## State Check
-- **Find project root**: Walk up from CWD looking for `./plans/` directory (check parent dirs up to 3 levels). Use the directory containing `./plans/` as project root.
-- Scan `{project-root}/plans/` for feature directories with REQUIREMENTS.md and milestone directories containing DESIGN.md
-- If multiple features found, ask user which feature
-- If missing DESIGN.md, tell user: "No design found. Run `/qf-2::design` first."
-- If missing REQUIREMENTS.md, tell user: "No requirements found. Run `/qf-1::brainstorm <idea>` first."
+See `_shared.md → State Check Template`. Required artifacts: REQUIREMENTS.md + DESIGN.md.
+If missing DESIGN.md: "No design found. Run `/qf-2::design` first."
+If missing REQUIREMENTS.md: "No requirements found. Run `/qf-1::brainstorm <idea>` first."
 
 ## Milestone Detection
-- Find the next milestone with DESIGN.md but no ROADMAP.md
-- Confirm with user: "Generating handoff for milestone-{N}. Correct?"
-- Read REQUIREMENTS.md (project-level) + DESIGN.md (milestone-level)
-- Read CONTEXT.md if it exists (for locked decisions from previous milestones)
+See `_shared.md → Milestone Detection`. Target artifact: `ROADMAP.md`.
+Read REQUIREMENTS.md (project-level) + DESIGN.md (milestone-level) + CONTEXT.md (if exists).
 
 ## Output Files
 Generate to ./plans/{feature-slug}/:
@@ -32,21 +28,21 @@ Generate to ./plans/{feature-slug}/milestone-{N}/:
 
 4. **ROADMAP.md** — phases with clear deliverable + done criteria per phase
 
-## Code Quality Mandates (inject into every ROADMAP phase)
-- Each module must have a single responsibility
-- New feature must not require modifying existing interfaces
-- Data models must be versioned from day 1
+## Code Quality Mandates
+See `_shared.md → Code Quality Mandates`. Inject into every ROADMAP phase.
 
 ## Review Gate
-Before finishing handoff, you MUST:
+
+**Autopilot mode:** See `_autopilot.md → Phase 3 — Handoff`.
+
+**Normal mode:**
 1. Read back CONTEXT.md locked decisions to the user
 2. Ask: "Anything missing or incorrect? Type CONFIRM to finalize."
 
 Agent waits. Does nothing until user types CONFIRM.
 
 ## Output Rule
-- When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.
-- **Long content rule:** If content requiring user review/approval exceeds ~30 lines, write it to the appropriate plan file first, then present a concise summary (5-10 lines) in console with the file path. Let user read the file. Do NOT dump long content into console.
+See `_shared.md → Output Rule`.
 
 ## Execution Gate
 After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` settings.
@@ -74,6 +70,8 @@ After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` sett
    - **SHIP** — Launch team pipeline (`/qf-c::cook`)
    - **REFINE** — Adjust team composition
    - **SOLO** — Switch to solo mode (implement manually)"
+
+**Autopilot shortcut:** See `_autopilot.md → Phase 3`. Auto-SHIP, skip REFINE/SOLO.
 
 4. On **REFINE**:
    - Ask: "What would you like to change?" and accept freeform instructions
