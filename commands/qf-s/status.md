@@ -17,10 +17,10 @@ Read the latest STATUS.md and present:
 ```
 **Project:** {feature-slug}
 **Milestone:** {N} of {total} — {status}
-**Phase:** {current PM phase: brainstorm/design/handoff/verify}
+**Phase:** {current PM phase: brainstorm/design/handoff/verify/maintain}
 **Pipeline:** {stage: domain-engineer/devs/tech-lead/tester/done}
 **Last Action:** {what was completed before session ended}
-**Next Command:** `{exact /pm-* command to run}`
+**Next Command:** `{exact /qf-* command to run}`
 **Blockers:** {any blockers or "none"}
 ```
 
@@ -34,6 +34,7 @@ Infer status from which artifacts exist:
 | REQUIREMENTS.md + DESIGN.md | Phase 2 done | `/qf-3::handoff` |
 | REQUIREMENTS.md + DESIGN.md + ROADMAP.md | Phase 3 done | Implement ROADMAP, then `/qf-4::verify` |
 | REQUIREMENTS.md + DESIGN.md + ROADMAP.md + QA-REPORT.md | Phase 4 done | See Gap-Aware Logic below |
+| All milestones have QA-REPORT.md | All shipped | `/qf-5::maintain` (maintain mode) |
 
 ## Gap-Aware Next Command Logic (CRITICAL)
 When determining the next command, ALWAYS check GAPS.md and ROADMAP.md for unresolved work:
@@ -64,6 +65,33 @@ Also check:
 - REVIEW.md → report tech-lead review status
 - OPEN_QUESTIONS.md → report open items count
 - `design/` folder → report if domain-engineer docs exist
+- BUGLOG.md → report bug log state (see Maintain Status below)
+
+## Maintain Status (Post-Ship)
+When ALL milestones have QA-REPORT.md (project is shipped), check for BUGLOG.md:
+
+**If BUGLOG.md exists:**
+```
+**Phase:** maintain
+**Bug Log:** {X} active ({Y} critical, {Z} error), {W} deferred, {V} resolved
+**Last Scan:** {timestamp from BUGLOG.md metadata}
+**Next Command:** `/qf-5::maintain scan` (refresh bug log) or `/qf-5::maintain fix BUG-XXX`
+```
+
+**If BUGLOG.md does not exist:**
+```
+**Phase:** maintain (no bug log yet)
+**Next Command:** `/qf-5::maintain scan` to scan logs and create bug log, or `/qf-5::maintain` to enter maintain mode
+```
+
+**Bug severity summary** (when BUGLOG.md has active bugs):
+```
+**Active Bugs:**
+- CRITICAL: {count} — fix immediately
+- ERROR: {count} — fix recommended
+- WARNING: {count} — triage needed
+**Oldest unresolved:** BUG-XXX ({age} days)
+```
 
 ## Team Status
 If REQUIREMENTS.md has `team_mode: true`:
@@ -75,9 +103,11 @@ If REQUIREMENTS.md has `team_mode: true`:
 If project has multiple milestones, show overview:
 
 ```
-Milestone-1: SHIPPED ✓
+Milestone-1: SHIPPED
 Milestone-2: IN PROGRESS — Phase 3 (devs implementing)
 Milestone-3: NOT STARTED
+---
+Maintain: {X} active bugs, last scan {date}
 ```
 
 ## Context Save Mode
@@ -91,12 +121,18 @@ If invoked with argument `save` (i.e. `/qf-s::status save`), perform a context s
    - Files modified this session (list paths)
    - Exact resume command for next session
 
-2. **Capture open context** to OPEN_QUESTIONS.md:
+2. **If in maintain mode**, also save to BUGLOG.md:
+   - Current bug being investigated (BUG-ID, investigation progress)
+   - Files already read/modified during investigation
+   - Partial root cause analysis (even if incomplete)
+   - Log lines already examined (update bookmarks)
+
+3. **Capture open context** to OPEN_QUESTIONS.md:
    - Any unresolved decisions from this session
    - Assumptions made but not yet validated
    - TODO items mentioned but not tracked elsewhere
 
-3. Print: "Context saved. Safe to /clear or /exit. Resume with `/qf-s::status` in next session."
+4. Print: "Context saved. Safe to /clear or /exit. Resume with `/qf-s::status` in next session."
 
 This should be run before `/clear` or `/exit` to prevent context loss.
 
@@ -114,12 +150,13 @@ Examples:
   ↳ Skip? Gaps may go undetected. Not recommended.
   ↳ Also available: `/qf-c::cook` (re-run team pipeline), `/qf-s::status save` (save context)
 
-- **Next:** `/qf-2::design` — Design architecture for milestone-2
-  ↳ Skip? You can jump to `/qf-3::handoff` if you already know the architecture.
-  ↳ Also available: `/qf-s::status save` (save context)
+- **Next:** `/qf-5::maintain scan` — Scan logs for new bugs since last check
+  ↳ Skip? New errors may go unnoticed.
+  ↳ Also available: `/qf-5::maintain fix BUG-XXX` (fix specific bug), `/qf-s::status save` (save context)
 
 ## Output Style
 - Keep it concise — this is a quick status check, not a full report
 - Bold the next command so user can copy-paste immediately
 - If gaps/blockers exist, highlight them prominently
 - Always show the next command suggestion with skip/alternative options
+- **Long content rule:** If content requiring user review/approval exceeds ~30 lines, write it to the appropriate plan file first, then present a concise summary (5-10 lines) in console with the file path. Let user read the file. Do NOT dump long content into console.
