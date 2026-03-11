@@ -4,7 +4,7 @@ A 5-phase workflow framework for [Claude Code](https://docs.anthropic.com/en/doc
 
 ## What It Does
 
-Adds 10 slash commands to Claude Code:
+Adds 11 slash commands to Claude Code:
 
 | Command | Phase | Purpose |
 |---------|-------|---------|
@@ -18,6 +18,7 @@ Adds 10 slash commands to Claude Code:
 | `/qf-c::cook` | Orchestrator | Launches agent team pipeline (domain-engineer → devs → tech-lead → tester → PM) |
 | `/qf-s::status` | Status | Session-aware status reporter with resume context |
 | `/qf-t::test` | Smoke Test | Auto-detect stack, generate integration scripts, verify real module interactions |
+| `/qf-u::update` | Update | Pull latest QuangFlow from GitHub and reinstall commands + agents |
 
 ## Philosophy
 
@@ -77,7 +78,8 @@ bash install.sh --update     # update commands+agents only (keeps CLAUDE.md)
 │   ├── qf-q/quick.md        # Quick mode
 │   ├── qf-c/cook.md         # Team orchestrator
 │   ├── qf-s/status.md       # Status reporter
-│   └── qf-t/test.md         # Smoke test
+│   ├── qf-t/test.md         # Smoke test
+│   └── qf-u/update.md      # Self-update
 └── agents/
     ├── _shared.md            # Shared agent protocols
     ├── domain-engineer.md    # Design docs producer
