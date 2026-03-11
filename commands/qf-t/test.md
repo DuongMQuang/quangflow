@@ -53,7 +53,7 @@ Validate structural prerequisites without running phases:
 ### Checks
 | # | Check | How |
 |---|-------|-----|
-| 1 | Command files exist | Glob for `qf-{1,2,3,4,5,c,s,t}/*.md` in commands dir |
+| 1 | Command files exist | Glob for `qf-{0,1,2,3,4,5,c,s,t}/*.md` in commands dir |
 | 2 | Agent files exist | Glob for `agents/*.md` (domain-engineer, dev-teammate, tech-lead, tester, pm) |
 | 3 | CLAUDE.md template valid | Read template, verify all 5 phases referenced |
 | 4 | No broken cross-references | Grep all command files for `/qf-` references, verify each target exists |
@@ -91,11 +91,58 @@ Or if failures:
 
 Runs each phase in sequence against the sandbox, validating inputs/outputs.
 
-### Phase 1 Simulation (brainstorm)
+### Phase 0 Simulation (init)
 **Input:** Synthetic idea: "user management CRUD with auth"
 **Validate:**
 - [ ] Feature slug created (e.g., `user-management`)
 - [ ] `plans/user-management/` directory created
+- [ ] CONTEXT.md written with: metadata, tech stack, project structure
+- [ ] `quangflow_version` present in metadata
+- [ ] `pm_mode` field present
+- [ ] OPEN_QUESTIONS.md created
+
+**Synthetic CONTEXT.md** (write directly):
+```markdown
+# Context — user-management
+
+## Metadata
+```yaml
+quangflow_version: "1.1.0"
+pm_mode: hands-on
+project_type: existing
+scan_depth: medium
+created: 2026-03-11T14:00:00+07:00
+```
+
+## Tech Stack
+- Python 3.11 + FastAPI + SQLAlchemy
+- React 18 + TypeScript
+
+## Project Structure
+- src/api/ — API endpoints
+- src/services/ — Business logic
+- src/models/ — Data models
+- src/components/ — React components
+
+## Existing Patterns
+- Repository pattern for data access
+- JWT auth middleware
+
+## Dependencies
+- fastapi, sqlalchemy, pyjwt, react, typescript
+
+## Constraints
+- Must use existing JWT middleware
+
+## Locked Decisions
+(populated by later phases)
+```
+
+**Result:** PASS if file created with all sections
+
+### Phase 1 Simulation (brainstorm)
+**Input:** Read synthetic CONTEXT.md
+**Validate:**
 - [ ] REQUIREMENTS.md written with: problem, personas, success metrics, edge cases, out-of-scope
 - [ ] Milestone tags present ([M1] at minimum)
 - [ ] team_mode field present (true or false)
@@ -274,14 +321,15 @@ QuangFlow Full Test Report
 ==========================
 Sandbox: /tmp/quangflow-test-{timestamp}/
 
+Phase 0 (init):        [PASS] CONTEXT.md + OPEN_QUESTIONS.md — 7/7 sections
 Phase 1 (brainstorm):  [PASS] REQUIREMENTS.md — 6/6 sections
 Phase 2 (design):      [PASS] DESIGN.md — 4/4 sections
-Phase 3 (handoff):     [PASS] ROADMAP.md + CONTEXT.md + OPEN_QUESTIONS.md — 5/5 files
+Phase 3 (handoff):     [PASS] ROADMAP.md + CONTEXT.md updated — 5/5 files
 Phase 4 (verify):      [PASS] QA-REPORT.md — coverage matrix complete
 Phase 5 (maintain):    [PASS] BUGLOG.md — 3 bugs detected, dedup correct
 Status:                [PASS] Detects shipped state + bug log
 
-Result: 6/6 phases passed. QuangFlow is ready for use.
+Result: 7/7 phases passed. QuangFlow is ready for use.
 
 Sandbox kept at: /tmp/quangflow-test-{timestamp}/
   -> Inspect artifacts: ls /tmp/quangflow-test-{timestamp}/plans/

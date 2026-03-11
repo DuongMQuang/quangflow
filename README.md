@@ -4,17 +4,18 @@ A 5-phase workflow framework for [Claude Code](https://docs.anthropic.com/en/doc
 
 ## What It Does
 
-Adds 9 slash commands to any Claude Code project:
+Adds 10 slash commands to Claude Code:
 
 | Command | Phase | Purpose |
 |---------|-------|---------|
-| `/qf-1::brainstorm <idea>` | 1. Requirements | Clarifying questions, edge cases, milestone splits, team composition |
+| `/qf-0::init <idea>` | 0. Init | Project setup, codebase scan, create CONTEXT.md (run once per feature) |
+| `/qf-1::brainstorm` | 1. Requirements | Clarifying questions, edge cases, milestone splits, team composition |
 | `/qf-2::design` | 2. Design | Architecture options with trade-offs, design pattern research, scalability gates |
 | `/qf-3::handoff` | 3. Handoff | Execution artifacts (ROADMAP, REQUIREMENTS finalization), SHIP/REFINE/SOLO gate |
 | `/qf-4::verify` | 4. Verify | Test generation, requirements traceability, gap detection, remediation |
-| `/qf-q::quick <task>` | Quick | Single-pass for small tasks — skip design, milestones, team setup |
 | `/qf-5::maintain` | 5. Maintain | Post-ship bug fix, log scan, triage, parallel hotfix via dev agents |
-| `/qf-c::cook` | Orchestrator | Launches agent team pipeline (domain-engineer -> devs -> tech-lead -> tester -> PM) |
+| `/qf-q::quick <task>` | Quick | Single-pass for small tasks — skip design, milestones, team setup |
+| `/qf-c::cook` | Orchestrator | Launches agent team pipeline (domain-engineer → devs → tech-lead → tester → PM) |
 | `/qf-s::status` | Status | Session-aware status reporter with resume context |
 | `/qf-t::test` | Smoke Test | Auto-detect stack, generate integration scripts, verify real module interactions |
 
@@ -22,43 +23,79 @@ Adds 9 slash commands to any Claude Code project:
 
 - **Slow in phases 1-2**: Surface problems before proposing solutions. Challenge assumptions. Devil's advocate every requirement.
 - **Structured in phases 3-4**: Clear deliverables, acceptance criteria, test coverage, gap detection.
-- **Never self-advances**: Every phase requires explicit user approval (APPROVE -> pick option -> CONFIRM -> SHIP).
+- **Never self-advances**: Every phase requires explicit user approval (APPROVE → pick option → CONFIRM → SHIP).
 - **Plan over tools**: Spend more time designing, less time fixing.
 
 ## Install
 
-**One-liner** (run from your project directory):
+### One-liner (remote)
 
 ```bash
+# Interactive — asks global or project
 curl -fsSL https://raw.githubusercontent.com/DuongMQuang/quangflow/main/remote-install.sh | bash
+
+# Global install (available in all projects)
+curl -fsSL https://raw.githubusercontent.com/DuongMQuang/quangflow/main/remote-install.sh | bash -s -- --global
+
+# Project install (specific project only)
+curl -fsSL https://raw.githubusercontent.com/DuongMQuang/quangflow/main/remote-install.sh | bash -s -- --project /path/to/project
 ```
 
-**Manual**:
+### Manual
 
 ```bash
 git clone https://github.com/DuongMQuang/quangflow.git
 cd quangflow
-bash install.sh /path/to/your/project
+bash install.sh              # interactive
+bash install.sh --global     # install to ~/.claude/
+bash install.sh --project    # install to current project
+bash install.sh --update     # update commands+agents only (keeps CLAUDE.md)
 ```
+
+### Global vs Project Install
+
+| | Global (`~/.claude/`) | Project (`.claude/`) |
+|---|---|---|
+| **Scope** | All projects | This project only |
+| **Best for** | Personal workflow across all repos | Team repos (commit `.claude/` to git) |
+| **CLAUDE.md** | `~/.claude/CLAUDE.md` | `./CLAUDE.md` (project root) |
+| **Plans dir** | Each project manages own `./plans/` | `./plans/` created automatically |
 
 ### What Gets Installed
 
 ```
-your-project/
-├── .claude/
-│   ├── commands/          # 6 slash commands (qf-1::brainstorm through qf-s::status)
-│   └── agents/            # 5 agent instruction files
-├── plans/                 # Created empty — workflow artifacts go here
-└── CLAUDE.md              # QuangFlow config (created or appended)
+{target}/.claude/
+├── commands/
+│   ├── _shared.md           # Shared protocols (state check, gates, output rules)
+│   ├── _autopilot.md        # Autopilot mode protocol
+│   ├── qf-0/init.md          # Phase 0
+│   ├── qf-1/brainstorm.md   # Phase 1
+│   ├── qf-2/design.md       # Phase 2
+│   ├── qf-3/handoff.md      # Phase 3
+│   ├── qf-4/verify.md       # Phase 4
+│   ├── qf-5/maintain.md     # Phase 5
+│   ├── qf-q/quick.md        # Quick mode
+│   ├── qf-c/cook.md         # Team orchestrator
+│   ├── qf-s/status.md       # Status reporter
+│   └── qf-t/test.md         # Smoke test
+└── agents/
+    ├── _shared.md            # Shared agent protocols
+    ├── domain-engineer.md    # Design docs producer
+    ├── dev-teammate.md       # Implementation agent
+    ├── tech-lead.md          # Code reviewer
+    ├── tester.md             # Test generator
+    └── pm.md                 # Status tracker
 ```
 
 ## Uninstall
 
 ```bash
-bash /path/to/quangflow/uninstall.sh /path/to/your/project
+bash /path/to/quangflow/uninstall.sh              # interactive (auto-detects)
+bash /path/to/quangflow/uninstall.sh --global      # remove from ~/.claude/
+bash /path/to/quangflow/uninstall.sh --project     # remove from current project
 ```
 
-Removes commands and agent files. Leaves `CLAUDE.md` and `plans/` intact.
+Removes only QuangFlow files. Leaves CLAUDE.md and plans/ intact.
 
 ## Quick Start
 
@@ -68,23 +105,24 @@ claude
 /qf-1::brainstorm user authentication with OAuth2 and JWT
 ```
 
-The PM will ask clarifying questions in batches, challenge your assumptions, recommend milestone splits, and suggest a team composition. Follow the phases:
+Follow the phases:
 
-1. **Brainstorm** -> answer questions -> APPROVE
-2. **Design** -> pick architecture option -> save DESIGN.md
-3. **Handoff** -> review artifacts -> CONFIRM -> SHIP (team) or SOLO (manual)
-4. **Verify** -> review QA report -> fix gaps -> SHIP
+0. **Init** → setup project context → scan codebase → CONTEXT.md
+1. **Brainstorm** → answer questions → APPROVE
+2. **Design** → pick architecture option → save DESIGN.md
+3. **Handoff** → review artifacts → CONFIRM → SHIP (team) or SOLO (manual)
+4. **Verify** → review QA report → fix gaps → SHIP
 
 ## Team Mode
 
-For larger projects (2+ functional layers), the workflow supports parallel agent teams:
+For larger projects (2+ functional layers), supports parallel agent teams:
 
 ```
-domain-engineer -> devs (parallel) -> [optional] tech-lead -> tester -> PM status
+domain-engineer → devs (parallel) → [optional] tech-lead → tester → PM status
 ```
 
-| Role | Agent Type | Purpose |
-|------|-----------|---------|
+| Role | Agent | Purpose |
+|------|-------|---------|
 | lead | main session | Orchestrator — coordinates team, user decisions |
 | pm | project-manager | NPC — tracks progress, session resume |
 | domain-engineer | planner | Designs modules, sequences, contracts before devs |
@@ -92,11 +130,9 @@ domain-engineer -> devs (parallel) -> [optional] tech-lead -> tester -> PM statu
 | tech-lead | code-reviewer | Reviews quality, detects gaps (optional) |
 | tester | tester | Generates & runs tests from requirements |
 
-Agent scoping is configurable — choose **scoped agents** (separate dev-backend + dev-frontend) or **combined fullstack** during Phase 1.
-
 ## Milestone System
 
-Large projects auto-split into milestones. Each milestone runs the full 4-phase cycle:
+Large projects auto-split into milestones. Each runs the full 4-phase cycle:
 
 ```
 plans/my-feature/
@@ -111,49 +147,36 @@ plans/my-feature/
 │   └── ...
 ```
 
-## Autopilot Mode (for non-technical users)
+## Autopilot Mode
 
-QuangFlow auto-detects whether you're technical or non-technical at the start of Phase 1.
+Auto-detects technical vs non-technical users at Phase 1 start.
 
-**Non-technical users get autopilot mode:**
-- Only answers business questions (what, who, why — never how)
-- Tech stack, architecture, and team composition auto-picked
-- All gates use plain, jargon-free language
-- Bug triage auto-handled by severity
-- Technical decisions logged silently to CONTEXT.md
+Non-technical users get:
+- Business-only questions (what, who, why — never how)
+- Auto-picked tech stack, architecture, team composition
+- Plain language at all gates
+- Auto-triage in maintain mode
 
 No flags needed — just answer "non-technical" when asked.
 
 ## Key Features
 
-- **Autopilot mode**: Non-technical users focus on business needs while PM handles all technical decisions.
+- **Crash recovery**: Pipeline state saved before each stage — resume with `--from` after interruption.
+- **File ownership validation**: Detects overlapping dev globs before spawning team agents.
+- **Cross-milestone regression**: Phase 4 re-runs previous milestone tests to catch regressions.
 - **Review gates**: Agent never self-advances. Every phase needs explicit approval.
-- **Design pattern research**: Phase 2 evaluates applicable patterns (Repository, CQRS, etc.) with YAGNI checks.
-- **Test dependency chains**: Phase 4 runs tests in order (infra -> models -> services -> endpoints -> E2E), marks downstream tests as BLOCKED on failure.
-- **Gap detection**: Tech-lead classifies gaps as minor (fix inline) or major (remediation phase). User decides ADD/DEFER/IGNORE.
-- **Session resume**: `/qf-s::status` reads STATUS.md and tells you exactly where you left off and what command to run next.
-- **Context save**: `/qf-s::status save` snapshots state before `/clear` or `/exit`.
-- **Per-agent token tracking**: Pipeline logs each agent's token usage, tool calls, and duration to STATUS.md.
 - **Critical thinking**: Challenges assumptions in ALL phases, not just brainstorm.
+- **Design pattern research**: Phase 2 evaluates applicable patterns with YAGNI checks.
+- **Test dependency chains**: Phase 4 runs tests in order, marks downstream as BLOCKED on failure.
+- **Gap detection**: Tech-lead classifies gaps as minor/major. User decides ADD/DEFER/IGNORE.
+- **Session resume**: `/qf-s::status` reads STATUS.md — tells you where you left off.
+- **Context save**: `/qf-s::status save` snapshots state before `/clear` or `/exit`.
 
 ## Customization
 
-### CLAUDE.md
+Edit `CLAUDE.md` in your project root to set tech stack, PM personality, conventions, and review gate behavior.
 
-Edit the `CLAUDE.md` in your project root to:
-- Set your tech stack
-- Adjust the PM personality
-- Add project-specific conventions
-- Modify review gate behavior
-
-### Agent Instructions
-
-Edit files in `.claude/agents/` to customize agent behavior:
-- `domain-engineer.md` — what design docs to produce
-- `dev-teammate.md` — implementation protocol
-- `tech-lead.md` — review checklist and severity classification
-- `tester.md` — test generation strategy
-- `pm.md` — status report structure
+Edit files in `.claude/agents/` to customize agent behavior per role.
 
 ## License
 

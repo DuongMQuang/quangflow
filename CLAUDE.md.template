@@ -55,7 +55,8 @@ Severity: CRITICAL > ERROR > WARNING > INFO. See `/qf-5::maintain` for full prot
 This project uses a 5-phase QuangFlow lifecycle:
 
 **Build phases (per milestone):**
-1. `/qf-1::brainstorm <idea>` — requirements discovery + milestone split + team suggestion
+0. `/qf-0::init <idea>` — project setup, codebase scan, create CONTEXT.md (run once per feature)
+1. `/qf-1::brainstorm` — requirements discovery + milestone split + team suggestion
 2. `/qf-2::design` — structural options + trade-offs + team refinement (per milestone)
 3. `/qf-3::handoff` — execution artifacts + SHIP/REFINE/SOLO gate (per milestone)
 4. `/qf-4::verify` — QA/QC: tests, traceability, gap detection, remediation (per milestone)

@@ -44,6 +44,14 @@ If tester agent already ran in Phase 3, check coverage gaps and supplement. Othe
 - Validate against success metrics from REQUIREMENTS.md
 
 ### Step 3: Run Tests (with dependency awareness)
+
+**Cross-milestone regression (milestone-2+):**
+If current milestone > 1, also run tests from ALL previous milestones as a regression check.
+- Run previous milestone tests FIRST — if they fail, flag as REGRESSION (not new failure)
+- Report regressions separately: "Milestone-{N} code broke {X} tests from milestone-{N-1}"
+- Regressions are auto-classified as CRITICAL gaps in GAPS.md — must be fixed before SHIP
+
+**Current milestone tests:**
 - Execute all tests (existing from Phase 3 tester + any newly generated)
 - **Test dependency chain**: If a foundational test fails (e.g., auth, DB connection, model creation), mark all downstream tests as BLOCKED instead of running them:
   - Auth tests fail → block all tests requiring authenticated requests (watchlist, protected routes, etc.)

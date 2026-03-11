@@ -24,6 +24,8 @@ Each phase follows this pattern (replace `{artifact}` with the phase-specific ch
 5. If single milestone project: skip confirmation
 
 **Target artifacts per phase:**
+- Phase 0 (init): `CONTEXT.md`
+- Phase 1 (brainstorm): `REQUIREMENTS.md`
 - Phase 2 (design): `DESIGN.md`
 - Phase 3 (handoff): `ROADMAP.md`
 - Phase 4 (verify): `QA-REPORT.md`
@@ -82,6 +84,15 @@ All phases follow the same gate structure:
 - Phase 3: `CONFIRM` (artifacts), then `SHIP / REFINE / SOLO` (execution)
 - Phase 4: `SHIP` (verification passed)
 - Phase 5: `FIX NOW / FIX LATER / DEFER / IGNORE` (bug triage)
+
+## Schema Version
+All generated artifacts (REQUIREMENTS.md, CONTEXT.md, ROADMAP.md, etc.) MUST include `quangflow_version` in their metadata.
+Current version: read from `.claude/.quangflow-version` file (written by installer).
+
+When a phase reads an artifact, check `quangflow_version`:
+- If missing: warn "This artifact was created before versioning. It may be missing fields added in newer versions."
+- If older than current: warn "This artifact was created with QuangFlow v{old}. Current is v{new}. Some fields may differ."
+- Do NOT block execution — just warn. Artifacts are forward-compatible.
 
 ## Code Quality Mandates
 Injected into every ROADMAP phase and verified in Phase 4:

@@ -69,6 +69,27 @@ Resume pipeline from a specific stage, running it and all subsequent stages.
 - `--from tester` runs: tester -> pm
 - Useful after fixing bugs found by tech-lead or after manual code changes
 
+## File Ownership Validation (before spawning any agents)
+Before creating the team, validate that dev roles have non-overlapping file ownership:
+
+1. Extract all `ownership` globs from `team_composition` in REQUIREMENTS.md
+2. For each pair of dev roles, check if their globs overlap:
+   - `src/api/*` and `src/*` → OVERLAP (src/* contains src/api/*)
+   - `src/api/*` and `src/components/*` → OK (disjoint)
+   - `tests/*` and `__tests__/*` → OK (different dirs)
+3. If overlap found, warn user:
+   "File ownership overlap detected:
+   - `dev-backend` owns `src/*`
+   - `dev-frontend` owns `src/components/*`
+   → `src/components/*` matches both. This will cause conflicts.
+
+   Fix options:
+   1. Narrow dev-backend to `src/api/*, src/models/*, src/services/*`
+   2. Merge into single `dev-fullstack`
+   Which do you prefer?"
+4. Do NOT proceed until ownership is clean (no overlaps between dev roles)
+5. Non-dev roles (tech-lead = read-only, tester = tests/*, pm = plans/*) are excluded from overlap check
+
 ## Team Creation
 
 CALL `TeamCreate(team_name: "{feature-slug}-m{N}")`
@@ -79,20 +100,33 @@ If TeamCreate fails: "Agent Teams requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS
 Track pipeline progress in `plans/{feature-slug}/milestone-{N}/PIPELINE-STATE.md`.
 This enables crash recovery via `--from` flag.
 
-**Create/update after each stage completes:**
+**CRITICAL: Write state BEFORE each stage starts (not just after completion).**
+This ensures that if the session crashes mid-stage, the state file records which stage was in progress.
+
+**Update at two points per stage:**
+1. **Before stage starts:** mark as `IN_PROGRESS`
+2. **After stage completes:** mark as `completed`
+
 ```markdown
 # Pipeline State — {feature-slug} / Milestone {N}
 Updated: {timestamp}
 
+## Mode
+pm_mode: {hands-on | autopilot}
+hands_free: {true | false}
+
 ## Completed Stages
 - [x] domain-engineer — completed {timestamp}
 - [x] devs — completed {timestamp}, agents: dev-backend, dev-frontend
-- [ ] tech-lead
+- [~] tech-lead — IN_PROGRESS since {timestamp}
 - [ ] tester
 - [ ] pm
 
 ## Last Completed Stage
 devs
+
+## Currently Running
+tech-lead (started {timestamp})
 
 ## Resume Command
 `/qf-c::cook --from tech-lead`
@@ -102,11 +136,12 @@ devs
 1. Read PIPELINE-STATE.md to verify the claimed stage was actually reached
 2. If state file missing: warn "No pipeline state found. Run full pipeline or use `--only`?"
 3. If requested stage hasn't been reached yet: warn "Stage `{stage}` requires `{previous}` to complete first."
+4. If stage marked `IN_PROGRESS`: warn "Stage `{stage}` was interrupted. Re-running it."
 
 **On pipeline crash/interruption:**
-- PIPELINE-STATE.md preserves what completed
+- PIPELINE-STATE.md preserves what completed AND what was in progress
 - User runs `/qf-s::status` to see resume command
-- User runs `/qf-c::cook --from {next-stage}` to continue
+- User runs `/qf-c::cook --from {interrupted-or-next-stage}` to continue
 
 ## Pipeline Execution
 

@@ -34,8 +34,9 @@ Infer status from which artifacts exist:
 
 | Artifacts Present | Inferred Phase | Next Command |
 |-------------------|---------------|--------------|
-| Nothing | Not started | `/qf-1::brainstorm <idea>` |
-| REQUIREMENTS.md only | Phase 1 done | `/qf-2::design` |
+| Nothing | Not started | `/qf-0::init <idea>` |
+| CONTEXT.md only | Phase 0 done | `/qf-1::brainstorm` |
+| CONTEXT.md + REQUIREMENTS.md | Phase 1 done | `/qf-2::design` |
 | REQUIREMENTS.md + DESIGN.md | Phase 2 done | `/qf-3::handoff` |
 | REQUIREMENTS.md + DESIGN.md + ROADMAP.md | Phase 3 done | Implement ROADMAP, then `/qf-4::verify` |
 | REQUIREMENTS.md + DESIGN.md + ROADMAP.md + QA-REPORT.md | Phase 4 done | See Gap-Aware Logic below |

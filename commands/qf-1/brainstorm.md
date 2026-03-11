@@ -1,31 +1,12 @@
 You are now entering Phase 1: Requirements Brainstorm.
 
-## Autopilot Detection (do this FIRST)
-Before anything else, ask the user:
+## State Check
+See `_shared.md → State Check Template`. Required artifact: CONTEXT.md (from `/qf-0::init`).
+If none found: "No project context found. Run `/qf-0::init <idea>` first."
 
-"Before we start — are you technical (developer/engineer) or non-technical (PM, founder, designer)?
+Read CONTEXT.md to get: `pm_mode`, `project_type`, scan results, and feature slug.
 
-1. **Technical** — Full control over architecture, tech stack, and design decisions
-2. **Non-technical** — I'll handle all technical decisions for you. You focus on what you want built."
-
-- If **Technical**: set `pm_mode: hands-on` — proceed with normal flow (all technical questions, design options, review gates)
-- If **Non-technical**: set `pm_mode: autopilot` — see `_autopilot.md` for full behavior.
-  Summary: business-only questions, auto-pick tech decisions, simplified gates.
-
-Write `pm_mode` into REQUIREMENTS.md metadata.
-
-### Hands-Free Mode Offer (autopilot only)
-See `_autopilot.md → Hands-Free Mode`. Offer restart with `claude --continue --dangerously-skip-permissions`.
-Save state to PIPELINE-STATE.md (see `_shared.md → PIPELINE-STATE Schema`).
-
-### Resume from PIPELINE-STATE (on restart)
-Check `./plans/*/milestone-*/PIPELINE-STATE.md` for `hands_free: true`.
-If found: skip Autopilot Detection, resume from last incomplete stage.
-If not found: proceed with Autopilot Detection above.
-
----
-
-## Quick Mode Detection (do this SECOND)
+## Quick Mode Detection (do this FIRST)
 Before starting the full brainstorm, analyze $ARGUMENTS for scope:
 
 **Signals of a small task** (any 2+ of these):
@@ -44,77 +25,15 @@ Before starting the full brainstorm, analyze $ARGUMENTS for scope:
 Which do you prefer?"
 
 If user picks Quick: tell them to run `/qf-q::quick {arguments}` and stop.
-If user picks Full: proceed with setup below.
+If user picks Full: proceed below.
 If ambiguous scope: proceed with full brainstorm (err on thorough side).
 
-## Setup
-- Derive a feature slug from $ARGUMENTS (kebab-case, e.g. "user-auth", "payment-flow")
-- Create directory: ./plans/{feature-slug}/
-- This slug is used by all subsequent phases
-
-## Project Type Detection (do this after setup)
-Ask the user:
-
-"Is this an **existing project** or a **new project from scratch**?
-
-1. **Existing project** — I'll scan the codebase first to understand what's already built
-2. **New project** — Starting fresh, no codebase to scan"
-
-### If Existing Project
-Ask scan depth:
-
-"How deep should I scan the codebase?
-
-- **Shallow** — Manifest files (package.json, etc.) + top-level directory structure. Fast, low token cost.
-- **Medium** — Shallow + main entry points, config files, and existing docs in `./docs/`. Recommended.
-- **Deep** — Medium + read key source files to understand patterns and architecture. Thorough but higher token cost."
-
-**Perform the scan based on user's choice:**
-
-#### Shallow Scan
-- Read manifest files: package.json, requirements.txt, go.mod, Cargo.toml, pyproject.toml, etc.
-- List top-level directory structure (1 level deep)
-- Read CLAUDE.md and README.md if they exist
-
-#### Medium Scan (includes Shallow)
-- Read main entry points: index.ts, main.py, app.ts, server.ts, etc.
-- Read config files: tsconfig.json, .env.example, docker-compose.yml, etc.
-- Read all docs in `./docs/` directory (if exists)
-- List `src/` structure (2 levels deep)
-
-#### Deep Scan (includes Medium)
-- Read key source files in each module directory (first file per directory)
-- Identify existing patterns: routing, middleware, DB access, state management
-- Note existing test setup and conventions
-
-**Present scan summary to user:**
-"Here's what I found in your codebase:
-- **Stack:** {detected stack}
-- **Structure:** {key directories and their purpose}
-- **Existing patterns:** {notable patterns found}
-- **Dependencies:** {key deps relevant to the new feature}
-
-This context will inform the design phase."
-
-**Inject into REQUIREMENTS.md** as an `## Existing Context` section containing:
-- Detected tech stack and versions
-- Project structure summary
-- Existing patterns and conventions
-- Dependencies relevant to the new feature
-- Any constraints imposed by the current architecture
-
-### If New Project
-- Skip codebase scan
-- Ask about intended tech stack in the first clarification batch
-- Note in REQUIREMENTS.md: `project_type: new`
-
 ## Milestone-2+ Detection (check before full brainstorm)
-Before starting clarification rounds, check if REQUIREMENTS.md already exists for this feature slug.
+Check if REQUIREMENTS.md already exists for this feature slug.
 
 **If REQUIREMENTS.md exists with [M2]+ tags (subsequent milestone):**
 
 This is a scoped confirmation, NOT a full brainstorm. Skip:
-- Codebase scan (already done in milestone-1, context in REQUIREMENTS.md + CONTEXT.md)
 - Devil's advocate
 - Milestone splitting (already decided)
 - Team composition (already decided, can be refined in Phase 2)
@@ -142,6 +61,11 @@ This is a scoped confirmation, NOT a full brainstorm. Skip:
 - Ask clarifying questions in BATCHES (max 5 per round)
 - Do not write any files until user has answered at least 2 rounds
 - After each round, summarize what you understood + what's still unclear
+
+## Autopilot Mode
+Read `pm_mode` from CONTEXT.md.
+- If `autopilot`: See `_autopilot.md → Phase 1`. Business-only questions, skip technical edge cases.
+- If `hands-on` or not set: proceed with normal flow below.
 
 ## Clarification Protocol
 When a user's answer is vague, incomplete, or ambiguous, use `AskUserQuestion` to probe deeper.
@@ -237,6 +161,7 @@ Scan all approved requirements and identify which **functional layers** are invo
 | **Frontend** | UI, pages, components, forms, dashboard, responsive, styling | `fullstack-developer` focused on frontend |
 | **Infrastructure** | Docker, CI/CD, deployment, env config, cloud, monitoring | `fullstack-developer` focused on infra |
 | **Mobile** | iOS, Android, React Native, Flutter, mobile app | `fullstack-developer` focused on mobile |
+
 ### Present Suggestion
 Based on the analysis, present:
 
