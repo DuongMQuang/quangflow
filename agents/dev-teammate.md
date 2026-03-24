@@ -43,8 +43,14 @@ After plan approval:
 3. Implement interfaces exactly as specified in CONTRACTS.md
 4. Follow the sequence flows from SEQUENCES.md
 5. Handle error paths shown in sequence diagrams
-6. Write clean, compilable code — run compile/lint checks after each file
-7. **After each major step** (file created, phase completed): update CHECKPOINT-{role}.md
+6. **Semantic safety (if `code_graph: gitnexus` in CK Context Block):**
+   - Before editing any shared/exported function: run `mcp__gitnexus__context` to see callers
+   - Before modifying a public interface: run `mcp__gitnexus__impact` (d=2) for blast radius
+   - If impact reaches outside your ownership: message lead before proceeding
+   - For renames: use `mcp__gitnexus__rename` instead of manual find-replace
+   - Skip for new files, private functions, and test files
+7. Write clean, compilable code — run compile/lint checks after each file
+8. **After each major step** (file created, phase completed): update CHECKPOINT-{role}.md
 
 **Checkpointing:** Write progress to `plans/{slug}/milestone-{N}/CHECKPOINT-{role}.md` after each file or phase completion. If you crash, a replacement agent will resume from your checkpoint.
 

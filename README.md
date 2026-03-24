@@ -180,6 +180,9 @@ No flags needed — just answer "non-technical" when asked.
 - **Gap detection**: Tech-lead classifies gaps as minor/major. User decides ADD/DEFER/IGNORE.
 - **Session resume**: `/qf:status` reads STATUS.md — tells you where you left off.
 - **Context save**: `/qf:status save` snapshots state before `/clear` or `/exit`.
+- **GitNexus integration** (optional): Adds semantic-level safety — blast radius analysis, cross-boundary impact detection, graph-aware renames. Auto-detected when [GitNexus](https://github.com/abhigyanpatwari/GitNexus) MCP server is configured.
+- **GOTCHAs self-improvement**: Lessons auto-logged from gaps/bugs, auto-reviewed before design/handoff. User corrections detected by hook.
+- **Progress tracking**: PROGRESS.md records phase timeline, session count, iterations, key decisions per milestone.
 
 ## Customization
 

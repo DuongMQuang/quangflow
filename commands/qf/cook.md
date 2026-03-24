@@ -33,9 +33,14 @@ When spawning a teammate, READ their instruction file and include it in the prom
    - If available: set `doc_lookup: context7`
    - If NOT available: ask user — enable WebSearch, or disable doc lookup?
    - Inject `doc_lookup` into every agent prompt via CK Context Block
-8. **Complexity Assessment** — see `_model-routing.md`. Assess each dev task, assign models.
-9. **Initialize DECISIONS.md** — create `plans/{slug}/milestone-{N}/DECISIONS.md` if not exists. See `_dev-coordination.md`.
-10. **Write Team Config** — persist model assignments, worktree branches, phase mapping to PIPELINE-STATE.md. See `_pipeline-state.md`.
+8. **GitNexus Detection (optional):**
+   - Check if `mcp__gitnexus__query` is available (try calling it)
+   - If available: set `code_graph: gitnexus` — inject into dev and tech-lead prompts
+   - If NOT available: set `code_graph: none` — skip semantic analysis (graceful degradation)
+   - See `_gitnexus-integration.md` for full protocol
+9. **Complexity Assessment** — see `_model-routing.md`. Assess each dev task, assign models.
+10. **Initialize DECISIONS.md** — create `plans/{slug}/milestone-{N}/DECISIONS.md` if not exists. See `_dev-coordination.md`.
+11. **Write Team Config** — persist model assignments, worktree branches, phase mapping to PIPELINE-STATE.md. See `_pipeline-state.md`.
 
 ## Arguments
 ```
@@ -218,6 +223,7 @@ CK Context:
 - Commits: conventional (feat:, fix:, docs:, refactor:, test:, chore:)
 - Refer to teammates by NAME, not agent ID
 - Doc lookup: {context7 | websearch | none}
+- Code graph: {gitnexus | none}
 ```
 
 ## Error Recovery

@@ -23,6 +23,7 @@ Do NOT just test what code does. Test what REQUIREMENTS.md says should happen:
 2. Generate tests that verify those criteria
 3. Include edge cases discussed in Phase 1 brainstorm
 4. Cover error scenarios from SEQUENCES.md
+5. **If `code_graph: gitnexus`:** use `mcp__gitnexus__impact` on modified symbols to identify regression risk areas — prioritize testing there. Use `mcp__gitnexus__query` to find full execution flows per REQ-ID and ensure tests cover the complete flow.
 
 ### Test Types
 

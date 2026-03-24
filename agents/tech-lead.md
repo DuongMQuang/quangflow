@@ -27,6 +27,7 @@ You are the tech lead — you review all dev outputs for quality, architecture c
 - Shared types consistent across dev boundaries?
 - Data flows match SEQUENCES.md diagrams?
 - No conflicting assumptions between devs
+- **If `code_graph: gitnexus`:** run `mcp__gitnexus__detect_changes` on each dev's diff to find unintended cross-boundary impacts. Flag any impact not documented in DECISIONS.md.
 
 ### 3. DESIGN.md Compliance
 - Implementation matches chosen architecture option
