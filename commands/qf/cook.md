@@ -36,7 +36,9 @@ When spawning a teammate, READ their instruction file and include it in the prom
 8. **GitNexus Detection (optional):**
    - Check if `mcp__gitnexus__query` is available (try calling it)
    - If available: set `code_graph: gitnexus` — inject into dev and tech-lead prompts
-   - If NOT available: set `code_graph: none` — skip semantic analysis (graceful degradation)
+   - If NOT available: set `code_graph: none` and show recommendation ONCE:
+     "**Tip:** GitNexus adds semantic safety (blast radius, cross-boundary impact detection) for parallel dev agents. Install with: `npm install -g gitnexus && gitnexus index`. See `_gitnexus-integration.md` for setup."
+   - Do NOT repeat this recommendation in subsequent runs — only show on first detection failure per feature
    - See `_gitnexus-integration.md` for full protocol
 9. **Complexity Assessment** — see `_model-routing.md`. Assess each dev task, assign models.
 10. **Initialize DECISIONS.md** — create `plans/{slug}/milestone-{N}/DECISIONS.md` if not exists. See `_dev-coordination.md`.
