@@ -116,13 +116,29 @@ Result: DEBATE.md with synthesized findings. User picks PROCEED / REVISE / SKIP.
 - READ `.claude/agents/dev-teammate.md`
 - Model per dev: see `_model-routing.md`
 - If 2+ devs: use worktree isolation — see `_worktree-isolation.md`
-- Scope context per `_context-scoping.md` — each dev gets only their phases/modules
 
 For each dev role:
-- `Task(subagent_type: "fullstack-developer", name: "{role}", mode: "plan")`
-  - model: {from complexity assessment}
-  - isolation: "worktree" (if 2+ devs)
-  - Prompt: dev-teammate.md + scoped context + CK Context Block
+1. **Build scoped context (script — not LLM):**
+   ```bash
+   bash scripts/build-agent-context.sh --role {role} --milestone-dir {path} \
+     --ownership "{globs}" --reqs "{REQ-IDs}" --phases "{phase-nums}" \
+     --output plans/{slug}/milestone-{N}/.context-{role}.md
+   ```
+2. **Set ownership for hook enforcement:**
+   ```bash
+   echo "{ownership-globs}" > .claude/.current-agent-ownership
+   ```
+3. **Log audit entry:**
+   ```bash
+   bash scripts/log-agent-audit.sh --role {role} --milestone-dir {path} \
+     --model {model} --context-file plans/{slug}/milestone-{N}/.context-{role}.md \
+     --ownership "{globs}" --reqs "{REQ-IDs}"
+   ```
+4. **Spawn agent:**
+   - `Task(subagent_type: "fullstack-developer", name: "{role}", mode: "plan")`
+     - model: {from complexity assessment}
+     - isolation: "worktree" (if 2+ devs)
+     - Prompt: dev-teammate.md + contents of `.context-{role}.md` + CK Context Block
 - If DEBATE.md exists: include as "Design Notes"
 - REVIEW and APPROVE each dev's plan
 - MONITOR all devs
