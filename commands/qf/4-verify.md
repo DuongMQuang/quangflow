@@ -8,6 +8,15 @@ If missing: "No finalized requirements found. Run `/qf:3-handoff` first."
 See `_shared.md → Milestone Detection`. Target artifact: `QA-REPORT.md`.
 Read REQUIREMENTS.md (filter to [M{N}]), DESIGN.md, and CONTEXT.md.
 
+## Pre-flight: Artifact Validation (auto — run FIRST)
+Run the artifact validation script before any LLM analysis:
+```bash
+bash {quangflow-root}/scripts/validate/validate-artifacts.sh ./plans/{feature-slug}
+```
+- If script reports failures: present them to user and ask to fix before proceeding
+- If script reports only warnings: proceed but note the warnings
+- This catches structural issues (missing sections, broken cross-refs) deterministically
+
 ## Pre-flight: Implementation Check
 - Check if source code exists for this milestone's features
 - If no implementation found, tell user: "No implementation detected. Implement ROADMAP.md phases first, then re-run `/qf:4-verify`."

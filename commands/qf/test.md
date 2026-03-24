@@ -48,9 +48,17 @@ These stubs need only be syntactically valid, not functional. They exist to give
 
 ## Quick Test (`/qf:test quick`)
 
-Validate structural prerequisites without running phases:
+Validate structural prerequisites without running phases.
 
-### Checks
+**IMPORTANT — Auto-invoke script first:**
+Before any LLM-based checks, run the validation script:
+```bash
+bash {quangflow-root}/scripts/validate/validate-install.sh {commands-dir}
+```
+Where `{quangflow-root}` is the directory containing `scripts/`, and `{commands-dir}` is the `.claude/commands` directory.
+If the script passes, report its output. If it fails, report failures and stop — do NOT proceed to LLM checks.
+
+### Additional LLM Checks (after script passes)
 | # | Check | How |
 |---|-------|-----|
 | 1 | Command files exist | Glob for `qf/*.md` in commands dir — verify all 13 files present |

@@ -122,6 +122,13 @@ remove_from() {
     fi
   done
 
+  # Remove scripts directory
+  if [[ -d "$claude_dir/scripts" ]]; then
+    rm -rf "$claude_dir/scripts"
+    echo -e "  ${RED}removed${NC} scripts/"
+    removed=$((removed + 1))
+  fi
+
   # Remove version file
   if [[ -f "$claude_dir/.quangflow-version" ]]; then
     rm "$claude_dir/.quangflow-version"

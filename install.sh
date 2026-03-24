@@ -212,6 +212,24 @@ for f in "$SCRIPT_DIR/agents/"*.md; do
   AGENT_COUNT=$((AGENT_COUNT + 1))
 done
 
+# --- Copy validation scripts ---
+SCRIPTS_DIR="$CLAUDE_DIR/scripts"
+SCRIPT_COUNT=0
+if [ -d "$SCRIPT_DIR/scripts" ]; then
+  echo ""
+  info "Installing scripts..."
+  # Copy scripts preserving directory structure
+  find "$SCRIPT_DIR/scripts" -name "*.sh" | while read -r f; do
+    rel_path="${f#$SCRIPT_DIR/scripts/}"
+    dest_dir="$SCRIPTS_DIR/$(dirname "$rel_path")"
+    mkdir -p "$dest_dir"
+    cp "$f" "$dest_dir/"
+    chmod +x "$dest_dir/$(basename "$f")"
+    ok "  scripts/$rel_path"
+  done
+  SCRIPT_COUNT=$(find "$SCRIPT_DIR/scripts" -name "*.sh" | wc -l | tr -d ' ')
+fi
+
 # --- Handle CLAUDE.md (skip in update mode) ---
 echo ""
 if $UPDATE_ONLY; then
@@ -263,6 +281,7 @@ echo "  Installed:"
 echo "    $SHARED_COUNT shared protocol(s)"
 echo "    $CMD_COUNT command(s)  -> $COMMANDS_DIR/"
 echo "    $AGENT_COUNT agent(s)   -> $AGENTS_DIR/"
+echo "    $SCRIPT_COUNT script(s)  -> $SCRIPTS_DIR/"
 [[ -n "$PLANS_DIR" ]] && echo "    plans dir    -> $PLANS_DIR/"
 echo ""
 echo "  Commands:"

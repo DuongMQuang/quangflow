@@ -81,13 +81,17 @@ bash install.sh --update     # update commands+agents only (keeps CLAUDE.md)
 │       ├── status.md          # Status reporter
 │       ├── test.md            # Smoke test
 │       └── update.md          # Self-update
-└── agents/
-    ├── _shared.md            # Shared agent protocols
-    ├── domain-engineer.md    # Design docs producer
-    ├── dev-teammate.md       # Implementation agent
-    ├── tech-lead.md          # Code reviewer
-    ├── tester.md             # Test generator
-    └── pm.md                 # Status tracker
+├── agents/
+│   ├── _shared.md            # Shared agent protocols
+│   ├── domain-engineer.md    # Design docs producer
+│   ├── dev-teammate.md       # Implementation agent
+│   ├── tech-lead.md          # Code reviewer
+│   ├── tester.md             # Test generator
+│   └── pm.md                 # Status tracker
+└── scripts/
+    └── validate/
+        ├── validate-install.sh    # Verify QuangFlow installation integrity
+        └── validate-artifacts.sh  # Verify plan artifacts structure
 ```
 
 ## Uninstall
