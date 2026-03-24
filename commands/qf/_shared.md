@@ -4,6 +4,12 @@ Referenced by all `/qf:*` commands. Do NOT duplicate — link here instead.
 
 ---
 
+## Core Principles
+- **Systems > Prompts** — enforce correctness through scripts and structure, not just instructions
+- **Verification > Generation** — validate with real checks (scripts, tests) before trusting LLM output
+- **Iteration > Perfection** — ship, learn (GOTCHAs), improve next round
+- **No lazy fixes** — solve root cause, never patch symptoms to pass a gate
+
 ## Project Root Detection
 Walk up from CWD looking for `./plans/` directory. Check parent directories up to 3 levels. Use the directory containing `./plans/` as project root for all subsequent scans.
 
