@@ -213,18 +213,58 @@ tech-lead (started {timestamp})
 
 ## Resume Command
 `/qf:cook --from tech-lead`
+
+## Team Config
+```yaml
+model_assignments:
+  domain-engineer: sonnet
+  critic-feasibility: haiku
+  critic-simplicity: haiku
+  dev-backend: sonnet
+  dev-frontend: haiku
+  tech-lead: sonnet
+  tester: sonnet
+  pm: haiku
+
+worktree_branches:
+  dev-backend: qf/user-auth/m1/dev-backend
+  dev-frontend: qf/user-auth/m1/dev-frontend
+
+phase_assignments:
+  dev-backend:
+    phases: [1, 3]
+    reqs: [REQ-001, REQ-002, REQ-003]
+    ownership: "src/api/*, src/models/*, src/services/*"
+  dev-frontend:
+    phases: [2, 4]
+    reqs: [REQ-004]
+    ownership: "src/components/*, src/pages/*"
+\```
 ```
 
-**On `--from` flag:**
+**Writing Team Config:**
+Cook writes the `## Team Config` section to PIPELINE-STATE.md during pre-flight, AFTER:
+- Complexity assessment completes (model assignments decided)
+- Phase-to-dev mapping completes (from ROADMAP + team_composition)
+- Worktree branch names generated (if 2+ devs)
+
+This happens ONCE at pipeline start. The config persists across sessions.
+
+**On `--from` flag (resume):**
 1. Read PIPELINE-STATE.md to verify the claimed stage was actually reached
-2. If state file missing: warn "No pipeline state found. Run full pipeline or use `--only`?"
-3. If requested stage hasn't been reached yet: warn "Stage `{stage}` requires `{previous}` to complete first."
-4. If stage marked `IN_PROGRESS`: warn "Stage `{stage}` was interrupted. Re-running it."
+2. If `## Team Config` section exists: use persisted model_assignments, worktree_branches, phase_assignments — do NOT re-derive
+3. Re-compute scoped context slicing fresh from current artifacts (avoids drift)
+4. If `## Team Config` is missing (legacy or first run): fall back to re-deriving everything from scratch
+5. If state file missing: warn "No pipeline state found. Run full pipeline or use `--only`?"
+6. If requested stage hasn't been reached yet: warn "Stage `{stage}` requires `{previous}` to complete first."
+7. If stage marked `IN_PROGRESS`: warn "Stage `{stage}` was interrupted. Re-running it."
+8. If CHECKPOINT-{role}.md exists for the interrupted stage: inject checkpoint into replacement agent prompt
 
 **On pipeline crash/interruption:**
-- PIPELINE-STATE.md preserves what completed AND what was in progress
+- PIPELINE-STATE.md preserves what completed, what's in progress, AND team config
 - User runs `/qf:status` to see resume command
 - User runs `/qf:cook --from {interrupted-or-next-stage}` to continue
+- Resumed pipeline uses persisted team config — no re-derivation surprises
 
 ## Pipeline Execution
 

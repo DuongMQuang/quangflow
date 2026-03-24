@@ -103,7 +103,10 @@ When ALL milestones have QA-REPORT.md (project is shipped), check for BUGLOG.md:
 If REQUIREMENTS.md has `team_mode: true`:
 - List team composition with roles
 - Read `PIPELINE-STATE.md` (if exists) for last completed stage and resume command
+- If `## Team Config` exists in PIPELINE-STATE.md: show model assignments and phase mapping
 - Report which pipeline stage was last active
+- Check for CHECKPOINT-*.md files — report per-agent progress for interrupted stages
+- Check for DECISIONS.md — report decision count
 - Note if any agent tasks are pending/blocked
 - If pipeline was interrupted: show resume command from PIPELINE-STATE.md
 
