@@ -4,7 +4,7 @@ A 5-phase workflow framework for [Claude Code](https://docs.anthropic.com/en/doc
 
 ## What It Does
 
-Adds 11 slash commands to Claude Code:
+Adds 12 slash commands to Claude Code:
 
 | Command | Phase | Purpose |
 |---------|-------|---------|
@@ -18,6 +18,7 @@ Adds 11 slash commands to Claude Code:
 | `/qf:cook` | Orchestrator | Launches agent team pipeline (domain-engineer → devs → tech-lead → tester → PM) |
 | `/qf:status` | Status | Session-aware status reporter with resume context |
 | `/qf:test` | Smoke Test | Auto-detect stack, generate integration scripts, verify real module interactions |
+| `/qf:guide` | Guide | Interactive guided tour — walk through every phase step-by-step |
 | `/qf:update` | Update | Pull latest QuangFlow from GitHub and reinstall commands + agents |
 
 ## Philosophy
@@ -110,6 +111,12 @@ Removes only QuangFlow files. Leaves CLAUDE.md and plans/ intact.
 ```
 cd your-project
 claude
+/qf:guide
+```
+
+The guide walks you through every phase interactively. Or jump straight in:
+
+```
 /qf:0-init my feature idea
 ```
 
@@ -121,7 +128,7 @@ Follow the phases:
 3. **Handoff** → review artifacts → CONFIRM → SHIP (team) or SOLO (manual)
 4. **Verify** → review QA report → fix gaps → SHIP
 
-**Want a full walkthrough?** See [showcase/README.md](showcase/README.md) — build a task tracker app step-by-step through every phase.
+**Want a full walkthrough?** See [showcase/README.md](showcase/README.md) or run `/qf:guide` for an interactive tour.
 
 ## Team Mode
 
