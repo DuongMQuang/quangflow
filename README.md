@@ -110,7 +110,7 @@ Removes only QuangFlow files. Leaves CLAUDE.md and plans/ intact.
 ```
 cd your-project
 claude
-/qf:1-brainstorm user authentication with OAuth2 and JWT
+/qf:0-init my feature idea
 ```
 
 Follow the phases:
@@ -120,6 +120,8 @@ Follow the phases:
 2. **Design** → pick architecture option → save DESIGN.md
 3. **Handoff** → review artifacts → CONFIRM → SHIP (team) or SOLO (manual)
 4. **Verify** → review QA report → fix gaps → SHIP
+
+**Want a full walkthrough?** See [showcase/README.md](showcase/README.md) — build a task tracker app step-by-step through every phase.
 
 ## Team Mode
 
