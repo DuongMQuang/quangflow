@@ -57,6 +57,6 @@ On objection: fall through to manual triage.
 
 ## Hands-Free Mode
 When autopilot user opts for hands-free:
-1. Save state to PIPELINE-STATE.md (see `_shared.md → PIPELINE-STATE Schema`)
+1. Save state to PIPELINE-STATE.md (see `_protocols/_shared.md → PIPELINE-STATE Schema`)
 2. Tell user to restart: `claude --continue --dangerously-skip-permissions`
 3. On restart: detect `hands_free: true` in PIPELINE-STATE.md, resume from last stage

@@ -69,19 +69,22 @@ bash install.sh --update     # update commands+agents only (keeps CLAUDE.md)
 {target}/.claude/
 ├── commands/
 │   └── qf/
-│       ├── _shared.md         # Shared protocols (state check, gates, output rules)
-│       ├── _autopilot.md      # Autopilot mode protocol
-│       ├── 0-init.md          # Phase 0: Project init
-│       ├── 1-brainstorm.md    # Phase 1: Requirements
-│       ├── 2-design.md        # Phase 2: Design
-│       ├── 3-handoff.md       # Phase 3: Handoff
-│       ├── 4-verify.md        # Phase 4: Verify
-│       ├── 5-maintain.md      # Phase 5: Maintain
-│       ├── quick.md           # Quick mode
-│       ├── cook.md            # Team orchestrator
-│       ├── status.md          # Status reporter
-│       ├── test.md            # Smoke test
-│       └── update.md          # Self-update
+│       ├── _protocols/          # Internal protocols (not user-facing commands)
+│       │   ├── _shared.md       #   State check, gates, output rules
+│       │   ├── _autopilot.md    #   Autopilot mode protocol
+│       │   └── ...              #   Context scoping, model routing, etc.
+│       ├── 0-init.md            # Phase 0: Project init
+│       ├── 1-brainstorm.md      # Phase 1: Requirements
+│       ├── 2-design.md          # Phase 2: Design
+│       ├── 3-handoff.md         # Phase 3: Handoff
+│       ├── 4-verify.md          # Phase 4: Verify
+│       ├── 5-maintain.md        # Phase 5: Maintain
+│       ├── guide.md             # Interactive guided tour
+│       ├── quick.md             # Quick mode
+│       ├── cook.md              # Team orchestrator
+│       ├── status.md            # Status reporter
+│       ├── test.md              # Smoke test
+│       └── update.md            # Self-update
 ├── agents/
 │   ├── _shared.md            # Shared agent protocols
 │   ├── domain-engineer.md    # Design docs producer

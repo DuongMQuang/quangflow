@@ -53,4 +53,4 @@ rm -rf "$TMPDIR"
 Print: "QuangFlow updated to v{new}. Commands and agents refreshed. CLAUDE.md untouched."
 
 ## Output Rule
-See `_shared.md → Output Rule`.
+See `_protocols/_shared.md → Output Rule`.

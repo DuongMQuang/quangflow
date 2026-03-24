@@ -1,7 +1,7 @@
 You are now entering Phase 1: Requirements Brainstorm.
 
 ## State Check
-See `_shared.md → State Check Template`. Required artifact: CONTEXT.md (from `/qf:0-init`).
+See `_protocols/_shared.md → State Check Template`. Required artifact: CONTEXT.md (from `/qf:0-init`).
 If none found: "No project context found. Run `/qf:0-init <idea>` first."
 
 Read CONTEXT.md to get: `pm_mode`, `project_type`, scan results, and feature slug.
@@ -64,7 +64,7 @@ This is a scoped confirmation, NOT a full brainstorm. Skip:
 
 ## Autopilot Mode
 Read `pm_mode` from CONTEXT.md.
-- If `autopilot`: See `_autopilot.md → Phase 1`. Business-only questions, skip technical edge cases.
+- If `autopilot`: See `_protocols/_autopilot.md → Phase 1`. Business-only questions, skip technical edge cases.
 - If `hands-on` or not set: proceed with normal flow below.
 
 ## Clarification Protocol
@@ -113,10 +113,10 @@ Use `AskUserQuestion` with structured options + free-type:
 - [ ] At least 3 edge cases discussed
 - [ ] Explicit list of what is OUT OF SCOPE
 
-**Autopilot mode:** See `_autopilot.md → Phase 1`. Business-only checklist, skip technical edge cases.
+**Autopilot mode:** See `_protocols/_autopilot.md → Phase 1`. Business-only checklist, skip technical edge cases.
 
 ## Devil's Advocate
-**Autopilot mode:** Skip — see `_autopilot.md → Phase 1`.
+**Autopilot mode:** Skip — see `_protocols/_autopilot.md → Phase 1`.
 
 **Normal mode:**
 Before finalizing, you MUST challenge each requirement:
@@ -137,7 +137,7 @@ Ask: "I recommend [1 | N] milestone(s). Here's the proposed split: [summary]. Do
 
 ## Review Gate
 
-**Autopilot mode:** See `_autopilot.md → Phase 1` review gate.
+**Autopilot mode:** See `_protocols/_autopilot.md → Phase 1` review gate.
 
 **Normal mode:**
 1. Present a summary: "Here's what I understood"
@@ -150,7 +150,7 @@ Agent waits. Does nothing until user types APPROVE.
 ## Team Mode Preference
 After APPROVE, analyze the approved requirements to suggest an execution mode.
 
-**Autopilot shortcut:** See `_autopilot.md → Phase 1`. Auto-select Solo/Team based on layer count.
+**Autopilot shortcut:** See `_protocols/_autopilot.md → Phase 1`. Auto-select Solo/Team based on layer count.
 
 ### Team Composition Analysis
 Scan all approved requirements and identify which **functional layers** are involved:
@@ -285,10 +285,10 @@ Write REQUIREMENTS.md to ./plans/{feature-slug}/REQUIREMENTS.md containing:
 If multiple milestones, create milestone directories: ./plans/{feature-slug}/milestone-1/, milestone-2/, etc.
 
 ## Output Rule
-See `_shared.md → Output Rule`.
+See `_protocols/_shared.md → Output Rule`.
 
 ## Progress Logging
-See `_shared.md → Progress Tracking`. Append Phase 1 row to `plans/{feature-slug}/PROGRESS.md`.
+See `_protocols/_shared.md → Progress Tracking`. Append Phase 1 row to `plans/{feature-slug}/PROGRESS.md`.
 Key decisions to log: REQ count, milestone count, team mode (solo/team), question rounds.
 
 ## Next Step

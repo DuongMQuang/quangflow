@@ -1,16 +1,16 @@
 You are now entering Phase 3: Execution Handoff.
 
 ## State Check
-See `_shared.md → State Check Template`. Required artifacts: REQUIREMENTS.md + DESIGN.md.
+See `_protocols/_shared.md → State Check Template`. Required artifacts: REQUIREMENTS.md + DESIGN.md.
 If missing DESIGN.md: "No design found. Run `/qf:2-design` first."
 If missing REQUIREMENTS.md: "No requirements found. Run `/qf:1-brainstorm <idea>` first."
 
 ## Milestone Detection
-See `_shared.md → Milestone Detection`. Target artifact: `ROADMAP.md`.
+See `_protocols/_shared.md → Milestone Detection`. Target artifact: `ROADMAP.md`.
 Read REQUIREMENTS.md (project-level) + DESIGN.md (milestone-level) + CONTEXT.md (if exists).
 
 ## GOTCHAs Review (before generating artifacts)
-See `_shared.md → GOTCHAs System → Review Protocol`.
+See `_protocols/_shared.md → GOTCHAs System → Review Protocol`.
 Read both `plans/GOTCHAS.md` (global) and `plans/{feature-slug}/GOTCHAS.md` (feature) if they exist. Filter by tags matching this milestone's requirements.
 If relevant gotchas found: inject their rules as `> ⚠️ GOTCHA [global/feature]:` warnings in the appropriate ROADMAP.md phases.
 
@@ -34,11 +34,11 @@ Generate to ./plans/{feature-slug}/milestone-{N}/:
 4. **ROADMAP.md** — phases with clear deliverable + done criteria per phase
 
 ## Code Quality Mandates
-See `_shared.md → Code Quality Mandates`. Inject into every ROADMAP phase.
+See `_protocols/_shared.md → Code Quality Mandates`. Inject into every ROADMAP phase.
 
 ## Review Gate
 
-**Autopilot mode:** See `_autopilot.md → Phase 3 — Handoff`.
+**Autopilot mode:** See `_protocols/_autopilot.md → Phase 3 — Handoff`.
 
 **Normal mode:**
 1. Read back CONTEXT.md locked decisions to the user
@@ -47,7 +47,7 @@ See `_shared.md → Code Quality Mandates`. Inject into every ROADMAP phase.
 Agent waits. Does nothing until user types CONFIRM.
 
 ## Output Rule
-See `_shared.md → Output Rule`.
+See `_protocols/_shared.md → Output Rule`.
 
 ## Execution Gate
 After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` settings.
@@ -76,7 +76,7 @@ After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` sett
    - **REFINE** — Adjust team composition
    - **SOLO** — Switch to solo mode (implement manually)"
 
-**Autopilot shortcut:** See `_autopilot.md → Phase 3`. Auto-SHIP, skip REFINE/SOLO.
+**Autopilot shortcut:** See `_protocols/_autopilot.md → Phase 3`. Auto-SHIP, skip REFINE/SOLO.
 
 4. On **REFINE**:
    - Ask: "What would you like to change?" and accept freeform instructions
@@ -97,7 +97,7 @@ After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` sett
 - Fall through to solo Next Step below
 
 ## Progress Logging
-See `_shared.md → Progress Tracking`. Append Phase 3 row to `plans/{feature-slug}/PROGRESS.md`.
+See `_protocols/_shared.md → Progress Tracking`. Append Phase 3 row to `plans/{feature-slug}/PROGRESS.md`.
 Key decisions to log: execution mode (SHIP/SOLO), ROADMAP phase count, team composition summary.
 
 ## Next Step

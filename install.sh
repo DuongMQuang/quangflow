@@ -174,29 +174,33 @@ mkdir -p "$COMMANDS_DIR"
 mkdir -p "$AGENTS_DIR"
 [[ -n "$PLANS_DIR" ]] && mkdir -p "$PLANS_DIR"
 
-# --- Copy shared protocol files ---
-info "Installing shared protocols..."
-SHARED_COUNT=0
-for f in "$SCRIPT_DIR/commands/"_*.md; do
-  [[ -f "$f" ]] || continue
-  fname="$(basename "$f")"
-  cp "$f" "$COMMANDS_DIR/$fname"
-  ok "  $fname"
-  SHARED_COUNT=$((SHARED_COUNT + 1))
-done
-
-# --- Copy commands ---
+# --- Copy commands (with subdirectories for protocols) ---
 info "Installing commands..."
 CMD_COUNT=0
+SHARED_COUNT=0
 for d in "$SCRIPT_DIR/commands/"*/; do
   dname="$(basename "$d")"
   mkdir -p "$COMMANDS_DIR/$dname"
+  # Copy command files
   for f in "$d"*.md; do
     [[ -f "$f" ]] || continue
     fname="$(basename "$f")"
     cp "$f" "$COMMANDS_DIR/$dname/$fname"
     ok "  $dname/$fname"
     CMD_COUNT=$((CMD_COUNT + 1))
+  done
+  # Copy protocol subdirectories (e.g. _protocols/)
+  for sub in "$d"_*/; do
+    [[ -d "$sub" ]] || continue
+    subname="$(basename "$sub")"
+    mkdir -p "$COMMANDS_DIR/$dname/$subname"
+    for f in "$sub"*.md; do
+      [[ -f "$f" ]] || continue
+      fname="$(basename "$f")"
+      cp "$f" "$COMMANDS_DIR/$dname/$subname/$fname"
+      ok "  $dname/$subname/$fname"
+      SHARED_COUNT=$((SHARED_COUNT + 1))
+    done
   done
 done
 

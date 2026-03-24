@@ -1,11 +1,11 @@
 You are now entering Phase 4: Verify & QA.
 
 ## State Check
-See `_shared.md → State Check Template`. Required artifact: finalized REQUIREMENTS.md + ROADMAP.md.
+See `_protocols/_shared.md → State Check Template`. Required artifact: finalized REQUIREMENTS.md + ROADMAP.md.
 If missing: "No finalized requirements found. Run `/qf:3-handoff` first."
 
 ## Milestone Detection
-See `_shared.md → Milestone Detection`. Target artifact: `QA-REPORT.md`.
+See `_protocols/_shared.md → Milestone Detection`. Target artifact: `QA-REPORT.md`.
 Read REQUIREMENTS.md (filter to [M{N}]), DESIGN.md, and CONTEXT.md.
 
 ## Pre-flight: Artifact Validation (auto — run FIRST)
@@ -107,14 +107,14 @@ Generate to ./plans/{feature-slug}/milestone-{N}/:
 - List: GAP-IDs with severity and status
 
 ## GOTCHAs Logging (after gap detection)
-See `_shared.md → GOTCHAs System → Logging Protocol`.
+See `_protocols/_shared.md → GOTCHAs System → Logging Protocol`.
 For each GAP found in Step 5, auto-create a gotcha entry in `plans/{feature-slug}/GOTCHAS.md`:
 - Domain tag: infer from affected files (e.g., `src/api/*` → `backend`, `src/components/*` → `frontend`)
 - Rule: derive from the gap's root cause — what should future phases check for?
 - Tags: include the phase where this should have been caught (e.g., `phase-2` if it's a design gap, `phase-3` if ROADMAP missed it)
 
 ## Autopilot Mode Check
-See `_autopilot.md → Phase 4 — Verify`. If autopilot: auto-fix, plain-language results, auto-triage gaps.
+See `_protocols/_autopilot.md → Phase 4 — Verify`. If autopilot: auto-fix, plain-language results, auto-triage gaps.
 If `hands-on` or not set: use normal review gate below.
 
 ## Review Gate
@@ -166,11 +166,11 @@ Only if user requests deeper review after seeing QA-REPORT.md:
 Append findings to QA-REPORT.md under "Manual Review" section.
 
 ## Progress Logging
-See `_shared.md → Progress Tracking`. Append Phase 4 row to `plans/{feature-slug}/PROGRESS.md`.
+See `_protocols/_shared.md → Progress Tracking`. Append Phase 4 row to `plans/{feature-slug}/PROGRESS.md`.
 Key decisions to log: PASS/FAIL count, gap count, remediation needed (yes/no), iterations.
 
 ## Output Rule
-See `_shared.md → Output Rule`.
+See `_protocols/_shared.md → Output Rule`.
 
 ## Next Step
 When user types SHIP:

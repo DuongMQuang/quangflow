@@ -26,10 +26,10 @@ echo ""
 
 # --- Check 1: Command files exist ---
 EXPECTED_COMMANDS=(
-  "qf/_shared.md" "qf/_autopilot.md"
+  "qf/_protocols/_shared.md" "qf/_protocols/_autopilot.md"
   "qf/0-init.md" "qf/1-brainstorm.md" "qf/2-design.md"
   "qf/3-handoff.md" "qf/4-verify.md" "qf/5-maintain.md"
-  "qf/quick.md" "qf/cook.md" "qf/status.md" "qf/test.md" "qf/update.md"
+  "qf/guide.md" "qf/quick.md" "qf/cook.md" "qf/status.md" "qf/test.md" "qf/update.md"
 )
 MISSING_CMDS=0
 for cmd in "${EXPECTED_COMMANDS[@]}"; do

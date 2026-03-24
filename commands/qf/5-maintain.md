@@ -149,7 +149,7 @@ Agent waits. Does nothing until user responds.
 ---
 
 ## Autopilot Triage
-See `_autopilot.md → Phase 5 — Maintain`. If autopilot: auto-triage by severity, present plain summary, proceed on OK.
+See `_protocols/_autopilot.md → Phase 5 — Maintain`. If autopilot: auto-triage by severity, present plain summary, proceed on OK.
 On user objection: fall through to manual Triage Flow below.
 
 ---
@@ -288,7 +288,7 @@ Agent waits for user response.
 ```
 
 ### Step 4: Log Gotcha
-See `_shared.md → GOTCHAs System → Logging Protocol`.
+See `_protocols/_shared.md → GOTCHAs System → Logging Protocol`.
 After each bug fix, auto-create a gotcha entry in `plans/{feature-slug}/GOTCHAS.md`:
 - Domain tag: infer from affected files
 - Rule: what should have prevented this bug (missing test, bad assumption, unchecked edge case)
@@ -347,4 +347,4 @@ When user is done:
 - Print: "Maintenance session complete. {X} bugs fixed, {Y} deferred, {Z} new. Resume with `/qf:5-maintain` next session."
 
 ## Output Rule
-See `_shared.md → Output Rule`.
+See `_protocols/_shared.md → Output Rule`.

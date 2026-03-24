@@ -5,7 +5,7 @@ Provide instant project status and session resumption context.
 This command can be run at ANY time, in ANY session.
 
 ## On Activation
-1. Find project root — see `_shared.md → Project Root Detection`.
+1. Find project root — see `_protocols/_shared.md → Project Root Detection`.
 2. Scan `{project-root}/plans/` for all feature directories
 3. For each feature, check for STATUS.md files in milestone directories
 4. If no plans exist: "No active projects. Run `/qf:1-brainstorm <idea>` to start."
@@ -192,4 +192,4 @@ When a new session starts and user asks "where was I?", "status", or similar:
 - Bold the next command so user can copy-paste immediately
 - If gaps/blockers exist, highlight them prominently
 - Always show the next command suggestion with skip/alternative options
-- See `_shared.md → Output Rule` for long content handling.
+- See `_protocols/_shared.md → Output Rule` for long content handling.

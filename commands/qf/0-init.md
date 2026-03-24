@@ -26,11 +26,11 @@ Ask the user:
 2. **Non-technical** — I'll handle all technical decisions for you. You focus on what you want built."
 
 - If **Technical**: set `pm_mode: hands-on`
-- If **Non-technical**: set `pm_mode: autopilot` — see `_autopilot.md` for full behavior
+- If **Non-technical**: set `pm_mode: autopilot` — see `_protocols/_autopilot.md` for full behavior
 
 ### Hands-Free Mode Offer (autopilot only)
-See `_autopilot.md → Hands-Free Mode`. Offer restart with `claude --continue --dangerously-skip-permissions`.
-Save state to PIPELINE-STATE.md (see `_shared.md → PIPELINE-STATE Schema`).
+See `_protocols/_autopilot.md → Hands-Free Mode`. Offer restart with `claude --continue --dangerously-skip-permissions`.
+Save state to PIPELINE-STATE.md (see `_protocols/_shared.md → PIPELINE-STATE Schema`).
 
 ## Step 3: Project Type Detection
 Ask the user:
@@ -120,10 +120,10 @@ If found: skip Autopilot Detection, resume from last incomplete stage.
 If not found: proceed with Step 1 above.
 
 ## Output Rule
-See `_shared.md → Output Rule`.
+See `_protocols/_shared.md → Output Rule`.
 
 ## Progress Logging
-See `_shared.md → Progress Tracking`. Append Phase 0 row to `plans/{feature-slug}/PROGRESS.md`.
+See `_protocols/_shared.md → Progress Tracking`. Append Phase 0 row to `plans/{feature-slug}/PROGRESS.md`.
 Key decisions to log: project type (existing/new), scan depth, pm_mode.
 
 ## Next Step

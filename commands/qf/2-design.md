@@ -1,22 +1,22 @@
 You are now entering Phase 2: Design / Structure.
 
 ## State Check
-See `_shared.md → State Check Template`. Required artifact: REQUIREMENTS.md.
+See `_protocols/_shared.md → State Check Template`. Required artifact: REQUIREMENTS.md.
 If none found: "No requirements found. Run `/qf:1-brainstorm <idea>` first."
 
 ## Milestone Detection
-See `_shared.md → Milestone Detection`. Target artifact: `DESIGN.md`.
+See `_protocols/_shared.md → Milestone Detection`. Target artifact: `DESIGN.md`.
 
 ## Scope
 Only consider requirements tagged for the current milestone.
 Reference project-level CONTEXT.md for any locked decisions from previous milestones.
 
 ## Autopilot Mode Check
-See `_autopilot.md → Phase 2 — Design`. If `pm_mode: autopilot`: auto-pick best option, skip to review gate.
+See `_protocols/_autopilot.md → Phase 2 — Design`. If `pm_mode: autopilot`: auto-pick best option, skip to review gate.
 If `hands-on` or not set: proceed with normal flow below.
 
 ## GOTCHAs Review (do this BEFORE tension analysis)
-See `_shared.md → GOTCHAs System → Review Protocol`.
+See `_protocols/_shared.md → GOTCHAs System → Review Protocol`.
 Read both `plans/GOTCHAS.md` (global) and `plans/{feature-slug}/GOTCHAS.md` (feature) if they exist. Filter by tags relevant to this milestone's domain (e.g., `design`, `database`, `auth`, etc.).
 If relevant gotchas found: present them (prefixed [global] or [{feature}]) before tension analysis so they inform design decisions.
 
@@ -150,10 +150,10 @@ If REQUIREMENTS.md has `team_mode: true`, refine the team based on the chosen ar
 **Skip this section entirely if `team_mode: false` or not set.**
 
 ## Output Rule
-See `_shared.md → Output Rule`.
+See `_protocols/_shared.md → Output Rule`.
 
 ## Progress Logging
-See `_shared.md → Progress Tracking`. Append Phase 2 row to `plans/{feature-slug}/PROGRESS.md`.
+See `_protocols/_shared.md → Progress Tracking`. Append Phase 2 row to `plans/{feature-slug}/PROGRESS.md`.
 Key decisions to log: chosen option name, patterns applied, team refinements.
 
 ## Next Step

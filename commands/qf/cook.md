@@ -2,13 +2,13 @@ You are the PM Team Orchestrator — launching the agent team pipeline from Phas
 
 ## Modular Protocols
 This command references extracted protocol files for detailed behavior. READ these when needed:
-- `_context-scoping.md` — what context each agent receives (scoping matrix)
-- `_model-routing.md` — complexity-based model assignment per dev task
-- `_worktree-isolation.md` — git worktree setup for parallel devs
-- `_debate-protocol.md` — design debate with parallel critics (Stage 1.5)
-- `_dev-coordination.md` — shared decisions log, cross-talk, streaming pipeline
-- `_error-recovery.md` — checkpoint-based retry on agent failure
-- `_pipeline-state.md` — pipeline tracking + team config persistence for session resume
+- `_protocols/_context-scoping.md` — what context each agent receives (scoping matrix)
+- `_protocols/_model-routing.md` — complexity-based model assignment per dev task
+- `_protocols/_worktree-isolation.md` — git worktree setup for parallel devs
+- `_protocols/_debate-protocol.md` — design debate with parallel critics (Stage 1.5)
+- `_protocols/_dev-coordination.md` — shared decisions log, cross-talk, streaming pipeline
+- `_protocols/_error-recovery.md` — checkpoint-based retry on agent failure
+- `_protocols/_pipeline-state.md` — pipeline tracking + team config persistence for session resume
 
 ## Agent Instructions
 Each teammate receives role-specific instructions from `.claude/agents/`:
@@ -37,12 +37,12 @@ When spawning a teammate, READ their instruction file and include it in the prom
    - Check if `mcp__gitnexus__query` is available (try calling it)
    - If available: set `code_graph: gitnexus` — inject into dev and tech-lead prompts
    - If NOT available: set `code_graph: none` and show recommendation ONCE:
-     "**Tip:** GitNexus adds semantic safety (blast radius, cross-boundary impact detection) for parallel dev agents. Install with: `npm install -g gitnexus && gitnexus index`. See `_gitnexus-integration.md` for setup."
+     "**Tip:** GitNexus adds semantic safety (blast radius, cross-boundary impact detection) for parallel dev agents. Install with: `npm install -g gitnexus && gitnexus index`. See `_protocols/_gitnexus-integration.md` for setup."
    - Do NOT repeat this recommendation in subsequent runs — only show on first detection failure per feature
-   - See `_gitnexus-integration.md` for full protocol
-9. **Complexity Assessment** — see `_model-routing.md`. Assess each dev task, assign models.
-10. **Initialize DECISIONS.md** — create `plans/{slug}/milestone-{N}/DECISIONS.md` if not exists. See `_dev-coordination.md`.
-11. **Write Team Config** — persist model assignments, worktree branches, phase mapping to PIPELINE-STATE.md. See `_pipeline-state.md`.
+   - See `_protocols/_gitnexus-integration.md` for full protocol
+9. **Complexity Assessment** — see `_protocols/_model-routing.md`. Assess each dev task, assign models.
+10. **Initialize DECISIONS.md** — create `plans/{slug}/milestone-{N}/DECISIONS.md` if not exists. See `_protocols/_dev-coordination.md`.
+11. **Write Team Config** — persist model assignments, worktree branches, phase mapping to PIPELINE-STATE.md. See `_protocols/_pipeline-state.md`.
 
 ## Arguments
 ```
@@ -77,7 +77,7 @@ Run only specified stage(s). Comma-separated: `--only tester,pm`
 | pm | Any stage completed | Any milestone artifact exists |
 
 ### --from {stage}
-Resume from a specific stage. See `_pipeline-state.md → Resume Protocol` for full details.
+Resume from a specific stage. See `_protocols/_pipeline-state.md → Resume Protocol` for full details.
 
 ## File Ownership Validation (before spawning agents)
 1. Extract all `ownership` globs from `team_composition` in REQUIREMENTS.md
@@ -107,7 +107,7 @@ bash {quangflow-root}/scripts/validate/validate-stage-completion.sh {stage} {mil
 
 ### Stage 1: Domain Engineer (if in team_composition)
 - READ `.claude/agents/domain-engineer.md`
-- Scope context per `_context-scoping.md`
+- Scope context per `_protocols/_context-scoping.md`
 - CALL `Task(subagent_type: "planner", name: "domain-engineer", model: "sonnet")`
 - Produces: `plans/{slug}/milestone-{N}/design/` — OVERVIEW, MODULES, SEQUENCES, CONTRACTS
 - **GATE:** Run `validate-stage-completion.sh domain-engineer {milestone-dir}`
@@ -115,14 +115,14 @@ bash {quangflow-root}/scripts/validate/validate-stage-completion.sh {stage} {mil
 - Wait for user approval
 
 ### Stage 1.5: Design Debate (optional)
-See `_debate-protocol.md` for full execution details.
+See `_protocols/_debate-protocol.md` for full execution details.
 Skip if `--skip debate` or domain-engineer was skipped.
 Result: DEBATE.md with synthesized findings. User picks PROCEED / REVISE / SKIP.
 
 ### Stage 2: Developers (parallel)
 - READ `.claude/agents/dev-teammate.md`
-- Model per dev: see `_model-routing.md`
-- If 2+ devs: use worktree isolation — see `_worktree-isolation.md`
+- Model per dev: see `_protocols/_model-routing.md`
+- If 2+ devs: use worktree isolation — see `_protocols/_worktree-isolation.md`
 
 For each dev role:
 1. **Build scoped context (script — not LLM):**
@@ -150,17 +150,17 @@ For each dev role:
 - REVIEW and APPROVE each dev's plan
 - MONITOR all devs
 
-**Cross-talk & decisions:** See `_dev-coordination.md`
+**Cross-talk & decisions:** See `_protocols/_dev-coordination.md`
 
 - When each dev completes:
   - **GATE:** Run `validate-stage-completion.sh devs {milestone-dir} --dev-role {role} --ownership {globs}`
   - If gate fails (ownership violation, missing checkpoint): block and report
 - When ALL devs pass gates:
-  - If worktrees: merge branches (see `_worktree-isolation.md`)
+  - If worktrees: merge branches (see `_protocols/_worktree-isolation.md`)
   - Review DECISIONS.md for cross-boundary impacts
   - Proceed to Stage 3
 
-**Streaming optimization:** See `_dev-coordination.md → Streaming Pipeline`
+**Streaming optimization:** See `_protocols/_dev-coordination.md → Streaming Pipeline`
 
 ### Stage 3: Tech Lead Review (optional)
 Ask user: "Tech lead review? (YES / SKIP)"
@@ -175,7 +175,7 @@ Ask user: "Tech lead review? (YES / SKIP)"
 
 ### Stage 4: Tester
 - READ `.claude/agents/tester.md`
-- Scope context per `_context-scoping.md`
+- Scope context per `_protocols/_context-scoping.md`
 - `Task(subagent_type: "tester", name: "tester", model: "sonnet")`
 - Generate tests from acceptance criteria + edge cases
 - **GATE:** Run `validate-stage-completion.sh tester {milestone-dir}`
@@ -229,7 +229,7 @@ CK Context:
 ```
 
 ## Error Recovery
-See `_error-recovery.md` for checkpoint-based retry protocol.
+See `_protocols/_error-recovery.md` for checkpoint-based retry protocol.
 
 ## Pipeline State
-See `_pipeline-state.md` for state tracking and session resume.
+See `_protocols/_pipeline-state.md` for state tracking and session resume.
