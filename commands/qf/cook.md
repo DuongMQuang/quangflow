@@ -27,6 +27,8 @@ When spawning a teammate, READ their instruction file and include it in the prom
      Which do you prefer?"
    - Set `doc_lookup: websearch` or `doc_lookup: none` based on user choice
    - Inject `doc_lookup` setting into every agent prompt via the CK Context Block
+8. **Complexity Assessment** (for model routing — see Complexity-Based Model Routing below)
+9. **Create shared DECISIONS.md** — initialize `plans/{slug}/milestone-{N}/DECISIONS.md` if it doesn't exist (see Shared Decisions Log below)
 
 ## Arguments
 ```
@@ -96,6 +98,86 @@ Before creating the team, validate that dev roles have non-overlapping file owne
 CALL `TeamCreate(team_name: "{feature-slug}-m{N}")`
 
 If TeamCreate fails: "Agent Teams requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. Team mode not available."
+
+## Scoped Context Injection
+Each agent receives ONLY the context slices relevant to their role — not the full project dump.
+This reduces token usage and keeps agents focused.
+
+| Agent | Gets | Does NOT get |
+|-------|------|-------------|
+| domain-engineer | REQUIREMENTS.md, DESIGN.md, CONTEXT.md, ROADMAP.md, GOTCHAS (filtered) | Source code, test files, BUGLOG |
+| critic | Design docs (OVERVIEW, MODULES, SEQUENCES, CONTRACTS), REQUIREMENTS.md, CONTEXT.md | Source code, BUGLOG, STATUS |
+| dev-{scope} | ROADMAP phases **for their scope only**, CONTRACTS.md, MODULES.md **sections for their modules only**, SEQUENCES.md **flows involving their modules**, GOTCHAS (filtered by domain), DECISIONS.md | Other dev's ROADMAP phases, rejected design options, full REQUIREMENTS (only their REQ-IDs) |
+| tech-lead | All dev output files, DESIGN.md, CONTRACTS.md, MODULES.md | ROADMAP phases, brainstorm edge cases, rejected options |
+| tester | REQUIREMENTS.md (acceptance criteria + edge cases only), CONTRACTS.md, list of implemented files | Design rationale, rejected options, ROADMAP |
+| pm | REQUIREMENTS.md, ROADMAP.md, REVIEW.md, GAPS.md, tester results | Source code, design docs detail |
+
+**How to scope:**
+- For devs: filter ROADMAP.md to only include phases assigned to that dev role
+- For devs: extract only their module sections from MODULES.md and CONTRACTS.md
+- For tester: extract acceptance criteria and edge cases from REQUIREMENTS.md, omit problem statement and personas
+- Always include: CK Context Block, agent instructions, DECISIONS.md
+
+## Shared Decisions Log
+`plans/{slug}/milestone-{N}/DECISIONS.md` — a lightweight append-only log where any agent can record implementation decisions that emerged during coding (not pre-planned in CONTRACTS.md).
+
+```markdown
+# Decisions — Milestone {N}
+
+### D-001 [{agent}] — {one-line decision}
+- **Context:** {why this decision was needed}
+- **Choice:** {what was decided}
+- **Affects:** {which modules/agents should know}
+```
+
+**Rules:**
+- Any dev agent can append to DECISIONS.md during implementation
+- Agents MUST read DECISIONS.md before starting work (injected in prompt)
+- Lead monitors DECISIONS.md for cross-boundary impacts
+- Decisions that contradict CONTRACTS.md must be flagged to lead immediately
+
+## Complexity-Based Model Routing
+Instead of static model assignment, lead assesses each task's complexity from ROADMAP.md and assigns models accordingly.
+
+**Assessment criteria per dev task:**
+- Count ROADMAP phases assigned to this dev
+- Count REQ-IDs in scope
+- Check if scope includes: auth, real-time, complex queries, external APIs, state machines
+- Check file count estimate from MODULES.md
+
+**Model assignment:**
+| Complexity | Signals | Model |
+|-----------|---------|-------|
+| **Low** | 1-2 phases, 1-2 REQs, CRUD only, no auth/realtime | `haiku` |
+| **Medium** | 3-4 phases, 3-5 REQs, standard patterns | `sonnet` |
+| **High** | 5+ phases, 6+ REQs, auth/realtime/complex logic | `sonnet` (with larger context budget) |
+
+**Other agents (static):**
+- domain-engineer: `sonnet` (always — design quality matters)
+- critics: `haiku` (bounded output, review only)
+- tech-lead: `sonnet` (code review needs depth)
+- tester: `sonnet` (test generation needs precision)
+- pm: `haiku` (status reporting is structured)
+
+Present model assignments to user before spawning: "Model routing: dev-backend=sonnet, dev-frontend=haiku. Adjust? (YES / proceed)"
+
+## Git Worktree Isolation
+When 2+ dev agents run in parallel, use git worktrees to prevent file conflicts.
+
+**Protocol:**
+1. Before spawning dev agents, check if multiple devs will run in parallel
+2. If YES (2+ devs): spawn each dev with `isolation: "worktree"`
+   - Each dev gets its own branch and working directory copy
+   - No file conflicts possible — even for shared config files
+3. If only 1 dev: skip worktree (unnecessary overhead)
+4. After all devs complete:
+   - Lead merges worktree branches into the main working branch
+   - If merge conflicts: present to user for resolution
+   - Clean up worktree branches after successful merge
+5. Include worktree path in each dev's CK Context Block so they know their working directory
+
+**Worktree branch naming:** `qf/{feature-slug}/m{N}/{dev-role}`
+Example: `qf/user-auth/m1/dev-backend`
 
 ## Pipeline State Tracking
 Track pipeline progress in `plans/{feature-slug}/milestone-{N}/PIPELINE-STATE.md`.
@@ -222,16 +304,22 @@ Skip if `--skip debate` flag is set or if domain-engineer was skipped.
 
 ### Stage 2: Developers (parallel)
 - READ `.claude/agents/dev-teammate.md` for role instructions
+- Determine model per dev role (see Complexity-Based Model Routing)
+- If 2+ devs: use worktree isolation (see Git Worktree Isolation)
+
 For each dev role in team_composition (dev-backend, dev-frontend, etc.):
 - CALL `TaskCreate`:
   - Subject: "{role}: {focus}"
-  - Description: assigned ROADMAP phases, file ownership globs, design docs from Stage 1
+  - Description: **scoped context only** (see Scoped Context Injection) — their ROADMAP phases, their module sections from CONTRACTS.md/MODULES.md, file ownership globs
   - `addBlockedBy`: domain-engineer task ID (if Stage 1 ran)
   - Include: "File ownership: {ownership globs} — do NOT edit files outside your ownership"
+  - Include: DECISIONS.md (for reading and appending)
 - CALL `Task(subagent_type: "fullstack-developer", name: "{role}", mode: "plan")`
-  - model: "sonnet"
-  - Prompt: dev-teammate.md instructions + task description + CK Context Block + team_name
+  - model: {assigned model from complexity assessment}
+  - isolation: "worktree" (if 2+ devs, omit if solo dev)
+  - Prompt: dev-teammate.md instructions + scoped context + CK Context Block + team_name
 - If DEBATE.md exists: include resolved debate findings in each dev's prompt as "Design Notes"
+- If GOTCHAS exist: include domain-filtered gotchas as "Past Lessons" (max 5)
 - REVIEW and APPROVE each dev's plan via `plan_approval_response`
 - MONITOR all devs via TaskCompleted events
 
@@ -248,7 +336,22 @@ During parallel implementation, devs may send concerns to lead via `SendMessage`
 4. When a concern is resolvable by lead: resolve and message the dev back
 5. When a concern affects multiple devs: wait until all devs complete, then address in Stage 3
 
-- When all devs complete → proceed to Stage 3
+- When all devs complete:
+  - If worktrees used: merge all dev branches into working branch (resolve conflicts if any)
+  - Read DECISIONS.md for any cross-boundary decisions logged during implementation
+  - If cross-boundary decisions found: present summary to user before Stage 3
+  - Proceed to Stage 3
+
+### Streaming Pipeline (optional optimization)
+When tech-lead is enabled AND multiple devs are running:
+- Tech-lead can start reviewing the FIRST completed dev's output while other devs are still working
+- Spawn tech-lead with `--partial` flag after first dev completes
+- Tech-lead reviews completed code, queues findings, waits for remaining devs
+- When all devs complete: tech-lead finishes full cross-dev integration review
+- This overlaps Stage 2 and Stage 3, saving wall-clock time
+
+**When to stream:** Only if 3+ devs AND tech-lead is enabled. For 2 devs, overhead isn't worth it.
+**Fallback:** If streaming causes issues, revert to sequential (all devs → then tech-lead).
 
 ### Stage 3: Tech Lead Review (optional gate)
 Ask user: "All devs completed. Tech lead review? (YES / SKIP)"
@@ -352,8 +455,37 @@ CK Context:
 - Doc lookup: {context7 | websearch | none}
 ```
 
-## Error Recovery
-- If a teammate fails: shut down, spawn replacement for same task
-- If stuck >5 min with no TaskCompleted: check TaskList, message teammate
+## Error Recovery (Checkpoint-Based Retry)
+When an agent fails, the replacement should RESUME, not restart from scratch.
+
+**Checkpoint protocol:**
+1. Dev agents write progress to `plans/{slug}/milestone-{N}/CHECKPOINT-{role}.md` after each major step:
+   ```markdown
+   # Checkpoint — {role}
+   Updated: {timestamp}
+   ## Completed
+   - [x] Created src/api/users.ts (Phase 1)
+   - [x] Created src/models/user.ts (Phase 1)
+   - [ ] Create src/services/user-service.ts (Phase 2) — IN PROGRESS
+   ## Files Created
+   - src/api/users.ts
+   - src/models/user.ts
+   ## Current Step
+   Phase 2: Implementing user-service.ts — writing createUser function
+   ## Decisions Made
+   - D-003: Used bcrypt for password hashing (logged to DECISIONS.md)
+   ```
+
+2. On agent failure:
+   - Read CHECKPOINT-{role}.md to understand what was completed
+   - Spawn replacement agent with: original prompt + "RESUME from checkpoint — already completed: {list}. Continue from: {current step}"
+   - Replacement agent reads existing files (already created by failed agent) and continues
+
+3. On agent timeout (stuck >5 min):
+   - Message agent first: "Status check — are you blocked?"
+   - If no response in 2 min: terminate and retry with checkpoint
+
+**Other recovery rules:**
 - If dev plan rejected twice: lead takes over that task directly
 - Lead NEVER implements code — only coordinates. If forced to take over, spawn a new dev agent.
+- If worktree merge has conflicts: present conflicts to user, do NOT auto-resolve

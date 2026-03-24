@@ -34,11 +34,14 @@ Each milestone runs the full phase flow but scoped to its subset of requirements
 │   ├── REVIEW.md                <- tech-lead code review report
 │   ├── QA-REPORT.md             <- test results + requirement coverage matrix
 │   ├── STATUS.md                <- PM progress report + session resume context
+│   ├── DECISIONS.md             <- shared decisions log (agents append during impl)
+│   ├── CHECKPOINT-*.md          <- per-agent progress for crash recovery
 │   └── design/                  <- domain-engineer outputs (team mode)
 │       ├── OVERVIEW.md          <- system components + Mermaid flowchart
 │       ├── MODULES.md           <- module boundaries + Mermaid class diagram
 │       ├── SEQUENCES.md         <- user flow sequence diagrams (Mermaid)
-│       └── CONTRACTS.md         <- API endpoints, shared types, DB schema
+│       ├── CONTRACTS.md         <- API endpoints, shared types, DB schema
+│       └── DEBATE.md            <- critic findings + lead synthesis (optional)
 ├── milestone-2/
 │   └── ...
 ```
