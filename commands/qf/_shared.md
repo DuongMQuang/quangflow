@@ -104,11 +104,14 @@ Injected into every ROADMAP phase and verified in Phase 4:
 
 ### Purpose
 Capture mistakes, surprises, and hard-won lessons so they inform future phases.
-GOTCHAs are per-feature: `plans/{feature-slug}/GOTCHAS.md`.
+
+### Two Levels
+- **Global GOTCHAs** (`plans/GOTCHAS.md`) — lessons that apply across ALL features in the project. General patterns, recurring mistakes, team conventions learned the hard way.
+- **Feature GOTCHAs** (`plans/{feature-slug}/GOTCHAS.md`) — lessons specific to one feature's domain, architecture, or codebase area.
 
 ### GOTCHAS.md Format
 ```markdown
-# GOTCHAs — {feature-slug}
+# GOTCHAs — {feature-slug OR "Global"}
 
 ### G-001 [{domain}] — {one-line description}
 - **When:** {which phase/stage discovered this}
@@ -125,21 +128,25 @@ GOTCHAs are per-feature: `plans/{feature-slug}/GOTCHAS.md`.
 - **Tech-lead review:** For each major finding → create a gotcha entry
 
 ### When to Review (automatic)
-- **Phase 2 (design):** Read GOTCHAS.md, filter by tags matching current milestone's concerns. Present relevant gotchas before proposing design options.
-- **Phase 3 (handoff):** Read GOTCHAS.md, inject relevant rules into ROADMAP.md phases as warnings.
-- **Cook (dev prompts):** Include gotchas tagged with each dev's domain in their prompt context.
+- **Phase 2 (design):** Read BOTH global and feature GOTCHAS.md. Filter by tags matching current milestone's concerns. Present relevant gotchas before proposing design options.
+- **Phase 3 (handoff):** Read BOTH. Inject relevant rules into ROADMAP.md phases as `> ⚠️ GOTCHA:` warnings.
+- **Cook (dev prompts):** Include matching gotchas from BOTH levels in each dev's prompt context.
 
 ### Logging Protocol
 1. Read existing GOTCHAS.md (if exists) to get next G-ID
-2. Append new entry with auto-incremented ID
-3. Mention: "Logged gotcha G-{NNN}: {description}"
-4. Do NOT print the full entry to console
+2. **Scope decision:** Determine if gotcha is global or feature-specific:
+   - **Clearly feature-specific** (e.g., "this API's pagination is off-by-one") → log to `plans/{feature-slug}/GOTCHAS.md`
+   - **Clearly general** (e.g., "always validate webhook signatures") → log to `plans/GOTCHAS.md`
+   - **Uncertain** → ask user: "This gotcha could apply broadly. Log it as **global** (all features) or **feature-specific** ({feature-slug} only)?"
+3. Append new entry with auto-incremented ID (IDs are scoped per file: global G-IDs and feature G-IDs are independent)
+4. Mention: "Logged gotcha G-{NNN} ({global|feature}): {description}"
+5. Do NOT print the full entry to console
 
 ### Review Protocol
-1. Read GOTCHAS.md
+1. Read `plans/GOTCHAS.md` (global) + `plans/{feature-slug}/GOTCHAS.md` (feature)
 2. Filter entries by tags relevant to current phase/milestone
 3. If relevant gotchas found, present summary:
    "**Past lessons ({N} relevant):**
-   - G-001: {rule} (from: {when})
-   - G-003: {rule} (from: {when})"
+   - [global] G-001: {rule} (from: {when})
+   - [{feature}] G-003: {rule} (from: {when})"
 4. If no gotchas exist or none relevant: skip silently

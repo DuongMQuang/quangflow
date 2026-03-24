@@ -17,8 +17,8 @@ If `hands-on` or not set: proceed with normal flow below.
 
 ## GOTCHAs Review (do this BEFORE tension analysis)
 See `_shared.md → GOTCHAs System → Review Protocol`.
-Read `plans/{feature-slug}/GOTCHAS.md` if it exists. Filter by tags relevant to this milestone's domain (e.g., `design`, `database`, `auth`, etc.).
-If relevant gotchas found: present them before tension analysis so they inform design decisions.
+Read both `plans/GOTCHAS.md` (global) and `plans/{feature-slug}/GOTCHAS.md` (feature) if they exist. Filter by tags relevant to this milestone's domain (e.g., `design`, `database`, `auth`, etc.).
+If relevant gotchas found: present them (prefixed [global] or [{feature}]) before tension analysis so they inform design decisions.
 
 ## Tension Analysis (do this AFTER gotchas review)
 List the "tension points" in this milestone's requirements:

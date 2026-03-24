@@ -11,8 +11,8 @@ Read REQUIREMENTS.md (project-level) + DESIGN.md (milestone-level) + CONTEXT.md 
 
 ## GOTCHAs Review (before generating artifacts)
 See `_shared.md → GOTCHAs System → Review Protocol`.
-Read `plans/{feature-slug}/GOTCHAS.md` if it exists. Filter by tags matching this milestone's requirements.
-If relevant gotchas found: inject their rules as `> ⚠️ GOTCHA:` warnings in the appropriate ROADMAP.md phases.
+Read both `plans/GOTCHAS.md` (global) and `plans/{feature-slug}/GOTCHAS.md` (feature) if they exist. Filter by tags matching this milestone's requirements.
+If relevant gotchas found: inject their rules as `> ⚠️ GOTCHA [global/feature]:` warnings in the appropriate ROADMAP.md phases.
 
 ## Output Files
 Generate to ./plans/{feature-slug}/:
