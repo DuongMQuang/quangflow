@@ -87,7 +87,8 @@ bash install.sh --update     # update commands+agents only (keeps CLAUDE.md)
 │   ├── dev-teammate.md       # Implementation agent
 │   ├── tech-lead.md          # Code reviewer
 │   ├── tester.md             # Test generator
-│   └── pm.md                 # Status tracker
+│   ├── pm.md                 # Status tracker
+│   └── critic.md             # Design debate critic (feasibility/simplicity)
 └── scripts/
     └── validate/
         ├── validate-install.sh    # Verify QuangFlow installation integrity
@@ -125,7 +126,7 @@ Follow the phases:
 For larger projects (2+ functional layers), supports parallel agent teams:
 
 ```
-domain-engineer → devs (parallel) → [optional] tech-lead → tester → PM status
+domain-engineer → [optional] debate → devs (parallel) → [optional] tech-lead → tester → PM status
 ```
 
 | Role | Agent | Purpose |
@@ -133,6 +134,7 @@ domain-engineer → devs (parallel) → [optional] tech-lead → tester → PM s
 | lead | main session | Orchestrator — coordinates team, user decisions |
 | pm | project-manager | NPC — tracks progress, session resume |
 | domain-engineer | planner | Designs modules, sequences, contracts before devs |
+| critics | code-reviewer (haiku) | Parallel feasibility + simplicity review of design (optional) |
 | dev-* | fullstack-developer | Implements code within file ownership boundaries |
 | tech-lead | code-reviewer | Reviews quality, detects gaps (optional) |
 | tester | tester | Generates & runs tests from requirements |

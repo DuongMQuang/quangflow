@@ -43,7 +43,7 @@ if [[ $MISSING_CMDS -eq 0 ]]; then
 fi
 
 # --- Check 2: Agent files exist ---
-EXPECTED_AGENTS=("_shared.md" "domain-engineer.md" "dev-teammate.md" "tech-lead.md" "tester.md" "pm.md")
+EXPECTED_AGENTS=("_shared.md" "domain-engineer.md" "dev-teammate.md" "tech-lead.md" "tester.md" "pm.md" "critic.md")
 MISSING_AGENTS=0
 for agent in "${EXPECTED_AGENTS[@]}"; do
   if [[ ! -f "$AGENTS_DIR/$agent" ]]; then

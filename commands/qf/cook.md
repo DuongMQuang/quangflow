@@ -41,10 +41,10 @@ If no argument provided, auto-detect from `./plans/` (latest milestone without Q
 ## Partial Pipeline
 Supports `--skip`, `--only`, and `--from` flags for partial execution.
 
-**Stage order:** domain-engineer -> devs -> tech-lead -> tester -> pm
+**Stage order:** domain-engineer -> debate -> devs -> tech-lead -> tester -> pm
 
 ### --skip {stage}
-Skip one or more stages. Comma-separated for multiple: `--skip domain-engineer,tech-lead`
+Skip one or more stages. Comma-separated for multiple: `--skip domain-engineer,debate,tech-lead`
 - Cannot skip `devs` (nothing to test/review without implementation)
 - Cannot skip `pm` (always runs — use `--only` instead if you truly don't want it)
 
@@ -55,6 +55,7 @@ Run only the specified stage(s). Comma-separated for multiple: `--only tester,pm
 | Stage | Requires | Check |
 |-------|----------|-------|
 | domain-engineer | DESIGN.md | File exists |
+| debate | Domain-engineer output | design/ docs exist |
 | devs | DESIGN.md | File exists |
 | tech-lead | Dev output | Source files exist for this milestone |
 | tester | Dev output | Source files exist for this milestone |
@@ -159,6 +160,66 @@ tech-lead (started {timestamp})
 - Present design docs to user: "Domain engineer completed. Review in `plans/{slug}/milestone-{N}/design/`. Proceed? (YES / request changes)"
 - Wait for user approval before spawning devs
 
+### Stage 1.5: Design Debate (optional, after domain-engineer)
+Skip if `--skip debate` flag is set or if domain-engineer was skipped.
+
+**Purpose:** Catch design issues BEFORE devs start coding. Two parallel critics review the design docs from different angles, then lead synthesizes and user decides.
+
+1. READ `.claude/agents/critic.md` for role instructions
+2. Spawn TWO critic agents **in parallel**:
+
+   **Feasibility Critic:**
+   - CALL `Task(subagent_type: "code-reviewer", name: "critic-feasibility")`
+     - model: "haiku"
+     - Prompt: critic.md instructions + perspective: "feasibility" + design docs (OVERVIEW, MODULES, SEQUENCES, CONTRACTS) + REQUIREMENTS.md + CONTEXT.md + ROADMAP.md
+     - Focus: "Can this realistically be built? What's underestimated? Where will devs get stuck?"
+     - Output: max 10 findings, each with: issue, impact, suggested fix
+
+   **Simplicity Critic:**
+   - CALL `Task(subagent_type: "code-reviewer", name: "critic-simplicity")`
+     - model: "haiku"
+     - Prompt: critic.md instructions + perspective: "simplicity" + same inputs
+     - Focus: "What's overengineered? What can be removed or simplified without losing value?"
+     - Output: max 10 findings, each with: issue, impact, suggested fix
+
+3. WAIT for both to complete (parallel — no sequential dependency)
+4. Synthesize findings into `plans/{slug}/milestone-{N}/design/DEBATE.md`:
+
+   ```markdown
+   # Design Debate — Milestone {N}
+
+   ## Feasibility Concerns
+   | # | Issue | Impact | Suggested Fix |
+   |---|-------|--------|---------------|
+   | F-1 | {issue} | {impact} | {fix} |
+
+   ## Simplicity Concerns
+   | # | Issue | Impact | Suggested Fix |
+   |---|-------|--------|---------------|
+   | S-1 | {issue} | {impact} | {fix} |
+
+   ## Conflicts
+   {where feasibility and simplicity critics disagree — if any}
+
+   ## Lead Recommendation
+   {lead's synthesis: which concerns to accept, which to dismiss, why}
+   ```
+
+5. Present summary to user:
+   "Design debate complete. {N} feasibility concerns, {M} simplicity concerns.
+   Top issues: {1-3 most impactful}
+   Full report: `plans/{slug}/milestone-{N}/design/DEBATE.md`
+
+   Options:
+   - **PROCEED** — Accept recommendations, continue to dev stage
+   - **REVISE** — Send feedback back to domain-engineer for design changes
+   - **SKIP** — Ignore debate, continue with original design"
+
+6. On **REVISE**: message domain-engineer with specific feedback, wait for updates, re-run critics (max 1 revision round)
+7. On **PROCEED** or **SKIP**: continue to Stage 2
+
+**Token budget:** Critics use `haiku` model to keep costs low. Max 10 findings each = bounded output.
+
 ### Stage 2: Developers (parallel)
 - READ `.claude/agents/dev-teammate.md` for role instructions
 For each dev role in team_composition (dev-backend, dev-frontend, etc.):
@@ -170,8 +231,23 @@ For each dev role in team_composition (dev-backend, dev-frontend, etc.):
 - CALL `Task(subagent_type: "fullstack-developer", name: "{role}", mode: "plan")`
   - model: "sonnet"
   - Prompt: dev-teammate.md instructions + task description + CK Context Block + team_name
+- If DEBATE.md exists: include resolved debate findings in each dev's prompt as "Design Notes"
 - REVIEW and APPROVE each dev's plan via `plan_approval_response`
 - MONITOR all devs via TaskCompleted events
+
+**Dev Cross-Talk Protocol:**
+During parallel implementation, devs may send concerns to lead via `SendMessage`:
+- Cross-boundary issues (e.g., "I need endpoint X but it's in dev-backend's scope")
+- Shared type disagreements (e.g., "CONTRACTS.md says X but I think it should be Y")
+- Blocking dependencies (e.g., "I can't proceed until dev-backend creates the auth middleware")
+
+**Lead handles cross-talk by batching:**
+1. Collect concerns from all devs as they arrive
+2. Do NOT relay concerns between devs directly (prevents cascading conversations)
+3. When a concern requires user decision: present it immediately
+4. When a concern is resolvable by lead: resolve and message the dev back
+5. When a concern affects multiple devs: wait until all devs complete, then address in Stage 3
+
 - When all devs complete → proceed to Stage 3
 
 ### Stage 3: Tech Lead Review (optional gate)

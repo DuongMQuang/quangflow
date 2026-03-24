@@ -22,7 +22,7 @@ warn()  { echo -e "${YELLOW}[warn]${NC}  $1"; }
 # QuangFlow-owned files (only these get removed)
 COMMAND_DIRS=("qf")
 SHARED_FILES=()
-AGENTS=("domain-engineer.md" "dev-teammate.md" "tech-lead.md" "tester.md" "pm.md" "_shared.md")
+AGENTS=("domain-engineer.md" "dev-teammate.md" "tech-lead.md" "tester.md" "pm.md" "critic.md" "_shared.md")
 
 # --- Parse arguments ---
 while [[ $# -gt 0 ]]; do
