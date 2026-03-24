@@ -2,7 +2,7 @@ You are now entering Phase 2: Design / Structure.
 
 ## State Check
 See `_shared.md → State Check Template`. Required artifact: REQUIREMENTS.md.
-If none found: "No requirements found. Run `/qf-1::brainstorm <idea>` first."
+If none found: "No requirements found. Run `/qf:1-brainstorm <idea>` first."
 
 ## Milestone Detection
 See `_shared.md → Milestone Detection`. Target artifact: `DESIGN.md`.
@@ -152,7 +152,7 @@ Tell user: "Phase 2 complete for milestone-{N}. Design saved to `./plans/{featur
 
 Then suggest next command:
 ```
-**Next:** `/qf-3::handoff` — Generate execution artifacts (ROADMAP, CONTEXT, team pipeline)
+**Next:** `/qf:3-handoff` — Generate execution artifacts (ROADMAP, CONTEXT, team pipeline)
   ↳ Skip? Not recommended — Phase 3 produces the ROADMAP that devs/team follow
-  ↳ Also available: `/qf-s::status` (check status), `/qf-s::status save` (save context)
+  ↳ Also available: `/qf:status` (check status), `/qf:status save` (save context)
 ```

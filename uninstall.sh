@@ -20,8 +20,8 @@ ok()    { echo -e "${GREEN}[ok]${NC}    $1"; }
 warn()  { echo -e "${YELLOW}[warn]${NC}  $1"; }
 
 # QuangFlow-owned files (only these get removed)
-COMMAND_DIRS=("qf-0" "qf-1" "qf-2" "qf-3" "qf-4" "qf-5" "qf-c" "qf-s" "qf-t" "qf-q" "qf-u")
-SHARED_FILES=("_shared.md" "_autopilot.md")
+COMMAND_DIRS=("qf")
+SHARED_FILES=()
 AGENTS=("domain-engineer.md" "dev-teammate.md" "tech-lead.md" "tester.md" "pm.md" "_shared.md")
 
 # --- Parse arguments ---

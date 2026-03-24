@@ -3,19 +3,19 @@ You are now entering Phase 5: Maintain — post-ship hotfix and maintenance work
 ## Purpose
 After all milestones are SHIPPED, the project enters maintenance mode.
 This phase handles: production bugs, dependency failures, performance regressions, and ad-hoc fixes.
-It is lighter than the full qf-1→4 cycle but still structured.
+It is lighter than the full qf:1→4 cycle but still structured.
 
 ## State Check
 - Scan ./plans/ for feature directories where ALL milestones have QA-REPORT.md (= shipped)
-- If no shipped project found: "No shipped project. Run `/qf-4` to verify and ship first."
+- If no shipped project found: "No shipped project. Run `/qf:4-verify` to verify and ship first."
 - If multiple features found: ask user which feature
 - Read the latest STATUS.md for context
 
 ## Arguments
 ```
-/qf-5              — Enter maintain mode (auto-detect project)
-/qf-5 scan         — Scan logs, build/refresh BUGLOG.md
-/qf-5 fix BUG-XXX  — Start hotfix for a specific bug
+/qf:5-maintain              — Enter maintain mode (auto-detect project)
+/qf:5-maintain scan         — Scan logs, build/refresh BUGLOG.md
+/qf:5-maintain fix BUG-XXX  — Start hotfix for a specific bug
 ```
 
 ---
@@ -68,10 +68,10 @@ Do NOT dump entire log files. Read strategically:
      backend/error.log: { last_line: 1847, last_read: "2026-03-10T15:00:00" }
      frontend/error.log: { last_line: 203, last_read: "2026-03-10T15:00:00" }
    ```
-2. **On `/qf-5 scan`**: Read only lines AFTER the bookmark (new entries since last scan)
+2. **On `/qf:5-maintain scan`**: Read only lines AFTER the bookmark (new entries since last scan)
 3. **On first scan**: Read last 200 lines of each log file (recent window)
 4. **Dedup**: Group identical errors by stack trace signature, count occurrences
-5. **Time window**: Default to last 24h. User can override: `/qf-5 scan 7d`
+5. **Time window**: Default to last 24h. User can override: `/qf:5-maintain scan 7d`
 
 ### BUGLOG.md Format
 Save to `./plans/{feature-slug}/BUGLOG.md`:
@@ -117,7 +117,7 @@ log_paths:
 
 ---
 
-## Scan Flow (`/qf-5 scan`)
+## Scan Flow (`/qf:5-maintain scan`)
 
 1. Discover log files (see Log Discovery Protocol)
 2. Read new entries since last bookmark
@@ -139,7 +139,7 @@ Top issues:
 3. BUG-XXX [WARNING]: {description} (3 occurrences)
 
 Actions:
-- `/qf-5 fix BUG-XXX` — start hotfix for a specific bug
+- `/qf:5-maintain fix BUG-XXX` — start hotfix for a specific bug
 - Type a BUG-ID to see full details
 - Type TRIAGE to review all NEW bugs
 ```
@@ -237,16 +237,16 @@ During investigation, if a bug reveals a missing or incorrect requirement (not j
 
    Options:
    - **Fix here** — Patch it in maintain mode (quick fix, may not be complete)
-   - **Escalate** — Run `/qf-1::brainstorm` to properly scope this as a new requirement (uses the short milestone-2+ confirmation flow)"
+   - **Escalate** — Run `/qf:1-brainstorm` to properly scope this as a new requirement (uses the short milestone-2+ confirmation flow)"
 
-3. If user picks **Escalate**: stop maintain flow, tell user to run `/qf-1::brainstorm {feature-slug}` which will use the milestone-2+ short confirmation flow to add the new requirement properly
+3. If user picks **Escalate**: stop maintain flow, tell user to run `/qf:1-brainstorm {feature-slug}` which will use the milestone-2+ short confirmation flow to add the new requirement properly
 4. If user picks **Fix here**: proceed with the fix as a normal bug
 
 ---
 
-## Hotfix Flow (`/qf-5 fix BUG-XXX`)
+## Hotfix Flow (`/qf:5-maintain fix BUG-XXX`)
 
-Lighter than full qf-1→4 cycle. No brainstorm, no milestone, no team pipeline.
+Lighter than full qf:1→4 cycle. No brainstorm, no milestone, no team pipeline.
 
 ### Step 1: Investigate
 - Read the bug entry from BUGLOG.md
@@ -337,7 +337,7 @@ When user is done:
 - Ensure all FIX NOW bugs are resolved or reclassified
 - Update BUGLOG.md with final state
 - Update STATUS.md: `phase: maintain, status: idle`
-- Print: "Maintenance session complete. {X} bugs fixed, {Y} deferred, {Z} new. Resume with `/qf-5` next session."
+- Print: "Maintenance session complete. {X} bugs fixed, {Y} deferred, {Z} new. Resume with `/qf:5-maintain` next session."
 
 ## Output Rule
 See `_shared.md → Output Rule`.

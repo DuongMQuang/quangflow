@@ -5,7 +5,7 @@
 
 ## Conventions
 - All phase artifacts save to ./plans/{feature-slug}/
-- Feature slug derived from `/qf-1::brainstorm` arguments (kebab-case)
+- Feature slug derived from `/qf:1-brainstorm` arguments (kebab-case)
 - Milestone artifacts save to ./plans/{feature-slug}/milestone-{N}/
 
 ## Milestone System
@@ -41,7 +41,7 @@ Each milestone runs the full phase flow but scoped to its subset of requirements
 ```
 
 ### Bug Log Convention
-Log files organized by source. Configure paths in CONTEXT.md or let `/qf-5::maintain` auto-discover:
+Log files organized by source. Configure paths in CONTEXT.md or let `/qf:5-maintain` auto-discover:
 ```
 ./logs/
 ├── backend/error.log            <- BE errors + exceptions
@@ -49,35 +49,35 @@ Log files organized by source. Configure paths in CONTEXT.md or let `/qf-5::main
 ├── frontend/error.log           <- FE errors (JS, build failures)
 └── infra/ci.log                 <- CI/CD logs (optional)
 ```
-Severity: CRITICAL > ERROR > WARNING > INFO. See `/qf-5::maintain` for full protocol.
+Severity: CRITICAL > ERROR > WARNING > INFO. See `/qf:5-maintain` for full protocol.
 
 ## Phase Workflow
 This project uses a 5-phase QuangFlow lifecycle:
 
 **Build phases (per milestone):**
-0. `/qf-0::init <idea>` — project setup, codebase scan, create CONTEXT.md (run once per feature)
-1. `/qf-1::brainstorm` — requirements discovery + milestone split + team suggestion
-2. `/qf-2::design` — structural options + trade-offs + team refinement (per milestone)
-3. `/qf-3::handoff` — execution artifacts + SHIP/REFINE/SOLO gate (per milestone)
-4. `/qf-4::verify` — QA/QC: tests, traceability, gap detection, remediation (per milestone)
+0. `/qf:0-init <idea>` — project setup, codebase scan, create CONTEXT.md (run once per feature)
+1. `/qf:1-brainstorm` — requirements discovery + milestone split + team suggestion
+2. `/qf:2-design` — structural options + trade-offs + team refinement (per milestone)
+3. `/qf:3-handoff` — execution artifacts + SHIP/REFINE/SOLO gate (per milestone)
+4. `/qf:4-verify` — QA/QC: tests, traceability, gap detection, remediation (per milestone)
 
 **Post-ship (ongoing):**
-5. `/qf-5::maintain` — bug log scan, triage, hotfix, dependency failure recovery
+5. `/qf:5-maintain` — bug log scan, triage, hotfix, dependency failure recovery
 
 ### Supporting Commands
-- `/qf-q::quick <task>` — Quick mode for small tasks (single-pass, solo, no milestones)
-- `/qf-c::cook` — Team pipeline orchestrator (domain-engineer -> devs -> tech-lead -> tester -> PM)
-- `/qf-s::status` — NPC status reporter: progress, session resume, next command
-- `/qf-t::test` — Smoke test: auto-detect stack, start project, verify it runs
+- `/qf:quick <task>` — Quick mode for small tasks (single-pass, solo, no milestones)
+- `/qf:cook` — Team pipeline orchestrator (domain-engineer -> devs -> tech-lead -> tester -> PM)
+- `/qf:status` — NPC status reporter: progress, session resume, next command
+- `/qf:test` — Smoke test: auto-detect stack, start project, verify it runs
 
 For milestone-2+, Phase 1 runs as scoped confirmation (not full brainstorm from scratch).
-After all milestones shipped, project enters maintain mode (`/qf-5`).
+After all milestones shipped, project enters maintain mode (`/qf:5-maintain`).
 
 ### Team Pipeline (when team_mode: true)
 ```
 domain-engineer -> devs (parallel) -> [optional] tech-lead -> tester -> PM status
 ```
-Phase behavior defined in `.claude/commands/qf-*/`. Agent behavior defined in `.claude/agents/`.
+Phase behavior defined in `.claude/commands/qf/`. Agent behavior defined in `.claude/agents/`.
 
 ### PM Mode
 QuangFlow supports two modes, auto-detected in Phase 1:

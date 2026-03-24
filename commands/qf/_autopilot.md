@@ -1,6 +1,6 @@
 # Autopilot Protocol
 
-Referenced by all `/qf-*` commands when `pm_mode: autopilot` is active.
+Referenced by all `/qf:*` commands when `pm_mode: autopilot` is active.
 Read `pm_mode` from REQUIREMENTS.md metadata. If not set or `hands-on`, skip all autopilot behavior.
 
 ---

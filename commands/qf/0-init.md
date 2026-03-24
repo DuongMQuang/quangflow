@@ -8,8 +8,8 @@ Creates the scaffold and scans the codebase so all subsequent phases start with 
 
 ## Arguments
 ```
-/qf-0::init <idea>       — Initialize with a feature idea
-/qf-0::init              — Initialize interactively (asks for idea)
+/qf:0-init <idea>       — Initialize with a feature idea
+/qf:0-init              — Initialize interactively (asks for idea)
 ```
 
 ## Step 1: Feature Slug
@@ -127,7 +127,7 @@ Tell user: "Project initialized. Context saved to `./plans/{feature-slug}/CONTEX
 
 Then suggest next command:
 ```
-**Next:** `/qf-1::brainstorm` — Discover requirements, edge cases, milestones, and team composition
-  ↳ Skip? Jump to `/qf-2::design` only if you already have REQUIREMENTS.md written manually
-  ↳ Also available: `/qf-s::status` (check status)
+**Next:** `/qf:1-brainstorm` — Discover requirements, edge cases, milestones, and team composition
+  ↳ Skip? Jump to `/qf:2-design` only if you already have REQUIREMENTS.md written manually
+  ↳ Also available: `/qf:status` (check status)
 ```

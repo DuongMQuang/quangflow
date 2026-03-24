@@ -12,7 +12,7 @@ When spawning a teammate, READ their instruction file and include it in the prom
 
 ## Pre-flight
 1. Read REQUIREMENTS.md for `team_mode` and `team_composition`
-2. If `team_mode: false` or missing: "Team mode not enabled. Enable in `/qf-1::brainstorm` or `/qf-3::handoff`."
+2. If `team_mode: false` or missing: "Team mode not enabled. Enable in `/qf:1-brainstorm` or `/qf:3-handoff`."
 3. Read ROADMAP.md for the current milestone
 4. Read DESIGN.md for architecture context
 5. Read CONTEXT.md if exists (locked decisions)
@@ -30,11 +30,11 @@ When spawning a teammate, READ their instruction file and include it in the prom
 
 ## Arguments
 ```
-/qf-c::cook                                          — Full pipeline (auto-detect milestone)
-/qf-c::cook ./plans/{slug}/milestone-{N}/ROADMAP.md  — Full pipeline for specific milestone
-/qf-c::cook --skip domain-engineer                   — Skip specific stage(s)
-/qf-c::cook --only tester                            — Run only specific stage(s)
-/qf-c::cook --from tech-lead                         — Resume from a specific stage
+/qf:cook                                          — Full pipeline (auto-detect milestone)
+/qf:cook ./plans/{slug}/milestone-{N}/ROADMAP.md  — Full pipeline for specific milestone
+/qf:cook --skip domain-engineer                   — Skip specific stage(s)
+/qf:cook --only tester                            — Run only specific stage(s)
+/qf:cook --from tech-lead                         — Resume from a specific stage
 ```
 If no argument provided, auto-detect from `./plans/` (latest milestone without QA-REPORT.md).
 
@@ -61,7 +61,7 @@ Run only the specified stage(s). Comma-separated for multiple: `--only tester,pm
 | pm | Any stage completed | STATUS.md or any milestone artifact exists |
 
 If dependency not met, warn:
-"Cannot run `{stage}` — requires `{dependency}` to complete first. Run `/qf-c::cook --from {dependency}` instead?"
+"Cannot run `{stage}` — requires `{dependency}` to complete first. Run `/qf:cook --from {dependency}` instead?"
 
 ### --from {stage}
 Resume pipeline from a specific stage, running it and all subsequent stages.
@@ -129,7 +129,7 @@ devs
 tech-lead (started {timestamp})
 
 ## Resume Command
-`/qf-c::cook --from tech-lead`
+`/qf:cook --from tech-lead`
 ```
 
 **On `--from` flag:**
@@ -140,8 +140,8 @@ tech-lead (started {timestamp})
 
 **On pipeline crash/interruption:**
 - PIPELINE-STATE.md preserves what completed AND what was in progress
-- User runs `/qf-s::status` to see resume command
-- User runs `/qf-c::cook --from {interrupted-or-next-stage}` to continue
+- User runs `/qf:status` to see resume command
+- User runs `/qf:cook --from {interrupted-or-next-stage}` to continue
 
 ## Pipeline Execution
 
@@ -251,8 +251,8 @@ After EACH agent completes, log its usage stats from the Agent tool response:
 Tell user:
 "Team pipeline complete for milestone-{N}.
 - STATUS.md: `plans/{slug}/milestone-{N}/STATUS.md`
-- Next: run `/qf-4::verify` for final QA/QC
-- Smoke test: run `/qf-t::test` to verify the project starts and flows work end-to-end"
+- Next: run `/qf:4-verify` for final QA/QC
+- Smoke test: run `/qf:test` to verify the project starts and flows work end-to-end"
 
 Then print the Agent Usage table.
 

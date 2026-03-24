@@ -8,17 +8,17 @@ Adds 11 slash commands to Claude Code:
 
 | Command | Phase | Purpose |
 |---------|-------|---------|
-| `/qf-0::init <idea>` | 0. Init | Project setup, codebase scan, create CONTEXT.md (run once per feature) |
-| `/qf-1::brainstorm` | 1. Requirements | Clarifying questions, edge cases, milestone splits, team composition |
-| `/qf-2::design` | 2. Design | Architecture options with trade-offs, design pattern research, scalability gates |
-| `/qf-3::handoff` | 3. Handoff | Execution artifacts (ROADMAP, REQUIREMENTS finalization), SHIP/REFINE/SOLO gate |
-| `/qf-4::verify` | 4. Verify | Test generation, requirements traceability, gap detection, remediation |
-| `/qf-5::maintain` | 5. Maintain | Post-ship bug fix, log scan, triage, parallel hotfix via dev agents |
-| `/qf-q::quick <task>` | Quick | Single-pass for small tasks — skip design, milestones, team setup |
-| `/qf-c::cook` | Orchestrator | Launches agent team pipeline (domain-engineer → devs → tech-lead → tester → PM) |
-| `/qf-s::status` | Status | Session-aware status reporter with resume context |
-| `/qf-t::test` | Smoke Test | Auto-detect stack, generate integration scripts, verify real module interactions |
-| `/qf-u::update` | Update | Pull latest QuangFlow from GitHub and reinstall commands + agents |
+| `/qf:0-init <idea>` | 0. Init | Project setup, codebase scan, create CONTEXT.md (run once per feature) |
+| `/qf:1-brainstorm` | 1. Requirements | Clarifying questions, edge cases, milestone splits, team composition |
+| `/qf:2-design` | 2. Design | Architecture options with trade-offs, design pattern research, scalability gates |
+| `/qf:3-handoff` | 3. Handoff | Execution artifacts (ROADMAP, REQUIREMENTS finalization), SHIP/REFINE/SOLO gate |
+| `/qf:4-verify` | 4. Verify | Test generation, requirements traceability, gap detection, remediation |
+| `/qf:5-maintain` | 5. Maintain | Post-ship bug fix, log scan, triage, parallel hotfix via dev agents |
+| `/qf:quick <task>` | Quick | Single-pass for small tasks — skip design, milestones, team setup |
+| `/qf:cook` | Orchestrator | Launches agent team pipeline (domain-engineer → devs → tech-lead → tester → PM) |
+| `/qf:status` | Status | Session-aware status reporter with resume context |
+| `/qf:test` | Smoke Test | Auto-detect stack, generate integration scripts, verify real module interactions |
+| `/qf:update` | Update | Pull latest QuangFlow from GitHub and reinstall commands + agents |
 
 ## Philosophy
 
@@ -67,19 +67,20 @@ bash install.sh --update     # update commands+agents only (keeps CLAUDE.md)
 ```
 {target}/.claude/
 ├── commands/
-│   ├── _shared.md           # Shared protocols (state check, gates, output rules)
-│   ├── _autopilot.md        # Autopilot mode protocol
-│   ├── qf-0/init.md          # Phase 0
-│   ├── qf-1/brainstorm.md   # Phase 1
-│   ├── qf-2/design.md       # Phase 2
-│   ├── qf-3/handoff.md      # Phase 3
-│   ├── qf-4/verify.md       # Phase 4
-│   ├── qf-5/maintain.md     # Phase 5
-│   ├── qf-q/quick.md        # Quick mode
-│   ├── qf-c/cook.md         # Team orchestrator
-│   ├── qf-s/status.md       # Status reporter
-│   ├── qf-t/test.md         # Smoke test
-│   └── qf-u/update.md      # Self-update
+│   └── qf/
+│       ├── _shared.md         # Shared protocols (state check, gates, output rules)
+│       ├── _autopilot.md      # Autopilot mode protocol
+│       ├── 0-init.md          # Phase 0: Project init
+│       ├── 1-brainstorm.md    # Phase 1: Requirements
+│       ├── 2-design.md        # Phase 2: Design
+│       ├── 3-handoff.md       # Phase 3: Handoff
+│       ├── 4-verify.md        # Phase 4: Verify
+│       ├── 5-maintain.md      # Phase 5: Maintain
+│       ├── quick.md           # Quick mode
+│       ├── cook.md            # Team orchestrator
+│       ├── status.md          # Status reporter
+│       ├── test.md            # Smoke test
+│       └── update.md          # Self-update
 └── agents/
     ├── _shared.md            # Shared agent protocols
     ├── domain-engineer.md    # Design docs producer
@@ -104,7 +105,7 @@ Removes only QuangFlow files. Leaves CLAUDE.md and plans/ intact.
 ```
 cd your-project
 claude
-/qf-1::brainstorm user authentication with OAuth2 and JWT
+/qf:1-brainstorm user authentication with OAuth2 and JWT
 ```
 
 Follow the phases:
@@ -171,8 +172,8 @@ No flags needed — just answer "non-technical" when asked.
 - **Design pattern research**: Phase 2 evaluates applicable patterns with YAGNI checks.
 - **Test dependency chains**: Phase 4 runs tests in order, marks downstream as BLOCKED on failure.
 - **Gap detection**: Tech-lead classifies gaps as minor/major. User decides ADD/DEFER/IGNORE.
-- **Session resume**: `/qf-s::status` reads STATUS.md — tells you where you left off.
-- **Context save**: `/qf-s::status save` snapshots state before `/clear` or `/exit`.
+- **Session resume**: `/qf:status` reads STATUS.md — tells you where you left off.
+- **Context save**: `/qf:status save` snapshots state before `/clear` or `/exit`.
 
 ## Customization
 

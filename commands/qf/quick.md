@@ -11,8 +11,8 @@ Strictly solo — no team pipeline.
 
 ## Arguments
 ```
-/qf-q::quick "add dark mode toggle"
-/qf-q::quick "fix 404 on /settings page"
+/qf:quick "add dark mode toggle"
+/qf:quick "fix 404 on /settings page"
 ```
 
 ## Step 1: Quick Requirements (1 round max)
@@ -27,8 +27,8 @@ If user's description is already clear enough, skip questions entirely.
 Count the implied requirements from user's description + answers:
 
 **If 5+ distinct requirements or 2+ functional areas detected:**
-- Warn: "This looks bigger than a quick task ({N} requirements across {M} areas). Recommend full flow: `/qf-1::brainstorm {idea}`. Continue in quick mode anyway? (YES / switch to full)"
-- If user says switch: tell them to run `/qf-1::brainstorm {idea}` and stop
+- Warn: "This looks bigger than a quick task ({N} requirements across {M} areas). Recommend full flow: `/qf:1-brainstorm {idea}`. Continue in quick mode anyway? (YES / switch to full)"
+- If user says switch: tell them to run `/qf:1-brainstorm {idea}` and stop
 - If user says YES: proceed but log warning in REQUIREMENTS.md
 
 **If 4 or fewer requirements in 1 area:** proceed normally.
@@ -88,7 +88,7 @@ Ask: "Looks good? Type SHIP to finalize."
 After SHIP:
 ```
 **Done.** Artifacts at `./plans/{feature-slug}/`.
-  => Run `/qf-t::test` for smoke test
-  => Run `/qf-5::maintain` if more bugs to fix
-  => Run `/qf-s::status` to update project status
+  => Run `/qf:test` for smoke test
+  => Run `/qf:5-maintain` if more bugs to fix
+  => Run `/qf:status` to update project status
 ```

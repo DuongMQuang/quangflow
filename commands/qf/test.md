@@ -7,9 +7,9 @@ Does NOT touch real project code. Everything happens in a temp sandbox.
 
 ## Arguments
 ```
-/qf-t              — Full test: phases 1→5 in sandbox
-/qf-t quick        — Quick test: validate file structure + command availability only
-/qf-t phase N      — Test a specific phase (1-5) in isolation
+/qf:test              — Full test: phases 1→5 in sandbox
+/qf:test quick        — Quick test: validate file structure + command availability only
+/qf:test phase N      — Test a specific phase (1-5) in isolation
 ```
 
 ---
@@ -46,20 +46,20 @@ These stubs need only be syntactically valid, not functional. They exist to give
 
 ---
 
-## Quick Test (`/qf-t quick`)
+## Quick Test (`/qf:test quick`)
 
 Validate structural prerequisites without running phases:
 
 ### Checks
 | # | Check | How |
 |---|-------|-----|
-| 1 | Command files exist | Glob for `qf-{0,1,2,3,4,5,c,s,t}/*.md` in commands dir |
+| 1 | Command files exist | Glob for `qf/*.md` in commands dir — verify all 13 files present |
 | 2 | Agent files exist | Glob for `agents/*.md` (domain-engineer, dev-teammate, tech-lead, tester, pm) |
 | 3 | CLAUDE.md template valid | Read template, verify all 5 phases referenced |
-| 4 | No broken cross-references | Grep all command files for `/qf-` references, verify each target exists |
-| 5 | Severity levels consistent | Grep qf-5 for CRITICAL/ERROR/WARNING/INFO, verify all 4 present |
-| 6 | Gate keywords present | Verify each phase has its gate: APPROVE (qf-1), choice (qf-2), CONFIRM (qf-3), SHIP (qf-4) |
-| 7 | Status command covers all phases | Read qf-s, verify it references phases 1-5 + maintain |
+| 4 | No broken cross-references | Grep all command files for `/qf:` references, verify each target exists |
+| 5 | Severity levels consistent | Grep 5-maintain for CRITICAL/ERROR/WARNING/INFO, verify all 4 present |
+| 6 | Gate keywords present | Verify each phase has its gate: APPROVE (1-brainstorm), choice (2-design), CONFIRM (3-handoff), SHIP (4-verify) |
+| 7 | Status command covers all phases | Read status.md, verify it references phases 1-5 + maintain |
 | 8 | File naming consistency | Check all referenced file names (BUGLOG.md, STATUS.md, etc.) are consistent across commands |
 
 ### Output
@@ -70,7 +70,7 @@ QuangFlow Quick Test
 [PASS] Agent files: 5/5 found
 [PASS] Template references: all 5 phases
 [PASS] Cross-references: 0 broken
-[PASS] Severity levels: all 4 in qf-5
+[PASS] Severity levels: all 4 in 5-maintain
 [PASS] Gate keywords: all phases have gates
 [PASS] Status coverage: phases 1-5 + maintain
 [PASS] File naming: consistent
@@ -82,12 +82,12 @@ Or if failures:
 ```
 [FAIL] Agent files: missing tester.md
   -> Expected: agents/tester.md
-  -> Fix: Create agent file or update reference in qf-c
+  -> Fix: Create agent file or update reference in cook.md
 ```
 
 ---
 
-## Full Test (`/qf-t`)
+## Full Test (`/qf:test`)
 
 Runs each phase in sequence against the sandbox, validating inputs/outputs.
 
@@ -148,7 +148,7 @@ created: 2026-03-11T14:00:00+07:00
 - [ ] team_mode field present (true or false)
 - [ ] If team_mode true: team_composition YAML is valid
 
-**Synthetic REQUIREMENTS.md** (write directly, don't actually run qf-1 interactively):
+**Synthetic REQUIREMENTS.md** (write directly, don't actually run qf:1-brainstorm interactively):
 ```markdown
 # Requirements — user-management
 
@@ -305,10 +305,10 @@ None detected.
 **Result:** PASS if correct bug count + severity + dedup
 
 ### Status Simulation
-After all phases, validate `/qf-s` would produce correct output:
+After all phases, validate `/qf:status` would produce correct output:
 - [ ] Detects "all milestones shipped"
 - [ ] Reports bug log state from BUGLOG.md
-- [ ] Suggests `/qf-5 scan` as next command
+- [ ] Suggests `/qf:5-maintain scan` as next command
 
 ---
 
@@ -339,29 +339,29 @@ Sandbox kept at: /tmp/quangflow-test-{timestamp}/
 If any failures:
 ```
 Phase 5 (maintain):    [FAIL] BUGLOG.md — expected 3 bugs, found 5 (dedup broken)
-  -> Check: qf-5 dedup logic in "Dedup by error signature" section
+  -> Check: 5-maintain dedup logic in "Dedup by error signature" section
   -> Sandbox preserved for inspection
 ```
 
 ---
 
-## Phase Isolation Test (`/qf-t phase N`)
+## Phase Isolation Test (`/qf:test phase N`)
 
 Test a single phase. Creates minimal prerequisites for that phase:
-- `/qf-t phase 1` — just sandbox + stubs, run phase 1 validation
-- `/qf-t phase 3` — creates REQUIREMENTS.md + DESIGN.md, then validates phase 3 output
-- `/qf-t phase 5` — creates all prior artifacts + log files, validates maintain phase
+- `/qf:test phase 1` — just sandbox + stubs, run phase 1 validation
+- `/qf:test phase 3` — creates REQUIREMENTS.md + DESIGN.md, then validates phase 3 output
+- `/qf:test phase 5` — creates all prior artifacts + log files, validates maintain phase
 
 Useful for iterating on a specific phase after making changes.
 
 ---
 
 ## Important Notes
-- All artifacts are **written directly** (synthetic data), NOT by running actual qf-1→4 interactively
+- All artifacts are **written directly** (synthetic data), NOT by running actual qf:1→4 interactively
 - The test validates the **expected contract** of each phase: what files it should create, what sections they contain, what cross-references exist
 - Test does NOT validate prompt quality or agent behavior — only structural contracts
 - Sandbox is preserved after test for manual inspection
-- Run `/qf-t` after modifying any command file to catch regressions
+- Run `/qf:test` after modifying any command file to catch regressions
 
 ## Output Rule
 When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.

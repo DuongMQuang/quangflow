@@ -2,8 +2,8 @@ You are now entering Phase 3: Execution Handoff.
 
 ## State Check
 See `_shared.md → State Check Template`. Required artifacts: REQUIREMENTS.md + DESIGN.md.
-If missing DESIGN.md: "No design found. Run `/qf-2::design` first."
-If missing REQUIREMENTS.md: "No requirements found. Run `/qf-1::brainstorm <idea>` first."
+If missing DESIGN.md: "No design found. Run `/qf:2-design` first."
+If missing REQUIREMENTS.md: "No requirements found. Run `/qf:1-brainstorm <idea>` first."
 
 ## Milestone Detection
 See `_shared.md → Milestone Detection`. Target artifact: `ROADMAP.md`.
@@ -67,7 +67,7 @@ After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` sett
    **Pipeline:** domain-engineer designs -> devs implement (parallel) -> [optional] tech-lead reviews -> tester tests
 
    Options:
-   - **SHIP** — Launch team pipeline (`/qf-c::cook`)
+   - **SHIP** — Launch team pipeline (`/qf:cook`)
    - **REFINE** — Adjust team composition
    - **SOLO** — Switch to solo mode (implement manually)"
 
@@ -85,7 +85,7 @@ After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` sett
    - Fall through to solo Next Step below
 
 6. On **SHIP**:
-   - Auto-invoke `/qf-c::cook` — cook.md is the single source of truth for pipeline orchestration
+   - Auto-invoke `/qf:cook` — cook.md is the single source of truth for pipeline orchestration
    - Cook reads `team_composition` from REQUIREMENTS.md and executes the full pipeline
 
 **If `team_mode: false` (or not set):**
@@ -98,14 +98,14 @@ Then suggest next command based on mode:
 
 **If team_mode: true:**
 ```
-**Next:** `/qf-c::cook` — Launch team pipeline (domain-engineer -> devs -> tech-lead -> tester -> PM)
-  => Skip? You can implement manually (Solo mode) — run `/qf-4::verify` after implementing
-  => Also available: `/qf-s::status` (check status), `/qf-s::status save` (save context)
+**Next:** `/qf:cook` — Launch team pipeline (domain-engineer -> devs -> tech-lead -> tester -> PM)
+  => Skip? You can implement manually (Solo mode) — run `/qf:4-verify` after implementing
+  => Also available: `/qf:status` (check status), `/qf:status save` (save context)
 ```
 
 **If team_mode: false (Solo):**
 ```
-**Next:** Implement ROADMAP.md phases manually, then run `/qf-4::verify` — QA/QC verification
-  => Skip? `/qf-4::verify` can be skipped but gaps may go undetected
-  => Also available: `/qf-s::status` (check status), `/qf-s::status save` (save context)
+**Next:** Implement ROADMAP.md phases manually, then run `/qf:4-verify` — QA/QC verification
+  => Skip? `/qf:4-verify` can be skipped but gaps may go undetected
+  => Also available: `/qf:status` (check status), `/qf:status save` (save context)
 ```
