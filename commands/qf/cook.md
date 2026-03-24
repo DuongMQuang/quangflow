@@ -87,6 +87,15 @@ If TeamCreate fails: "Agent Teams requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS
 Read both `plans/GOTCHAS.md` (global) and `plans/{feature-slug}/GOTCHAS.md` (feature) if they exist.
 Filter by domain tags per agent. Include as "Past Lessons" (max 5 per agent).
 
+## Stage Gate Enforcement
+After EACH stage completes, run the validation script BEFORE advancing:
+```bash
+bash {quangflow-root}/scripts/validate/validate-stage-completion.sh {stage} {milestone-dir} [options]
+```
+- If script returns 0 (pass): advance to next stage
+- If script returns 1 (fail): present failures to user. Do NOT advance until fixed.
+- This is NOT optional — it enforces rules the LLM might skip (checkpoints, ownership, format)
+
 ## Pipeline Execution
 
 ### Stage 1: Domain Engineer (if in team_composition)
@@ -94,6 +103,7 @@ Filter by domain tags per agent. Include as "Past Lessons" (max 5 per agent).
 - Scope context per `_context-scoping.md`
 - CALL `Task(subagent_type: "planner", name: "domain-engineer", model: "sonnet")`
 - Produces: `plans/{slug}/milestone-{N}/design/` — OVERVIEW, MODULES, SEQUENCES, CONTRACTS
+- **GATE:** Run `validate-stage-completion.sh domain-engineer {milestone-dir}`
 - Present to user: "Domain engineer completed. Proceed? (YES / request changes)"
 - Wait for user approval
 
@@ -119,7 +129,10 @@ For each dev role:
 
 **Cross-talk & decisions:** See `_dev-coordination.md`
 
-- When all devs complete:
+- When each dev completes:
+  - **GATE:** Run `validate-stage-completion.sh devs {milestone-dir} --dev-role {role} --ownership {globs}`
+  - If gate fails (ownership violation, missing checkpoint): block and report
+- When ALL devs pass gates:
   - If worktrees: merge branches (see `_worktree-isolation.md`)
   - Review DECISIONS.md for cross-boundary impacts
   - Proceed to Stage 3
@@ -133,6 +146,7 @@ Ask user: "Tech lead review? (YES / SKIP)"
 - READ `.claude/agents/tech-lead.md`
 - `Task(subagent_type: "code-reviewer", name: "tech-lead", model: "sonnet")`
 - Minor issues → devs fix inline. Major gaps → GAPS.md → user decides ADD/DEFER/IGNORE.
+- **GATE:** Run `validate-stage-completion.sh tech-lead {milestone-dir}`
 
 **If SKIP:** proceed to Stage 4
 
@@ -141,11 +155,13 @@ Ask user: "Tech lead review? (YES / SKIP)"
 - Scope context per `_context-scoping.md`
 - `Task(subagent_type: "tester", name: "tester", model: "sonnet")`
 - Generate tests from acceptance criteria + edge cases
+- **GATE:** Run `validate-stage-completion.sh tester {milestone-dir}`
 
 ### Stage 5: PM Status Report
 - READ `.claude/agents/pm.md`
 - `Task(subagent_type: "project-manager", name: "pm", model: "haiku")`
 - Produces: STATUS.md with progress, pipeline report, blockers, session resume
+- **GATE:** Run `validate-stage-completion.sh pm {milestone-dir}`
 
 ### Stage 6: Remediation (if GAPS.md has ADDed phases)
 - Spawn additional dev tasks for remediation phases
