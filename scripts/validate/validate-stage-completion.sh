@@ -183,6 +183,65 @@ case "$STAGE" in
     fi
     ;;
 
+  verify)
+    # QA-REPORT.md must exist
+    if [[ -f "$MILESTONE_DIR/QA-REPORT.md" ]]; then
+      pass "QA-REPORT.md exists"
+    else
+      fail "QA-REPORT.md missing — verify must produce QA report"
+    fi
+    # If GAPS.md has entries, GOTCHAS.md must have been updated
+    GAPS="$MILESTONE_DIR/GAPS.md"
+    if [[ -f "$GAPS" ]]; then
+      GAP_COUNT=$(grep -c 'GAP-[0-9]' "$GAPS" 2>/dev/null || echo 0)
+      if [[ "$GAP_COUNT" -gt 0 ]]; then
+        # Check both global and feature GOTCHAS.md
+        FEATURE_GOTCHAS="$FEATURE_DIR/GOTCHAS.md"
+        GLOBAL_GOTCHAS="$FEATURE_DIR/../GOTCHAS.md"
+        GOTCHA_COUNT=0
+        if [[ -f "$FEATURE_GOTCHAS" ]]; then
+          GOTCHA_COUNT=$((GOTCHA_COUNT + $(grep -c '### G-[0-9]' "$FEATURE_GOTCHAS" 2>/dev/null || echo 0)))
+        fi
+        if [[ -f "$GLOBAL_GOTCHAS" ]]; then
+          GOTCHA_COUNT=$((GOTCHA_COUNT + $(grep -c '### G-[0-9]' "$GLOBAL_GOTCHAS" 2>/dev/null || echo 0)))
+        fi
+        if [[ "$GOTCHA_COUNT" -gt 0 ]]; then
+          pass "GOTCHAs logged: $GOTCHA_COUNT entries (gaps found: $GAP_COUNT)"
+        else
+          fail "GAPS.md has $GAP_COUNT gaps but no GOTCHAs logged — lessons must be captured"
+        fi
+      fi
+    fi
+    ;;
+
+  maintain)
+    # If bugs were fixed, GOTCHAS.md should have been updated
+    BUGLOG="$FEATURE_DIR/BUGLOG.md"
+    if [[ -f "$BUGLOG" ]]; then
+      RESOLVED=$(grep -c 'RESOLVED' "$BUGLOG" 2>/dev/null || echo 0)
+      if [[ "$RESOLVED" -gt 0 ]]; then
+        FEATURE_GOTCHAS="$FEATURE_DIR/GOTCHAS.md"
+        GLOBAL_GOTCHAS="$FEATURE_DIR/../GOTCHAS.md"
+        GOTCHA_COUNT=0
+        if [[ -f "$FEATURE_GOTCHAS" ]]; then
+          GOTCHA_COUNT=$((GOTCHA_COUNT + $(grep -c '### G-[0-9]' "$FEATURE_GOTCHAS" 2>/dev/null || echo 0)))
+        fi
+        if [[ -f "$GLOBAL_GOTCHAS" ]]; then
+          GOTCHA_COUNT=$((GOTCHA_COUNT + $(grep -c '### G-[0-9]' "$GLOBAL_GOTCHAS" 2>/dev/null || echo 0)))
+        fi
+        if [[ "$GOTCHA_COUNT" -gt 0 ]]; then
+          pass "GOTCHAs logged: $GOTCHA_COUNT entries ($RESOLVED bugs resolved)"
+        else
+          fail "$RESOLVED bugs resolved but no GOTCHAs logged — lessons must be captured"
+        fi
+      else
+        pass "BUGLOG.md exists, no resolved bugs to check"
+      fi
+    else
+      pass "No BUGLOG.md (maintain not yet active)"
+    fi
+    ;;
+
   *)
     fail "Unknown stage: $STAGE"
     ;;
