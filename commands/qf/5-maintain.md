@@ -287,7 +287,14 @@ Agent waits for user response.
 - **Regression test:** test_fundamental_service.py::test_api_failure_returns_all_null
 ```
 
-### Step 4: Commit (optional)
+### Step 4: Log Gotcha
+See `_shared.md → GOTCHAs System → Logging Protocol`.
+After each bug fix, auto-create a gotcha entry in `plans/{feature-slug}/GOTCHAS.md`:
+- Domain tag: infer from affected files
+- Rule: what should have prevented this bug (missing test, bad assumption, unchecked edge case)
+- Tags: include `phase-4` if tests should have caught it, `phase-2` if design was flawed, etc.
+
+### Step 5: Commit (optional)
 Ask user: "Fix verified. Commit? (YES / NO)"
 If YES, create conventional commit: `fix: {brief description} (BUG-XXX)`
 

@@ -107,9 +107,14 @@ See GAPS.md for details.
 - (any forward-looking suggestions)
 ```
 
+## GOTCHAs Logging
+For each **major** finding written to GAPS.md, also log a gotcha entry to `plans/{feature-slug}/GOTCHAS.md`.
+See `_shared.md → GOTCHAs System → Logging Protocol` (in commands/qf/_shared.md).
+
 ## Completion
 - Mark task completed via `TaskUpdate` only when:
   - All minor issues have been fixed by devs (or explicitly deferred)
   - REVIEW.md is written
   - GAPS.md is written (if major gaps found)
+  - GOTCHAS.md updated (if major gaps found)
 - Send summary to lead with: issues found, issues fixed, gaps escalated

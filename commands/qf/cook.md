@@ -256,6 +256,12 @@ Tell user:
 
 Then print the Agent Usage table.
 
+## GOTCHAs Injection (before spawning agents)
+Read `plans/{feature-slug}/GOTCHAS.md` if it exists.
+For each dev agent, filter gotchas by domain tags matching the dev's focus area.
+Include matching gotchas in the dev's prompt as a "Past Lessons" section (max 5 most recent).
+Also include relevant gotchas in domain-engineer and tester prompts.
+
 ## CK Context Block
 Every teammate prompt MUST include:
 ```

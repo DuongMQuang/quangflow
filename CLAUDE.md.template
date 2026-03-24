@@ -24,6 +24,7 @@ Each milestone runs the full phase flow but scoped to its subset of requirements
 ├── CONTEXT.md                   <- locked decisions (project-wide)
 ├── OPEN_QUESTIONS.md            <- unresolved items
 ├── BUGLOG.md                    <- bug log with severity, bookmarks, triage status (Phase 5)
+├── GOTCHAS.md                   <- lessons learned, auto-logged by Phase 4/5, reviewed by Phase 2/3
 ├── milestone-1/
 │   ├── DESIGN.md                <- chosen architecture + rejected options
 │   ├── ROADMAP.md               <- phases with deliverables + done criteria

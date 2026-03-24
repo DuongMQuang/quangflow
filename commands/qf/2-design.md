@@ -15,7 +15,12 @@ Reference project-level CONTEXT.md for any locked decisions from previous milest
 See `_autopilot.md → Phase 2 — Design`. If `pm_mode: autopilot`: auto-pick best option, skip to review gate.
 If `hands-on` or not set: proceed with normal flow below.
 
-## Tension Analysis (do this FIRST)
+## GOTCHAs Review (do this BEFORE tension analysis)
+See `_shared.md → GOTCHAs System → Review Protocol`.
+Read `plans/{feature-slug}/GOTCHAS.md` if it exists. Filter by tags relevant to this milestone's domain (e.g., `design`, `database`, `auth`, etc.).
+If relevant gotchas found: present them before tension analysis so they inform design decisions.
+
+## Tension Analysis (do this AFTER gotchas review)
 List the "tension points" in this milestone's requirements:
 - Requirements that pull in different directions
 - Things that are easy now but hard to change later

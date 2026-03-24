@@ -9,6 +9,11 @@ If missing REQUIREMENTS.md: "No requirements found. Run `/qf:1-brainstorm <idea>
 See `_shared.md → Milestone Detection`. Target artifact: `ROADMAP.md`.
 Read REQUIREMENTS.md (project-level) + DESIGN.md (milestone-level) + CONTEXT.md (if exists).
 
+## GOTCHAs Review (before generating artifacts)
+See `_shared.md → GOTCHAs System → Review Protocol`.
+Read `plans/{feature-slug}/GOTCHAS.md` if it exists. Filter by tags matching this milestone's requirements.
+If relevant gotchas found: inject their rules as `> ⚠️ GOTCHA:` warnings in the appropriate ROADMAP.md phases.
+
 ## Output Files
 Generate to ./plans/{feature-slug}/:
 

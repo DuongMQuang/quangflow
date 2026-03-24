@@ -99,3 +99,47 @@ Injected into every ROADMAP phase and verified in Phase 4:
 - Each module must have a single responsibility
 - New features must not require modifying existing interfaces
 - Data models must be versioned from day 1
+
+## GOTCHAs System — Self-Improvement Loop
+
+### Purpose
+Capture mistakes, surprises, and hard-won lessons so they inform future phases.
+GOTCHAs are per-feature: `plans/{feature-slug}/GOTCHAS.md`.
+
+### GOTCHAS.md Format
+```markdown
+# GOTCHAs — {feature-slug}
+
+### G-001 [{domain}] — {one-line description}
+- **When:** {which phase/stage discovered this}
+- **Root cause:** {why it happened — bad assumption, missing check, etc.}
+- **Rule:** {concrete rule to prevent recurrence}
+- **Tags:** {comma-separated: phase-2, design, auth, database, etc.}
+```
+
+**Domain tags:** `backend`, `frontend`, `infra`, `auth`, `database`, `api`, `testing`, `design`, `requirements`, `deployment`
+
+### When to Log (automatic)
+- **Phase 4 (verify):** For each GAP found → create a gotcha entry
+- **Phase 5 (maintain):** For each bug fixed → create a gotcha entry
+- **Tech-lead review:** For each major finding → create a gotcha entry
+
+### When to Review (automatic)
+- **Phase 2 (design):** Read GOTCHAS.md, filter by tags matching current milestone's concerns. Present relevant gotchas before proposing design options.
+- **Phase 3 (handoff):** Read GOTCHAS.md, inject relevant rules into ROADMAP.md phases as warnings.
+- **Cook (dev prompts):** Include gotchas tagged with each dev's domain in their prompt context.
+
+### Logging Protocol
+1. Read existing GOTCHAS.md (if exists) to get next G-ID
+2. Append new entry with auto-incremented ID
+3. Mention: "Logged gotcha G-{NNN}: {description}"
+4. Do NOT print the full entry to console
+
+### Review Protocol
+1. Read GOTCHAS.md
+2. Filter entries by tags relevant to current phase/milestone
+3. If relevant gotchas found, present summary:
+   "**Past lessons ({N} relevant):**
+   - G-001: {rule} (from: {when})
+   - G-003: {rule} (from: {when})"
+4. If no gotchas exist or none relevant: skip silently

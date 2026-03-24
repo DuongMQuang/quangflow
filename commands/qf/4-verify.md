@@ -106,6 +106,13 @@ Generate to ./plans/{feature-slug}/milestone-{N}/:
 - List: PASS / FAIL / WARN per requirement ID
 - List: GAP-IDs with severity and status
 
+## GOTCHAs Logging (after gap detection)
+See `_shared.md → GOTCHAs System → Logging Protocol`.
+For each GAP found in Step 5, auto-create a gotcha entry in `plans/{feature-slug}/GOTCHAS.md`:
+- Domain tag: infer from affected files (e.g., `src/api/*` → `backend`, `src/components/*` → `frontend`)
+- Rule: derive from the gap's root cause — what should future phases check for?
+- Tags: include the phase where this should have been caught (e.g., `phase-2` if it's a design gap, `phase-3` if ROADMAP missed it)
+
 ## Autopilot Mode Check
 See `_autopilot.md → Phase 4 — Verify`. If autopilot: auto-fix, plain-language results, auto-triage gaps.
 If `hands-on` or not set: use normal review gate below.
