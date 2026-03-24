@@ -27,6 +27,7 @@ Each milestone runs the full phase flow but scoped to its subset of requirements
     ├── OPEN_QUESTIONS.md            <- unresolved items
     ├── BUGLOG.md                    <- bug log with severity, bookmarks, triage status (Phase 5)
     ├── GOTCHAS.md                   <- FEATURE lessons (specific to this feature)
+    ├── PROGRESS.md                  <- project timeline, phase history, metrics
 ├── milestone-1/
 │   ├── DESIGN.md                <- chosen architecture + rejected options
 │   ├── ROADMAP.md               <- phases with deliverables + done criteria

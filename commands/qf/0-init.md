@@ -122,6 +122,10 @@ If not found: proceed with Step 1 above.
 ## Output Rule
 See `_shared.md → Output Rule`.
 
+## Progress Logging
+See `_shared.md → Progress Tracking`. Append Phase 0 row to `plans/{feature-slug}/PROGRESS.md`.
+Key decisions to log: project type (existing/new), scan depth, pm_mode.
+
 ## Next Step
 Tell user: "Project initialized. Context saved to `./plans/{feature-slug}/CONTEXT.md`."
 

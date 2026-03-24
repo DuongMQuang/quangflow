@@ -152,6 +152,10 @@ If REQUIREMENTS.md has `team_mode: true`, refine the team based on the chosen ar
 ## Output Rule
 See `_shared.md → Output Rule`.
 
+## Progress Logging
+See `_shared.md → Progress Tracking`. Append Phase 2 row to `plans/{feature-slug}/PROGRESS.md`.
+Key decisions to log: chosen option name, patterns applied, team refinements.
+
 ## Next Step
 Tell user: "Phase 2 complete for milestone-{N}. Design saved to `./plans/{feature-slug}/milestone-{N}/DESIGN.md`."
 

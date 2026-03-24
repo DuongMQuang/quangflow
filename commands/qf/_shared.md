@@ -100,6 +100,51 @@ When a phase reads an artifact, check `quangflow_version`:
 - If older than current: warn "This artifact was created with QuangFlow v{old}. Current is v{new}. Some fields may differ."
 - Do NOT block execution — just warn. Artifacts are forward-compatible.
 
+## Progress Tracking
+
+Every phase MUST append an entry to `plans/{feature-slug}/PROGRESS.md` when it completes.
+This is NOT optional — the stage gate script checks for it.
+
+### PROGRESS.md Schema
+```markdown
+# Progress — {feature-slug}
+
+## Overview
+| Milestone | Phases Done | Sessions | Status |
+|-----------|------------|----------|--------|
+| M1 | 0→4 | 4 | SHIPPED |
+| M2 | 0→2 | 1 | IN PROGRESS |
+
+## Milestone 1
+
+| Phase | Started | Completed | Sessions | Iterations | Key Decisions |
+|-------|---------|-----------|----------|------------|---------------|
+| 0-init | 2026-03-10 | 2026-03-10 | 1 | 1 | existing project, medium scan |
+| 1-brainstorm | 2026-03-10 | 2026-03-10 | 1 | 3 rounds | 8 REQs, 2 milestones |
+| 2-design | 2026-03-11 | 2026-03-11 | 1 | 1 | Option A (MVC+JWT) |
+| cook | 2026-03-12 | 2026-03-12 | 1 | 1+remediation | 1 gap, 120K tokens |
+| 4-verify | 2026-03-13 | 2026-03-13 | 1 | 2 | 4/4 PASS |
+
+## Metrics
+- Total sessions: {N}
+- Gotchas logged: {N}
+- Gaps found: {N} ({N} remediated, {N} deferred)
+```
+
+### Logging Protocol
+Each phase appends its row to the milestone table when it completes:
+1. If PROGRESS.md doesn't exist: create it with the Overview table and current milestone section
+2. If milestone section doesn't exist: add it
+3. Append phase row with: start time, completion time, session count (1 if same session), iterations, key decisions
+4. Update the Overview table's "Phases Done" and "Status" columns
+5. Update Metrics section
+
+### Who Updates What
+- **Phase 0-4:** Each phase appends its own row after review gate passes
+- **Cook:** Appends the "cook" row with agent usage totals and gap count
+- **PM agent:** Updates Metrics section at pipeline end
+- **`/qf:status`:** Reads PROGRESS.md for timeline display
+
 ## Code Quality Mandates
 Injected into every ROADMAP phase and verified in Phase 4:
 - Each module must have a single responsibility

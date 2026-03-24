@@ -287,6 +287,10 @@ If multiple milestones, create milestone directories: ./plans/{feature-slug}/mil
 ## Output Rule
 See `_shared.md → Output Rule`.
 
+## Progress Logging
+See `_shared.md → Progress Tracking`. Append Phase 1 row to `plans/{feature-slug}/PROGRESS.md`.
+Key decisions to log: REQ count, milestone count, team mode (solo/team), question rounds.
+
 ## Next Step
 Tell user: "Phase 1 complete. Draft saved to `./plans/{feature-slug}/REQUIREMENTS.md` with [N] milestone(s)."
 

@@ -17,7 +17,17 @@ This command can be run at ANY time, in ANY session.
 - If file missing: display `**QuangFlow:** version unknown`
 
 ## Status Report
-Read the latest STATUS.md and present:
+Read PROGRESS.md first (if exists) for timeline context, then STATUS.md for current state.
+
+If PROGRESS.md exists, show project timeline summary:
+```
+**Timeline:**
+  M1: Phase 0→4 completed in 4 sessions (Mar 10–13) — SHIPPED
+  M2: Phase 0→2 completed in 1 session (Mar 14) — IN PROGRESS
+  Metrics: 3 gotchas, 1 gap remediated, ~250K tokens total
+```
+
+Then show current state from STATUS.md:
 
 ```
 **Project:** {feature-slug}

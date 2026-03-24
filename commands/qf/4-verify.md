@@ -165,6 +165,10 @@ Only if user requests deeper review after seeing QA-REPORT.md:
 
 Append findings to QA-REPORT.md under "Manual Review" section.
 
+## Progress Logging
+See `_shared.md → Progress Tracking`. Append Phase 4 row to `plans/{feature-slug}/PROGRESS.md`.
+Key decisions to log: PASS/FAIL count, gap count, remediation needed (yes/no), iterations.
+
 ## Output Rule
 See `_shared.md → Output Rule`.
 

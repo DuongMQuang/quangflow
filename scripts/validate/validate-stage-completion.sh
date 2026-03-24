@@ -51,6 +51,20 @@ else
   fail "PIPELINE-STATE.md missing — cook must track pipeline state"
 fi
 
+# --- Common: PROGRESS.md should exist and contain current phase ---
+FEATURE_DIR="$(dirname "$MILESTONE_DIR")"
+PROGRESS="$FEATURE_DIR/PROGRESS.md"
+if [[ -f "$PROGRESS" ]]; then
+  pass "PROGRESS.md exists"
+else
+  # Not a hard fail for cook pipeline stages (domain-engineer, devs, etc.)
+  # Only warn — progress is logged by phase commands, not cook stages
+  case "$STAGE" in
+    domain-engineer|devs|tech-lead|tester|pm) ;; # skip for cook stages
+    *) fail "PROGRESS.md missing — each phase must log progress" ;;
+  esac
+fi
+
 # --- Stage-specific checks ---
 case "$STAGE" in
 

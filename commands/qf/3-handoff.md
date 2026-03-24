@@ -96,6 +96,10 @@ After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` sett
 **If `team_mode: false` (or not set):**
 - Fall through to solo Next Step below
 
+## Progress Logging
+See `_shared.md → Progress Tracking`. Append Phase 3 row to `plans/{feature-slug}/PROGRESS.md`.
+Key decisions to log: execution mode (SHIP/SOLO), ROADMAP phase count, team composition summary.
+
 ## Next Step
 Tell user: "Phase 3 complete for milestone-{N}. Artifacts saved to `./plans/{feature-slug}/milestone-{N}/`."
 
