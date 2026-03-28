@@ -137,6 +137,21 @@ case "$STAGE" in
           fi
         fi
       fi
+
+      # Check 4: TDD evidence exists for assigned REQ-IDs
+      if [[ -n "$OWNERSHIP" ]]; then
+        EVIDENCE_DIR="$(cd "$MILESTONE_DIR/../.." && pwd)/.evidence/tdd"
+        if [[ -d "$EVIDENCE_DIR" ]]; then
+          EVIDENCE_COUNT=$(find "$EVIDENCE_DIR" -name "REQ-*-green.log" 2>/dev/null | wc -l | tr -d ' ')
+          if [[ "$EVIDENCE_COUNT" -gt 0 ]]; then
+            pass "TDD evidence: $EVIDENCE_COUNT REQ-IDs have green logs"
+          else
+            fail "TDD evidence: no green logs found in .evidence/tdd/ — devs must follow TDD"
+          fi
+        else
+          fail ".evidence/tdd/ directory missing — devs must save TDD evidence"
+        fi
+      fi
     fi
 
     # Check 3: DECISIONS.md format (if exists and has entries)
@@ -198,11 +213,34 @@ case "$STAGE" in
     ;;
 
   verify)
-    # QA-REPORT.md must exist
-    if [[ -f "$MILESTONE_DIR/QA-REPORT.md" ]]; then
-      pass "QA-REPORT.md exists"
+    # CERTIFICATION.md (new format) or QA-REPORT.md (legacy) must exist
+    CERTIFICATION="$MILESTONE_DIR/CERTIFICATION.md"
+    QA_REPORT="$MILESTONE_DIR/QA-REPORT.md"
+    if [[ -f "$CERTIFICATION" ]]; then
+      pass "CERTIFICATION.md exists"
+      # Check for UNRESOLVED entries
+      UNRESOLVED=$(grep -ci 'UNRESOLVED\|BLOCKED\|FAILED' "$CERTIFICATION" 2>/dev/null || echo 0)
+      if [[ "$UNRESOLVED" -gt 0 ]]; then
+        fail "CERTIFICATION.md has $UNRESOLVED UNRESOLVED/BLOCKED/FAILED entries — resolve before shipping"
+      else
+        pass "CERTIFICATION.md: no unresolved entries"
+      fi
+    elif [[ -f "$QA_REPORT" ]]; then
+      pass "QA-REPORT.md exists (legacy format — consider upgrading to CERTIFICATION.md)"
     else
-      fail "QA-REPORT.md missing — verify must produce QA report"
+      fail "CERTIFICATION.md or QA-REPORT.md missing — verify must produce certification report"
+    fi
+    # Evidence directory check
+    EVIDENCE_VERIFY_DIR="$(cd "$MILESTONE_DIR/../.." && pwd)/.evidence/verification"
+    if [[ -d "$EVIDENCE_VERIFY_DIR" ]]; then
+      GATE_COUNT=$(find "$EVIDENCE_VERIFY_DIR" -name "*.log" -o -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+      if [[ "$GATE_COUNT" -gt 0 ]]; then
+        pass "Verification evidence: $GATE_COUNT phase gate file(s) in .evidence/verification/"
+      else
+        fail "Verification evidence: .evidence/verification/ exists but is empty"
+      fi
+    else
+      fail ".evidence/verification/ directory missing — verify must save phase gate evidence"
     fi
     # If GAPS.md has entries, GOTCHAS.md must have been updated
     GAPS="$MILESTONE_DIR/GAPS.md"
@@ -260,6 +298,16 @@ case "$STAGE" in
     fail "Unknown stage: $STAGE"
     ;;
 esac
+
+# Auto-save to Feature Memory on successful validation
+if [[ $FAIL -eq 0 ]]; then
+  FEATURE_SLUG=$(basename "$FEATURE_DIR")
+  SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+  MEMORY_HOOK="$SCRIPT_DIR/../hooks/save-feature-memory.sh"
+  if [[ -x "$MEMORY_HOOK" ]]; then
+    bash "$MEMORY_HOOK" "$FEATURE_SLUG" "$STAGE" "$MILESTONE_DIR" 2>/dev/null || true
+  fi
+fi
 
 # --- Summary ---
 echo ""
