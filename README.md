@@ -30,7 +30,25 @@ Adds 12 slash commands to Claude Code:
 
 ## Install
 
-### One-liner (remote)
+### As a Plugin (recommended)
+
+The easiest way to install QuangFlow. Works with Claude Code, Cursor, and OpenCode.
+
+**Claude Code:**
+```bash
+claude plugin add quangflow
+```
+
+**Cursor:** Add to your `.cursor-plugin/` config or install from the plugin marketplace.
+
+**OpenCode:** Add to `opencode.json`:
+```json
+{ "plugin": ["quangflow@git+https://github.com/DuongMQuang/quangflow.git"] }
+```
+
+Plugin benefits: one-command install, auto-updates, no file conflicts, multi-platform support.
+
+### One-liner (remote) — legacy
 
 ```bash
 # Interactive — asks global or project
@@ -43,7 +61,7 @@ curl -fsSL https://raw.githubusercontent.com/DuongMQuang/quangflow/main/remote-i
 curl -fsSL https://raw.githubusercontent.com/DuongMQuang/quangflow/main/remote-install.sh | bash -s -- --project /path/to/project
 ```
 
-### Manual
+### Manual — legacy
 
 ```bash
 git clone https://github.com/DuongMQuang/quangflow.git
