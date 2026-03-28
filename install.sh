@@ -11,7 +11,7 @@
 set -euo pipefail
 
 # --- Configuration ---
-QUANGFLOW_VERSION="1.1.0"
+QUANGFLOW_VERSION="2.0.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 INSTALL_MODE=""   # "global" or "project"
 TARGET_DIR=""
@@ -292,12 +292,17 @@ echo "  Commands:"
 echo "    /qf:1-brainstorm <idea>  — Requirements discovery"
 echo "    /qf:2-design             — Architecture design"
 echo "    /qf:3-handoff            — Execution handoff"
-echo "    /qf:4-verify             — QA & verification"
-echo "    /qf:5-maintain           — Post-ship bug fix & triage"
-echo "    /qf:quick <task>       — Quick mode (single-pass)"
+echo "    /qf:4-verify             — Verify & Certify"
+echo "    /qf:5-maintain           — Systematic debugging & hotfix"
+echo "    /qf:quick <task>       — Quick mode (minimal team)"
 echo "    /qf:cook               — Team pipeline orchestrator"
 echo "    /qf:status             — Status & session resume"
 echo "    /qf:test               — Smoke test"
+echo ""
+echo "  Update notifications:"
+echo "    Add this hook to .claude/settings.json for session-start update checks:"
+echo '    "hooks": { "SessionStart": [{ "matcher": "", "hooks": [{ "type": "command",'
+echo '      "command": "bash .claude/scripts/hooks/check-update.sh", "async": true }] }] }'
 echo ""
 if [[ "$INSTALL_MODE" == "global" ]]; then
   echo "  Global install — commands available in every project."
