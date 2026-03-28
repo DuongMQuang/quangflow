@@ -13,7 +13,7 @@
       "author": {
         "name": "Duong M Quang"
       },
-      "source": ".",
+      "source": "./plugins/quangflow",
       "category": "workflow"
     }
   ]
