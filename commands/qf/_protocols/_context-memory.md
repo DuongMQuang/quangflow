@@ -6,7 +6,11 @@ Referenced by all phase files and `cook.md`. Ensures context is never lost betwe
 
 ## HARD-GATE
 
-> **Do NOT start work on a feature without loading its FMU via @mention.** Context loss between sessions causes rework, contradictory decisions, and missed requirements. Load before you work. Save before you stop.
+<HARD-GATE>
+Do NOT start work on a feature without loading its FMU via @mention.
+Context loss between sessions causes rework, contradictory decisions,
+and missed requirements. Load before you work. Save before you stop.
+</HARD-GATE>
 
 ---
 

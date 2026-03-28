@@ -6,7 +6,12 @@ Referenced by `dev-teammate.md` and `3-handoff.md`. Defines the logging standard
 
 ## HARD-GATE
 
-> **All application code MUST use structured logging format.** No `console.log("something happened")`. No `print(data)`. Every log entry must be machine-parseable and contain context. Unstructured logs are technical debt.
+<HARD-GATE>
+All application code MUST use structured logging format. No
+console.log("something happened"). No print(data). Every log entry
+must be machine-parseable and contain context. Unstructured logs are
+technical debt.
+</HARD-GATE>
 
 ---
 

@@ -6,7 +6,11 @@ Referenced by `4-verify.md`, `tester.md`, and phase gate checks. Ensures claims 
 
 ## HARD-GATE
 
-> **Do NOT claim any phase is complete without producing the required evidence artifact.** Confidence is not evidence. "I checked" is not evidence. Only saved, auditable output is evidence.
+<HARD-GATE>
+Do NOT claim any phase is complete without producing the required
+evidence artifact. Confidence is not evidence. "I checked" is not
+evidence. Only saved, auditable output is evidence.
+</HARD-GATE>
 
 ---
 

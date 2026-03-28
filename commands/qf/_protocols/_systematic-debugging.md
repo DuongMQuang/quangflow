@@ -6,7 +6,11 @@ Referenced by `5-maintain.md`, `dev-teammate.md`, and `tester.md`. Prevents gues
 
 ## HARD-GATE
 
-> **Do NOT propose a fix until the investigation phase is complete and root cause is documented.** Guessing at fixes wastes time and introduces new bugs. Investigate first, fix second.
+<HARD-GATE>
+Do NOT propose a fix until the investigation phase is complete and root
+cause is documented. Guessing at fixes wastes time and introduces new
+bugs. Investigate first, fix second.
+</HARD-GATE>
 
 ---
 

@@ -6,7 +6,11 @@ Referenced by `3-handoff.md`, `dev-teammate.md`, and `cook.md`. Ensures test-dri
 
 ## HARD-GATE
 
-> **Do NOT write implementation code until a failing test exists for the requirement being implemented.** No exceptions. No "I'll test it after." The test comes first — always.
+<HARD-GATE>
+Do NOT write implementation code until a failing test exists for the
+requirement being implemented. No exceptions. No "I'll test it after."
+The test comes first — always.
+</HARD-GATE>
 
 ---
 
