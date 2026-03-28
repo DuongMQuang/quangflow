@@ -1,0 +1,20 @@
+{
+  "name": "quangflow",
+  "description": "5-phase workflow framework — structured project management with TDD, verification gates, team orchestration, and systematic debugging",
+  "version": "2.0.0",
+  "author": {
+    "name": "Duong M Quang"
+  },
+  "homepage": "https://github.com/DuongMQuang/quangflow",
+  "repository": "https://github.com/DuongMQuang/quangflow",
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "tdd",
+    "debugging",
+    "verification",
+    "project-management",
+    "team-orchestration",
+    "multi-agent"
+  ]
+}
