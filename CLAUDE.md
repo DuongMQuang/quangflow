@@ -19,10 +19,10 @@ Or jump straight in:
 | `/qf:0-init <idea>` | Project setup, codebase scan, create CONTEXT.md |
 | `/qf:1-brainstorm` | Requirements discovery, clarifying questions, milestone splits |
 | `/qf:2-design` | Architecture options with trade-offs |
-| `/qf:3-handoff` | Execution artifacts, ROADMAP generation |
-| `/qf:4-verify` | Tests, requirement traceability, gap detection |
-| `/qf:5-maintain` | Post-ship bug scan, triage, hotfix |
-| `/qf:quick <task>` | Single-pass for small tasks (skip design phase) |
+| `/qf:3-handoff` | Execution artifacts, ROADMAP generation, SHIP/REFINE gate |
+| `/qf:4-verify` | TDD audit, evidence certification, gap detection |
+| `/qf:5-maintain` | Post-ship systematic debugging, structured log scan, hotfix |
+| `/qf:quick <task>` | Streamlined flow for small tasks — minimal team (dev + tester) |
 | `/qf:cook` | Launch agent team pipeline |
 | `/qf:status` | Session-aware progress report |
 | `/qf:test` | Auto-detect stack, smoke test the project |
@@ -31,8 +31,8 @@ Or jump straight in:
 ## Phase Flow
 
 ```
-Init -> Brainstorm -> Design -> Handoff -> [Implement] -> Verify -> Ship
-  0         1           2         3                         4
+Init -> Brainstorm -> Design -> Handoff -> [Implement/TDD] -> Verify & Certify -> Ship
+  0         1           2         3                                4
 ```
 
 Each phase has a **review gate** — Claude never auto-advances. You stay in control.

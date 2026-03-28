@@ -13,7 +13,7 @@ Large projects split into milestones (milestone-1, milestone-2, ...).
 Each milestone runs the full phase flow but scoped to its subset of requirements.
 
 - Project-level files: REQUIREMENTS.md, CONTEXT.md, OPEN_QUESTIONS.md
-- Milestone-level files: DESIGN.md, ROADMAP.md, GAPS.md, REVIEW.md, QA-REPORT.md, STATUS.md
+- Milestone-level files: DESIGN.md, ROADMAP.md, GAPS.md, REVIEW.md, CERTIFICATION.md (or QA-REPORT.md for legacy), STATUS.md
 - Agent auto-recommends splitting when 8+ requirements or 3+ distinct functional areas detected
 - User can override: "single milestone" or "split into N milestones"
 
@@ -33,7 +33,8 @@ Each milestone runs the full phase flow but scoped to its subset of requirements
 │   ├── ROADMAP.md               <- phases with deliverables + done criteria
 │   ├── GAPS.md                  <- tech debt + gap findings (from tech-lead/verify)
 │   ├── REVIEW.md                <- tech-lead code review report
-│   ├── QA-REPORT.md             <- test results + requirement coverage matrix
+│   ├── CERTIFICATION.md         <- evidence audit + traceability matrix (new milestones)
+│   ├── QA-REPORT.md             <- test results + coverage matrix (legacy milestones)
 │   ├── STATUS.md                <- PM progress report + session resume context
 │   ├── DECISIONS.md             <- shared decisions log (agents append during impl)
 │   ├── CHECKPOINT-*.md          <- per-agent progress for crash recovery
@@ -45,6 +46,32 @@ Each milestone runs the full phase flow but scoped to its subset of requirements
 │       └── DEBATE.md            <- critic findings + lead synthesis (optional)
 ├── milestone-2/
 │   └── ...
+
+.evidence/                               <- TDD + verification evidence (per-session, gitignored)
+├── tdd/
+│   ├── REQ-001-red.log              <- failing test output
+│   ├── REQ-001-green.log            <- passing test output
+│   └── ...
+├── debug/
+│   ├── BUG-001-investigation.md     <- investigation findings
+│   └── BUG-001-resolution.md        <- root cause + fix
+├── verification/
+│   ├── phase-1-gate.md              <- phase transition evidence
+│   └── phase-4-certification.md     <- final certification
+└── logs/
+    ├── test-run-YYYY-MM-DD.jsonl    <- structured test logs
+    └── e2e-run-YYYY-MM-DD.jsonl     <- E2E scenario logs
+
+.memory/                                 <- Feature Memory Units (persistent)
+├── _index.md                        <- master registry of all features
+├── {feature}/
+│   ├── CONTEXT.md                   <- what this feature is, dependencies
+│   ├── REQUIREMENTS.md              <- scoped REQ-IDs
+│   ├── DESIGN.md                    <- architecture decisions
+│   ├── GOTCHAS.md                   <- feature-specific lessons
+│   ├── HISTORY.md                   <- key decisions timeline
+│   └── LINKS.md                     <- cross-references to related features
+└── ...
 ```
 
 ### Bug Log Convention
@@ -58,6 +85,13 @@ Log files organized by source. Configure paths in CONTEXT.md or let `/qf:5-maint
 ```
 Severity: CRITICAL > ERROR > WARNING > INFO. See `/qf:5-maintain` for full protocol.
 
+### Structured Logging Standard
+All application code must use structured JSON logging (see `_structured-logging.md`):
+```json
+{"timestamp": "ISO-8601", "level": "INFO|WARN|ERROR|FATAL", "source": "frontend|backend", "module": "auth/login", "trace_id": "uuid", "message": "...", "context": {}}
+```
+Frontend errors bridge to backend via `/api/logs`. `trace_id` links FE→BE request chains.
+
 ## Phase Workflow
 This project uses a 5-phase QuangFlow lifecycle:
 
@@ -65,14 +99,14 @@ This project uses a 5-phase QuangFlow lifecycle:
 0. `/qf:0-init <idea>` — project setup, codebase scan, create CONTEXT.md (run once per feature)
 1. `/qf:1-brainstorm` — requirements discovery + milestone split + team suggestion
 2. `/qf:2-design` — structural options + trade-offs + team refinement (per milestone)
-3. `/qf:3-handoff` — execution artifacts + SHIP/REFINE/SOLO gate (per milestone)
-4. `/qf:4-verify` — QA/QC: tests, traceability, gap detection, remediation (per milestone)
+3. `/qf:3-handoff` — execution artifacts + SHIP/REFINE gate, TDD/logging/verification mandates (per milestone)
+4. `/qf:4-verify` — TDD compliance audit, evidence certification, gap detection (per milestone)
 
 **Post-ship (ongoing):**
 5. `/qf:5-maintain` — bug log scan, triage, hotfix, dependency failure recovery
 
 ### Supporting Commands
-- `/qf:quick <task>` — Quick mode for small tasks (single-pass, solo, no milestones)
+- `/qf:quick <task>` — Streamlined flow for small tasks (minimal team: dev + tester, TDD enforced)
 - `/qf:cook` — Team pipeline orchestrator (domain-engineer -> devs -> tech-lead -> tester -> PM)
 - `/qf:status` — NPC status reporter: progress, session resume, next command
 - `/qf:test` — Smoke test: auto-detect stack, start project, verify it runs
@@ -109,6 +143,15 @@ When user proposes a design, workflow, or architectural decision, you MUST:
 - Present concerns as numbered items with concrete impact
 - Only proceed after user has acknowledged the concerns
 - This applies to ALL phases, not just devil's advocate in Phase 1
+
+### Discipline Layer
+All implementation follows these mandatory protocols:
+- **TDD enforcement**: No production code without a failing test first. Evidence in `.evidence/tdd/`.
+- **Systematic debugging**: 4-phase root cause process. No guessing. Evidence in `.evidence/debug/`.
+- **Verification gates**: Every phase transition needs saved proof in `.evidence/verification/`.
+- **Structured logging**: All app code uses JSON log format. No raw console.log/print.
+- **Feature Memory**: Load context via `@feature-name` mention before working. Save on phase transitions.
+- **Multi-agent only**: Solo mode removed. All tasks run through agent team pipeline.
 
 ### Review Gates
 - Agent NEVER self-advances between phases

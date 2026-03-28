@@ -11,10 +11,10 @@ Adds 12 slash commands to Claude Code:
 | `/qf:0-init <idea>` | 0. Init | Project setup, codebase scan, create CONTEXT.md (run once per feature) |
 | `/qf:1-brainstorm` | 1. Requirements | Clarifying questions, edge cases, milestone splits, team composition |
 | `/qf:2-design` | 2. Design | Architecture options with trade-offs, design pattern research, scalability gates |
-| `/qf:3-handoff` | 3. Handoff | Execution artifacts (ROADMAP, REQUIREMENTS finalization), SHIP/REFINE/SOLO gate |
-| `/qf:4-verify` | 4. Verify | Test generation, requirements traceability, gap detection, remediation |
-| `/qf:5-maintain` | 5. Maintain | Post-ship bug fix, log scan, triage, parallel hotfix via dev agents |
-| `/qf:quick <task>` | Quick | Single-pass for small tasks — skip design, milestones, team setup |
+| `/qf:3-handoff` | 3. Handoff | Execution artifacts (ROADMAP, REQUIREMENTS finalization), SHIP/REFINE gate |
+| `/qf:4-verify` | 4. Verify & Certify | TDD compliance audit, requirements traceability, evidence certification |
+| `/qf:5-maintain` | 5. Maintain | Post-ship bug fix, systematic debugging protocol, structured log scan |
+| `/qf:quick <task>` | Quick | Streamlined flow for small tasks — minimal team (dev + tester), TDD enforced |
 | `/qf:cook` | Orchestrator | Launches agent team pipeline (domain-engineer → devs → tech-lead → tester → PM) |
 | `/qf:status` | Status | Session-aware status reporter with resume context |
 | `/qf:test` | Smoke Test | Auto-detect stack, generate integration scripts, verify real module interactions |
@@ -70,9 +70,15 @@ bash install.sh --update     # update commands+agents only (keeps CLAUDE.md)
 ├── commands/
 │   └── qf/
 │       ├── _protocols/          # Internal protocols (not user-facing commands)
-│       │   ├── _shared.md       #   State check, gates, output rules
-│       │   ├── _autopilot.md    #   Autopilot mode protocol
-│       │   └── ...              #   Context scoping, model routing, etc.
+│       │   ├── _shared.md              #   State check, gates, output rules
+│       │   ├── _autopilot.md           #   Autopilot mode protocol
+│       │   ├── _tdd-enforcement.md     #   RED-GREEN-REFACTOR cycle
+│       │   ├── _systematic-debugging.md #  4-phase root cause process
+│       │   ├── _verification-gates.md  #   Evidence-before-assertions
+│       │   ├─��� _hard-gates.md          #   Red flag table, phase gate checklists
+│       │   ├── _structured-logging.md  #   Log format standard, FE→BE bridge
+│       │   ├── _context-memory.md      #   Feature Memory Units (@mention)
+│       │   └── ...                     #   Context scoping, model routing, etc.
 │       ├── 0-init.md            # Phase 0: Project init
 │       ├── 1-brainstorm.md      # Phase 1: Requirements
 │       ├── 2-design.md          # Phase 2: Design
@@ -94,9 +100,19 @@ bash install.sh --update     # update commands+agents only (keeps CLAUDE.md)
 │   ├── pm.md                 # Status tracker
 │   └── critic.md             # Design debate critic (feasibility/simplicity)
 └── scripts/
-    └── validate/
-        ├── validate-install.sh    # Verify QuangFlow installation integrity
-        └── validate-artifacts.sh  # Verify plan artifacts structure
+    ├── validate/
+    │   ├── validate-install.sh        # Verify QuangFlow installation integrity
+    │   ├── validate-artifacts.sh      # Verify plan artifacts structure
+    │   ├── validate-tdd-coverage.sh   # Verify red+green TDD logs per REQ-ID
+    │   ├── validate-evidence.sh       # Verify .evidence/ per phase transition
+    │   ├── validate-memory.sh         # Verify FMU structure, bidirectional links
+    │   └── validate-stage-completion.sh # Pipeline stage advancement checks
+    └── hooks/
+        ├── enforce-ownership.sh       # PreToolUse: file ownership boundaries
+        ├── detect-gotcha-trigger.sh   # Lesson detection
+        ├── auto-checkpoint.sh         # PostToolUse: auto-save agent progress
+        ├── evidence-tracker.sh        # PostToolUse: track evidence in PIPELINE-STATE
+        └── save-feature-memory.sh     # Phase transition: auto-update FMU
 ```
 
 ## Uninstall
@@ -128,8 +144,8 @@ Follow the phases:
 0. **Init** → setup project context → scan codebase → CONTEXT.md
 1. **Brainstorm** → answer questions → APPROVE
 2. **Design** → pick architecture option → save DESIGN.md
-3. **Handoff** → review artifacts → CONFIRM → SHIP (team) or SOLO (manual)
-4. **Verify** → review QA report → fix gaps → SHIP
+3. **Handoff** → review artifacts → CONFIRM → SHIP (team always)
+4. **Verify & Certify** → TDD audit → evidence certification → fix gaps → SHIP
 
 **Want a full walkthrough?** See [showcase/README.md](showcase/README.md) or run `/qf:guide` for an interactive tour.
 
@@ -147,9 +163,9 @@ domain-engineer → [optional] debate → devs (parallel) → [optional] tech-le
 | pm | project-manager | NPC — tracks progress, session resume |
 | domain-engineer | planner | Designs modules, sequences, contracts before devs |
 | critics | code-reviewer (haiku) | Parallel feasibility + simplicity review of design (optional) |
-| dev-* | fullstack-developer | Implements code within file ownership boundaries |
+| dev-* | fullstack-developer | Implements code via TDD within file ownership boundaries |
 | tech-lead | code-reviewer | Reviews quality, detects gaps (optional) |
-| tester | tester | Generates & runs tests from requirements |
+| tester | tester | Audits TDD coverage, generates integration/E2E tests, certifies traceability |
 
 ## Milestone System
 
@@ -162,7 +178,7 @@ plans/my-feature/
 ├── milestone-1/
 │   ├── DESIGN.md
 │   ├── ROADMAP.md
-│   ├── QA-REPORT.md
+│   ├── CERTIFICATION.md         # (or QA-REPORT.md for legacy milestones)
 │   └── STATUS.md
 ├── milestone-2/
 │   └── ...
@@ -182,6 +198,16 @@ No flags needed — just answer "non-technical" when asked.
 
 ## Key Features
 
+### Discipline Layer (new)
+- **TDD enforcement**: Iron-law RED-GREEN-REFACTOR — no production code without a failing test first. Evidence saved to `.evidence/tdd/`.
+- **Systematic debugging**: 4-phase root cause process (Investigate → Analyze → Hypothesize → Fix). 3+ failed attempts → question the architecture.
+- **Verification gates**: Evidence before assertions — every phase transition requires saved proof. No "should work" or "probably passes."
+- **Hard gates & red flags**: Master rationalization table catches shortcuts before they happen. Three enforcement layers: prompts + inline gates + scripts.
+- **Structured logging**: JSON log standard (level, source, module, trace_id). Frontend errors bridge to backend. Debugging reads structured logs first.
+- **Feature Memory Units**: Per-feature context in `.memory/` loaded via `@mention`. Scales context without drowning in it.
+- **Multi-agent only**: Solo mode eliminated. Every task runs through the agent team pipeline. `/qf:quick` uses a minimal team (dev + tester).
+
+### Core
 - **Crash recovery**: Pipeline state saved before each stage — resume with `--from` after interruption.
 - **File ownership validation**: Detects overlapping dev globs before spawning team agents.
 - **Cross-milestone regression**: Phase 4 re-runs previous milestone tests to catch regressions.
@@ -195,6 +221,7 @@ No flags needed — just answer "non-technical" when asked.
 - **GitNexus integration** (optional): Adds semantic-level safety — blast radius analysis, cross-boundary impact detection, graph-aware renames. Auto-detected when [GitNexus](https://github.com/abhigyanpatwari/GitNexus) MCP server is configured.
 - **GOTCHAs self-improvement**: Lessons auto-logged from gaps/bugs, auto-reviewed before design/handoff. User corrections detected by hook.
 - **Progress tracking**: PROGRESS.md records phase timeline, session count, iterations, key decisions per milestone.
+- **Auto-checkpoint hooks**: PostToolUse hooks auto-save agent progress, track evidence artifacts, and update Feature Memory on phase transitions.
 
 ## Customization
 
