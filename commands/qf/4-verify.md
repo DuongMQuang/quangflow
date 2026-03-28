@@ -1,11 +1,11 @@
-You are now entering Phase 4: Verify & QA.
+You are now entering Phase 4: Verify & Certify.
 
 ## State Check
 See `_protocols/_shared.md → State Check Template`. Required artifact: finalized REQUIREMENTS.md + ROADMAP.md.
 If missing: "No finalized requirements found. Run `/qf:3-handoff` first."
 
 ## Milestone Detection
-See `_protocols/_shared.md → Milestone Detection`. Target artifact: `QA-REPORT.md`.
+See `_protocols/_shared.md → Milestone Detection`. Target artifact: `CERTIFICATION.md` (or `QA-REPORT.md` for legacy).
 Read REQUIREMENTS.md (filter to [M{N}]), DESIGN.md, and CONTEXT.md.
 
 ## Pre-flight: Artifact Validation (auto — run FIRST)
@@ -22,10 +22,31 @@ bash {quangflow-root}/scripts/validate/validate-artifacts.sh ./plans/{feature-sl
 - If no implementation found, tell user: "No implementation detected. Implement ROADMAP.md phases first, then re-run `/qf:4-verify`."
 - Do NOT proceed if there's nothing to verify
 
+## Pre-flight: TDD Compliance Audit (auto — run BEFORE test generation)
+
+<HARD-GATE>
+Do NOT proceed to test generation until TDD evidence is verified.
+Every REQ-ID must have red + green logs in .evidence/tdd/.
+</HARD-GATE>
+
+Run the TDD coverage validation script:
+```bash
+bash {quangflow-root}/scripts/validate/validate-tdd-coverage.sh ./plans/{feature-slug}
+```
+- If script exits 0: TDD coverage confirmed. Proceed.
+- If script exits 1: present failures to user. Block until all REQ-IDs have evidence.
+
+## Pre-flight: Log Audit
+Check structured logs for ERROR/FATAL entries:
+- Read `.evidence/logs/test-run-*.jsonl` (if exists)
+- Filter for `level: "ERROR"` or `level: "FATAL"`
+- If found: flag as potential issues
+- If no structured logs exist: warn about missing logging
+
 ## Pre-flight: Existing Tests Check
 - Check if tester agent already generated tests during Phase 3 (team mode)
 - If tests exist: reuse them, run them, and supplement with any missing coverage
-- If no tests exist (solo mode): generate tests from scratch (see Step 2)
+- If no tests exist: generate tests from scratch (see Step 2)
 
 ## Automatic Review (always runs)
 
@@ -34,10 +55,11 @@ bash {quangflow-root}/scripts/validate/validate-artifacts.sh ./plans/{feature-sl
 - Map: REQ-ID → file(s) that implement it
 - Flag any requirement not covered or partially implemented
 
-### Step 2: Test Coverage (generate or supplement)
-If tester agent already ran in Phase 3, check coverage gaps and supplement. Otherwise generate:
+### Step 2: Test Coverage (audit and supplement)
+Dev agents already generated unit tests via TDD. Audit existing coverage and supplement.
+If tester agent already ran in Phase 3, check coverage gaps and supplement. If no tests exist, generate from scratch:
 
-**Unit Tests** — always generate:
+**Unit Tests** — audit existing, supplement gaps:
 - Test each module/function in isolation
 - Cover happy path, edge cases, error handling
 - Match against edge cases discussed in Phase 1
@@ -96,12 +118,12 @@ Scan implementation for gaps not caught by tests or reviews:
 - Verify ADDed remediation phases were implemented
 - Append any NEW gaps found in this step
 
-**If no GAPS.md exists (solo mode or tech-lead skipped):**
+**If no GAPS.md exists (no tests exist or tech-lead skipped):**
 - Create GAPS.md with all detected gaps
 
 ## Automatic Review Output
 Generate to ./plans/{feature-slug}/milestone-{N}/:
-- QA-REPORT.md — test results, requirement coverage matrix, violations found
+- CERTIFICATION.md — test results, requirement coverage matrix, TDD evidence summary, violations found (replaces QA-REPORT.md for new milestones; Phase 4 accepts both formats for backwards compatibility)
 - GAPS.md — created or updated with gap findings from Step 5
 - List: PASS / FAIL / WARN per requirement ID
 - List: GAP-IDs with severity and status
