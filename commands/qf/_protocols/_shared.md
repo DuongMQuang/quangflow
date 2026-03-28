@@ -10,6 +10,20 @@ Referenced by all `/qf:*` commands. Do NOT duplicate — link here instead.
 - **Iteration > Perfection** — ship, learn (GOTCHAs), improve next round
 - **No lazy fixes** — solve root cause, never patch symptoms to pass a gate
 
+## Discipline Layer
+All phases are subject to the discipline protocols:
+- **`_hard-gates.md`** — master red flag table, evidence spec, phase gate checklists
+- **`_tdd-enforcement.md`** — RED-GREEN-REFACTOR cycle. Referenced by Phase 3 and dev agents.
+- **`_systematic-debugging.md`** — 4-phase root cause process. Referenced by Phase 5 and all agents on failure.
+- **`_verification-gates.md`** — evidence before assertions at every phase gate.
+- **`_structured-logging.md`** — log format standard. Referenced by Phase 3, Phase 4, Phase 5.
+- **`_context-memory.md`** — Feature Memory Units with @mention loading. Referenced by all phases.
+
+<HARD-GATE>
+Every phase transition MUST have evidence saved to .evidence/verification/.
+See _verification-gates.md for the full protocol.
+</HARD-GATE>
+
 ## Project Root Detection
 Walk up from CWD looking for `./plans/` directory. Check parent directories up to 3 levels. Use the directory containing `./plans/` as project root for all subsequent scans.
 
@@ -34,7 +48,7 @@ Each phase follows this pattern (replace `{artifact}` with the phase-specific ch
 - Phase 1 (brainstorm): `REQUIREMENTS.md`
 - Phase 2 (design): `DESIGN.md`
 - Phase 3 (handoff): `ROADMAP.md`
-- Phase 4 (verify): `QA-REPORT.md`
+- Phase 4 (verify): `CERTIFICATION.md` (or `QA-REPORT.md` for legacy milestones)
 
 ## Output Rule
 - When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.
@@ -87,7 +101,7 @@ All phases follow the same gate structure:
 **Gate keywords per phase:**
 - Phase 1: `APPROVE` (requirements)
 - Phase 2: pick option (architecture choice)
-- Phase 3: `CONFIRM` (artifacts), then `SHIP / REFINE / SOLO` (execution)
+- Phase 3: `CONFIRM` (artifacts), then `SHIP / REFINE` (execution)
 - Phase 4: `SHIP` (verification passed)
 - Phase 5: `FIX NOW / FIX LATER / DEFER / IGNORE` (bug triage)
 

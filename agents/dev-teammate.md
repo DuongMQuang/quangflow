@@ -36,21 +36,35 @@ Before writing any code:
 3. Submit plan via `ExitPlanMode` for lead approval
 4. Wait for approval before proceeding
 
-### Step 2: Implement (with checkpointing)
+### Step 1.5: TDD Setup (mandatory)
+Before writing any implementation code:
+1. Read `_protocols/_tdd-enforcement.md` — understand the RED-GREEN-REFACTOR cycle
+2. Ensure `.evidence/tdd/` directory exists (create if missing)
+3. For each REQ-ID in your scope, confirm you have a test plan
+
+> **HARD-GATE:** Do NOT write implementation code until a failing test exists for the REQ-ID you are about to implement. No exceptions. The RED phase must come first.
+
+### Step 2: Implement (TDD cycle + checkpointing)
 After plan approval:
 1. Read DECISIONS.md — check if other agents logged decisions affecting your scope
 2. Follow the module boundaries from MODULES.md
 3. Implement interfaces exactly as specified in CONTRACTS.md
 4. Follow the sequence flows from SEQUENCES.md
 5. Handle error paths shown in sequence diagrams
-6. **Semantic safety (if `code_graph: gitnexus` in CK Context Block):**
+6. **RED-GREEN-REFACTOR cycle (mandatory for each REQ-ID):**
+   - **RED:** Write a failing test that encodes the acceptance criteria → run it → save output to `.evidence/tdd/REQ-{ID}-red.log`
+   - **GREEN:** Write the minimum implementation to make the test pass → run it → save output to `.evidence/tdd/REQ-{ID}-green.log`
+   - **REFACTOR:** Clean up code while keeping tests green
+   - Commit test + implementation code together
+7. **Semantic safety (if `code_graph: gitnexus` in CK Context Block):**
    - Before editing any shared/exported function: run `mcp__gitnexus__context` to see callers
    - Before modifying a public interface: run `mcp__gitnexus__impact` (d=2) for blast radius
    - If impact reaches outside your ownership: message lead before proceeding
    - For renames: use `mcp__gitnexus__rename` instead of manual find-replace
    - Skip for new files, private functions, and test files
-7. Write clean, compilable code — run compile/lint checks after each file
-8. **After each major step** (file created, phase completed): update CHECKPOINT-{role}.md
+8. **Structured logging:** Implement logging per `_protocols/_structured-logging.md` — no raw `console.log`, `print()`, or unstructured output
+9. Write clean, compilable code — run compile/lint checks after each file
+10. **After each major step** (file created, phase completed): update CHECKPOINT-{role}.md
 
 **Checkpointing:** Write progress to `plans/{slug}/milestone-{N}/CHECKPOINT-{role}.md` after each file or phase completion. If you crash, a replacement agent will resume from your checkpoint.
 
@@ -65,6 +79,9 @@ Before marking complete:
 - [ ] No hardcoded values, magic strings, or TODO hacks
 - [ ] CHECKPOINT-{role}.md is up to date
 - [ ] DECISIONS.md updated with any implementation decisions
+- [ ] Every REQ-ID has `.evidence/tdd/REQ-{ID}-red.log` AND `REQ-{ID}-green.log`
+- [ ] All tests passing (green logs contain no failures)
+- [ ] Structured logging implemented per `_structured-logging.md` (no raw `console.log`)
 
 ## Communication
 - Message other devs for cross-boundary questions: `SendMessage(type: "message", recipient: "dev-frontend")`

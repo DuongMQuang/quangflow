@@ -14,6 +14,24 @@ See `_protocols/_shared.md → GOTCHAs System → Review Protocol`.
 Read both `plans/GOTCHAS.md` (global) and `plans/{feature-slug}/GOTCHAS.md` (feature) if they exist. Filter by tags matching this milestone's requirements.
 If relevant gotchas found: inject their rules as `> ⚠️ GOTCHA [global/feature]:` warnings in the appropriate ROADMAP.md phases.
 
+## Discipline Protocols (injected into implementation)
+When generating ROADMAP.md, inject these requirements into EVERY implementation phase:
+
+<HARD-GATE>
+All implementation phases MUST follow TDD (see _tdd-enforcement.md).
+All application code MUST use structured logging (see _structured-logging.md).
+All phase transitions MUST have verification evidence (see _verification-gates.md).
+</HARD-GATE>
+
+Each ROADMAP.md implementation phase must include:
+1. **TDD mandate:** "Follow RED-GREEN-REFACTOR. Save evidence to .evidence/tdd/"
+2. **Logging mandate:** "Implement structured logging per _structured-logging.md"
+3. **Verification mandate:** "Save phase gate evidence to .evidence/verification/"
+
+## Feature Memory — Context Loading
+Before generating artifacts, load the feature's FMU via @mention (see `_context-memory.md`).
+If no FMU exists for this feature, create one in `.memory/{feature-slug}/` with CONTEXT.md.
+
 ## Output Files
 Generate to ./plans/{feature-slug}/:
 
@@ -73,32 +91,29 @@ After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` sett
 
    Options:
    - **SHIP** — Launch team pipeline (`/qf:cook`)
-   - **REFINE** — Adjust team composition
-   - **SOLO** — Switch to solo mode (implement manually)"
+   - **REFINE** — Adjust team composition"
 
-**Autopilot shortcut:** See `_protocols/_autopilot.md → Phase 3`. Auto-SHIP, skip REFINE/SOLO.
+**Autopilot shortcut:** See `_protocols/_autopilot.md → Phase 3`. Auto-SHIP, skip REFINE.
 
 4. On **REFINE**:
    - Ask: "What would you like to change?" and accept freeform instructions
    - Lead, PM, and Tester roles cannot be removed
-   - Apply changes, re-display updated table, ask again: SHIP / REFINE / SOLO
+   - Apply changes, re-display updated table, ask again: SHIP / REFINE
    - Update `team_composition` in REQUIREMENTS.md after each refinement
-   - Loop until user types SHIP or SOLO
+   - Loop until user types SHIP
 
-5. On **SOLO**:
-   - Set `team_mode: false` in REQUIREMENTS.md
-   - Fall through to solo Next Step below
-
-6. On **SHIP**:
+5. On **SHIP**:
    - Auto-invoke `/qf:cook` — cook.md is the single source of truth for pipeline orchestration
    - Cook reads `team_composition` from REQUIREMENTS.md and executes the full pipeline
 
 **If `team_mode: false` (or not set):**
-- Fall through to solo Next Step below
+- Set `team_mode: true` automatically — multi-agent is the only mode
+- Auto-compose minimal team: 1 dev + tester + pm
+- Present team table and proceed to SHIP/REFINE gate
 
 ## Progress Logging
 See `_protocols/_shared.md → Progress Tracking`. Append Phase 3 row to `plans/{feature-slug}/PROGRESS.md`.
-Key decisions to log: execution mode (SHIP/SOLO), ROADMAP phase count, team composition summary.
+Key decisions to log: execution mode (SHIP), ROADMAP phase count, team composition summary.
 
 ## Next Step
 Tell user: "Phase 3 complete for milestone-{N}. Artifacts saved to `./plans/{feature-slug}/milestone-{N}/`."
@@ -112,9 +127,4 @@ Then suggest next command based on mode:
   => Also available: `/qf:status` (check status), `/qf:status save` (save context)
 ```
 
-**If team_mode: false (Solo):**
-```
-**Next:** Implement ROADMAP.md phases manually, then run `/qf:4-verify` — QA/QC verification
-  => Skip? `/qf:4-verify` can be skipped but gaps may go undetected
-  => Also available: `/qf:status` (check status), `/qf:status save` (save context)
-```
+**Solo mode has been removed.** All execution runs through `/qf:cook`.
