@@ -36,6 +36,17 @@ echo ""
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Find .evidence/ directory (walk up from feature dir)
+EVIDENCE_DIR=""
+SEARCH="$FEATURE_DIR"
+for _ in 1 2 3 4; do
+  SEARCH="$(cd "$SEARCH/.." 2>/dev/null && pwd)"
+  if [[ -d "$SEARCH/.evidence" ]]; then
+    EVIDENCE_DIR="$SEARCH/.evidence"
+    break
+  fi
+done
+
 case "$PHASE" in
 
   1)
@@ -51,10 +62,10 @@ case "$PHASE" in
       fail "REQUIREMENTS.md missing"
     fi
 
-    if [[ -f "$FEATURE_DIR/phase-1-gate.md" ]]; then
+    if [[ -n "$EVIDENCE_DIR" && -f "$EVIDENCE_DIR/verification/phase-1-gate.md" ]]; then
       pass "phase-1-gate.md exists"
     else
-      fail "phase-1-gate.md missing — brainstorm gate not recorded"
+      fail "phase-1-gate.md missing (.evidence/verification/phase-1-gate.md)"
     fi
     ;;
 
@@ -66,10 +77,10 @@ case "$PHASE" in
       fail "DESIGN.md missing"
     fi
 
-    if [[ -f "$FEATURE_DIR/phase-2-gate.md" ]]; then
+    if [[ -n "$EVIDENCE_DIR" && -f "$EVIDENCE_DIR/verification/phase-2-gate.md" ]]; then
       pass "phase-2-gate.md exists"
     else
-      fail "phase-2-gate.md missing — design gate not recorded"
+      fail "phase-2-gate.md missing (.evidence/verification/phase-2-gate.md)"
     fi
     ;;
 
@@ -83,10 +94,10 @@ case "$PHASE" in
       fail "TDD coverage incomplete — see details above"
     fi
 
-    if [[ -f "$FEATURE_DIR/phase-3-gate.md" ]]; then
+    if [[ -f "$EVIDENCE_DIR/verification/phase-3-gate.md" ]]; then
       pass "phase-3-gate.md exists"
     else
-      fail "phase-3-gate.md missing — handoff gate not recorded"
+      fail "phase-3-gate.md missing — handoff gate not recorded (.evidence/verification/phase-3-gate.md)"
     fi
     ;;
 
@@ -113,10 +124,10 @@ case "$PHASE" in
       fi
     fi
 
-    if [[ -f "$FEATURE_DIR/phase-4-certification.md" ]]; then
+    if [[ -n "$EVIDENCE_DIR" && -f "$EVIDENCE_DIR/verification/phase-4-certification.md" ]]; then
       pass "phase-4-certification.md exists"
     else
-      fail "phase-4-certification.md missing — verify gate not recorded"
+      fail "phase-4-certification.md missing (.evidence/verification/phase-4-certification.md)"
     fi
     ;;
 
