@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "quangflow",
+  "description": "QuangFlow — 5-phase workflow framework for Claude Code with TDD, debugging, verification gates, and multi-agent orchestration",
+  "owner": {
+    "name": "Duong M Quang"
+  },
+  "plugins": [
+    {
+      "name": "quangflow",
+      "description": "5-phase workflow framework — structured project management with TDD, verification gates, team orchestration, and systematic debugging",
+      "version": "2.0.0",
+      "author": {
+        "name": "Duong M Quang"
+      },
+      "source": ".",
+      "category": "workflow"
+    }
+  ]
+}
