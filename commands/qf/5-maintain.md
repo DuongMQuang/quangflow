@@ -5,6 +5,15 @@ After all milestones are SHIPPED, the project enters maintenance mode.
 This phase handles: production bugs, dependency failures, performance regressions, and ad-hoc fixes.
 It is lighter than the full qf:1→4 cycle but still structured.
 
+## Discipline Protocol
+All bug investigation and fixing in this phase follows `_protocols/_systematic-debugging.md`.
+
+<HARD-GATE>
+Do NOT propose a fix until the investigation phase is complete and findings
+are documented in .evidence/debug/. See _systematic-debugging.md for the
+full 4-phase process.
+</HARD-GATE>
+
 ## State Check
 - Scan ./plans/ for feature directories where ALL milestones have QA-REPORT.md (= shipped)
 - If no shipped project found: "No shipped project. Run `/qf:4-verify` to verify and ship first."
@@ -249,10 +258,15 @@ During investigation, if a bug reveals a missing or incorrect requirement (not j
 Lighter than full qf:1→4 cycle. No brainstorm, no milestone, no team pipeline.
 
 ### Step 1: Investigate
+Follow `_protocols/_systematic-debugging.md` Phase 1 (Observe) and Phase 2 (Hypothesize):
+
 - Read the bug entry from BUGLOG.md
+- Read structured logs: check `.evidence/logs/` for relevant `*.jsonl` files, filter by correlation ID or timestamp
 - Read the source log lines (full context around the error)
 - Read the affected source files (from stack trace)
-- Identify root cause — present to user:
+- Identify root cause using systematic debugging process
+- Save findings to `.evidence/debug/BUG-{ID}-investigation.md`
+- Present to user:
 
 ```
 **BUG-XXX Investigation:**
@@ -261,17 +275,22 @@ Lighter than full qf:1→4 cycle. No brainstorm, no milestone, no team pipeline.
 - **Proposed fix:** {brief description}
 - **Risk:** {what else could break}
 - **Tests needed:** {what to test after fix}
+- **Evidence:** .evidence/debug/BUG-{ID}-investigation.md
 
 Proceed with fix? (YES / ADJUST / SKIP)
 ```
 
 Agent waits for user response.
 
-### Step 2: Fix
-- Apply the fix to affected files
+### Step 2: Fix (TDD required)
+- **Write failing test FIRST** — reproduce the bug as a failing test case
+- Save red evidence: `.evidence/tdd/BUG-{ID}-red.log`
+- Apply the fix to affected files (root cause, not symptoms)
+- Run the failing test — it should now pass
+- Save green evidence: `.evidence/tdd/BUG-{ID}-green.log`
 - Run existing tests to check for regressions
 - If tests fail: diagnose, fix, repeat
-- If no existing tests cover this area: write minimal regression test
+- **Escalation rule:** If fix attempt fails 3+ times, stop and present findings to user. Do NOT keep retrying blindly.
 
 ### Step 3: Verify
 - Run full test suite (or targeted tests for affected area)
@@ -287,7 +306,9 @@ Agent waits for user response.
 - **Regression test:** test_fundamental_service.py::test_api_failure_returns_all_null
 ```
 
-### Step 4: Log Gotcha
+### Step 4: Log Gotcha & Resolution Evidence
+Save resolution to `.evidence/debug/BUG-{ID}-resolution.md` with: root cause, fix applied, files changed, tests added.
+
 See `_protocols/_shared.md → GOTCHAs System → Logging Protocol`.
 After each bug fix, auto-create a gotcha entry in `plans/{feature-slug}/GOTCHAS.md`:
 - Domain tag: infer from affected files
