@@ -30,9 +30,20 @@ Adds 12 slash commands to Claude Code:
 
 ## Install
 
-### As a Plugin (coming soon)
+### As a Plugin (recommended)
 
-Plugin support is planned — will enable `claude plugin install quangflow` with auto-updates and multi-platform support (Claude Code, Cursor, OpenCode). See the [design spec](docs/superpowers/specs/2026-03-28-discipline-layer-design.md#plugin-migration) for the migration plan.
+```bash
+# Step 1: Add QuangFlow marketplace (one-time)
+claude plugin marketplace add https://github.com/DuongMQuang/quangflow
+
+# Step 2: Install
+claude plugin install quangflow
+
+# Update later
+claude plugin update quangflow
+```
+
+Plugin benefits: one-command install, auto-updates, no file conflicts.
 
 ### One-liner (remote)
 
