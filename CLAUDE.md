@@ -16,6 +16,7 @@ Or jump straight in:
 | Command | Purpose |
 |---------|---------|
 | `/qf:guide` | Interactive guided tour — explore the workflow step-by-step |
+| `/qf:adopt` | Onboard an existing codebase — adaptive scan, feature extraction, doc generation, confidence scoring |
 | `/qf:0-init <idea>` | Project setup, codebase scan, create CONTEXT.md |
 | `/qf:1-brainstorm` | Requirements discovery, clarifying questions, milestone splits |
 | `/qf:2-design` | Architecture options with trade-offs |

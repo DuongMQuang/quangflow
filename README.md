@@ -8,6 +8,7 @@ Adds 12 slash commands to Claude Code:
 
 | Command | Phase | Purpose |
 |---------|-------|---------|
+| `/qf:adopt` | — | Onboard an existing codebase into QuangFlow (adaptive scan + feature extraction + doc generation) |
 | `/qf:0-init <idea>` | 0. Init | Project setup, codebase scan, create CONTEXT.md (run once per feature) |
 | `/qf:1-brainstorm` | 1. Requirements | Clarifying questions, edge cases, milestone splits, team composition |
 | `/qf:2-design` | 2. Design | Architecture options with trade-offs, design pattern research, scalability gates |
@@ -113,7 +114,11 @@ bash install.sh --update     # update commands+agents only (keeps CLAUDE.md)
 │   ├── tech-lead.md          # Code reviewer
 │   ├── tester.md             # Test generator
 │   ├── pm.md                 # Status tracker
-│   └── critic.md             # Design debate critic (feasibility/simplicity)
+│   ├── critic.md             # Design debate critic (feasibility/simplicity)
+│   ├── adopt-scanner.md      # /qf:adopt — adaptive codebase scanner
+│   ├── adopt-scaffolder.md   # /qf:adopt — directory scaffolder + .memory/ populator
+│   ├── adopt-feature-extractor.md  # /qf:adopt — feature detection + memory units
+│   └── adopt-doc-generator.md     # /qf:adopt — Mermaid diagrams + module map
 └── scripts/
     ├── validate/
     │   ├── validate-install.sh        # Verify QuangFlow installation integrity
@@ -211,9 +216,26 @@ Non-technical users get:
 
 No flags needed — just answer "non-technical" when asked.
 
+## Adopt Command (`/qf:adopt`)
+
+Onboards existing codebases into QuangFlow. Runs a multi-agent pipeline:
+
+```
+scanner (adaptive) → feature-extractor + doc-generator (parallel) → synthesis → scaffolder → review gate → finalize
+```
+
+| Capability | Description |
+|-----------|-------------|
+| Adaptive scanning | Small (<50 files): full scan. Medium (50-500): key files + 20% sample. Large (500+): smart sampling up to 100 files. |
+| Feature extraction | Detects features by directory structure, import graphs, and naming patterns. Populates `.memory/` with per-feature context. |
+| Doc generation | Generates Mermaid component diagrams, dependency graphs, and module maps. Additive README sections. |
+| Synthesis | Reconciles findings across agents — resolves naming conflicts, merges dependencies, flags disagreements. |
+| Confidence scoring | Every draft artifact tagged `[confidence: high/medium/low]` based on signal quality. Review gate groups by confidence tier. |
+| Graceful degradation | Any agent can fail without blocking adoption. Falls back to simpler output with warnings. |
+
 ## Key Features
 
-### Discipline Layer (new)
+### Discipline Layer
 - **TDD enforcement**: Iron-law RED-GREEN-REFACTOR — no production code without a failing test first. Evidence saved to `.evidence/tdd/`.
 - **Systematic debugging**: 4-phase root cause process (Investigate → Analyze → Hypothesize → Fix). 3+ failed attempts → question the architecture.
 - **Verification gates**: Evidence before assertions — every phase transition requires saved proof. No "should work" or "probably passes."
