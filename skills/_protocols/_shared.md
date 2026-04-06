@@ -18,6 +18,7 @@ All phases are subject to the discipline protocols:
 - **`_verification-gates.md`** — evidence before assertions at every phase gate.
 - **`_structured-logging.md`** — log format standard. Referenced by Phase 3, Phase 4, Phase 5.
 - **`_context-memory.md`** — Feature Memory Units with @mention loading. Referenced by all phases.
+- **`_context-limits.md`** — context window monitoring and 70% hard gate. Referenced by all agents and cook.
 
 <HARD-GATE>
 Every phase transition MUST have evidence saved to .evidence/verification/.

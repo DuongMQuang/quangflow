@@ -83,6 +83,25 @@ Before marking complete:
 - [ ] All tests passing (green logs contain no failures)
 - [ ] Structured logging implemented per `_structured-logging.md` (no raw `console.log`)
 
+## Context Monitoring (CRITICAL)
+See `_protocols/_context-limits.md` for full protocol.
+
+Monitor your context usage throughout implementation:
+- At 50%: Log warning to CHECKPOINT-{role}.md
+- At 60%: Auto-save all progress to CHECKPOINT-{role}.md
+- At 70%: HARD STOP
+  1. Complete current sub-task only
+  2. Commit WIP: `wip: checkpoint at 70% context limit`
+  3. Update CHECKPOINT-{role}.md with exact resume point
+  4. Report to orchestrator and terminate
+
+**Proxy signals for context usage:**
+- >40 tool calls ≈ approaching 60%
+- >50KB file content read ≈ approaching 60%
+- >100 conversation exchanges ≈ approaching 70%
+
+Do NOT attempt to "finish quickly" — partial clean work > rushed complete work.
+
 ## Communication
 - Message other devs for cross-boundary questions: `SendMessage(type: "message", recipient: "dev-frontend")`
 - Message lead for blockers or ownership conflicts

@@ -59,6 +59,35 @@ Generate to ./plans/{feature-slug}/milestone-{N}/:
 ## Code Quality Mandates
 See `_protocols/_shared.md → Code Quality Mandates`. Inject into every ROADMAP phase.
 
+## Task Granularity Check (auto — after ROADMAP generation)
+
+<HARD-GATE>
+No ROADMAP phase should produce >150 LOC or cover >3 REQ-IDs.
+Large phases overwhelm agent context and reduce review quality.
+</HARD-GATE>
+
+For each phase in the generated ROADMAP.md:
+1. Count REQ-IDs assigned to this phase
+2. Estimate LOC from MODULES.md file targets:
+   - CRUD endpoint: ~40 LOC
+   - Service with business logic: ~80 LOC
+   - Complex module (auth, realtime, state machine): ~120 LOC
+3. **If REQ-IDs > 3 OR estimated LOC > 150:**
+   - Auto-split into sub-tasks: Phase {N}.1, {N}.2, {N}.3...
+   - Each sub-task: 1-2 REQ-IDs, single module focus
+   - Each sub-task must be independently testable (own TDD cycle)
+   - Use MODULES.md boundaries as natural split points
+4. Update ROADMAP.md with sub-tasks replacing the original phase
+5. Log: "Phase {N} split into {M} sub-tasks (estimated {LOC} LOC, {R} REQ-IDs)"
+
+**Split rules:**
+- Sub-tasks inherit the parent phase's priority and done criteria
+- Sub-tasks get sequential numbering: Phase 2.1, 2.2, 2.3
+- Each sub-task lists its specific REQ-IDs and target files
+- Dev agents receive sub-tasks as their scoped phases (no change to dev-teammate.md)
+
+**Skip condition:** If ALL phases are already ≤150 LOC and ≤3 REQ-IDs, skip silently.
+
 ## Review Gate
 
 **Autopilot mode:** See `_protocols/_autopilot.md → Phase 3 — Handoff`.

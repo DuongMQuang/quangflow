@@ -9,7 +9,8 @@ Referenced by `cook.md`. Each agent receives ONLY the context slices relevant to
 | domain-engineer | REQUIREMENTS.md, DESIGN.md, CONTEXT.md, ROADMAP.md, GOTCHAS (filtered) | Source code, test files, BUGLOG |
 | critic | Design docs (OVERVIEW, MODULES, SEQUENCES, CONTRACTS), REQUIREMENTS.md, CONTEXT.md | Source code, BUGLOG, STATUS |
 | dev-{scope} | ROADMAP phases **for their scope only**, CONTRACTS.md, MODULES.md **sections for their modules only**, SEQUENCES.md **flows involving their modules**, GOTCHAS (filtered by domain), DECISIONS.md | Other dev's ROADMAP phases, rejected design options, full REQUIREMENTS (only their REQ-IDs) |
-| tech-lead | All dev output files, DESIGN.md, CONTRACTS.md, MODULES.md | ROADMAP phases, brainstorm edge cases, rejected options |
+| spec-reviewer | REQUIREMENTS.md (acceptance criteria + edge cases), CONTRACTS.md, ROADMAP.md, all dev output files | Design rationale, rejected options, BUGLOG, STATUS, GOTCHAS |
+| tech-lead | All dev output files, DESIGN.md, CONTRACTS.md, MODULES.md, SPEC-REVIEW.md | ROADMAP phases, brainstorm edge cases, rejected options |
 | tester | REQUIREMENTS.md (acceptance criteria + edge cases only), CONTRACTS.md, list of implemented files | Design rationale, rejected options, ROADMAP |
 | pm | REQUIREMENTS.md, ROADMAP.md, REVIEW.md, GAPS.md, tester results | Source code, design docs detail |
 

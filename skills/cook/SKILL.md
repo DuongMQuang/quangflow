@@ -62,7 +62,7 @@ If no argument provided, auto-detect from `./plans/` (latest milestone without Q
 ## Partial Pipeline
 Supports `--skip`, `--only`, and `--from` flags for partial execution.
 
-**Stage order:** domain-engineer → debate → devs → tech-lead → tester → pm
+**Stage order:** domain-engineer → debate → devs → spec-reviewer → tech-lead → tester → pm
 
 ### --skip {stage}
 Skip one or more stages. Comma-separated: `--skip domain-engineer,debate,tech-lead`
@@ -77,7 +77,8 @@ Run only specified stage(s). Comma-separated: `--only tester,pm`
 | domain-engineer | DESIGN.md | File exists |
 | debate | Domain-engineer output | design/ docs exist |
 | devs | DESIGN.md | File exists |
-| tech-lead | Dev output | Source files exist |
+| spec-reviewer | Dev output + REQUIREMENTS.md | Source files exist + SPEC-REVIEW.md not yet written |
+| tech-lead | Dev output + SPEC-REVIEW.md | Source files exist + SPEC-REVIEW.md exists |
 | tester | Dev output | Source files exist |
 | pm | Any stage completed | Any milestone artifact exists |
 
@@ -155,6 +156,8 @@ For each dev role:
 - REVIEW and APPROVE each dev's plan
 - MONITOR all devs
 
+**Context monitoring:** See `_protocols/_context-limits.md`. If a dev reports 70% context limit, read their CHECKPOINT-{role}.md and spawn a fresh replacement agent to resume from checkpoint.
+
 **Cross-talk & decisions:** See `_protocols/_dev-coordination.md`
 
 - When each dev completes:
@@ -167,12 +170,30 @@ For each dev role:
 
 **Streaming optimization:** See `_protocols/_dev-coordination.md → Streaming Pipeline`
 
+### Stage 2.5: Spec Reviewer (mandatory)
+- READ `.claude/agents/spec-reviewer.md`
+- Scope context per `_protocols/_context-scoping.md`
+- `Task(subagent_type: "code-reviewer", name: "spec-reviewer", model: "sonnet")`
+- Prompt: spec-reviewer.md + REQUIREMENTS.md (M{N} only) + CONTRACTS.md + ROADMAP.md + list of dev output files + CK Context Block
+- Produces: `plans/{slug}/milestone-{N}/SPEC-REVIEW.md`
+- **GATE:** Run `validate-stage-completion.sh spec-reviewer {milestone-dir}`
+- **If any REQ-ID is PARTIAL or MISSING:**
+  - Send fix requests to relevant devs via SendMessage
+  - Wait for fixes
+  - Re-run spec-reviewer on fixed files
+  - Loop until all REQ-IDs PASS
+- Present to user: "Spec review complete. {X}/{Y} REQ-IDs pass. Proceed to tech-lead? (YES / review details)"
+- Wait for user approval
+
+**If `--skip spec-reviewer`:** tech-lead inherits full spec + quality review (original behavior). SPEC-REVIEW.md will not exist — tech-lead should check REQ coverage in addition to code quality.
+
 ### Stage 3: Tech Lead Review (optional)
 Ask user: "Tech lead review? (YES / SKIP)"
 
 **If YES:**
 - READ `.claude/agents/tech-lead.md`
 - `Task(subagent_type: "code-reviewer", name: "tech-lead", model: "sonnet")`
+- Include SPEC-REVIEW.md in tech-lead's context (spec compliance already verified)
 - Minor issues → devs fix inline. Major gaps → GAPS.md → user decides ADD/DEFER/IGNORE.
 - **GATE:** Run `validate-stage-completion.sh tech-lead {milestone-dir}`
 

@@ -5,7 +5,7 @@
 # Usage:
 #   bash scripts/validate/validate-stage-completion.sh <stage> <milestone-dir> [options]
 #
-# Stages: domain-engineer, devs, tech-lead, tester, pm
+# Stages: domain-engineer, devs, spec-reviewer, tech-lead, tester, pm
 # Options:
 #   --dev-role <role>       For devs stage: validate a specific dev role
 #   --ownership <globs>     For devs stage: file ownership globs (comma-separated)
@@ -60,7 +60,7 @@ else
   # Not a hard fail for cook pipeline stages (domain-engineer, devs, etc.)
   # Only warn — progress is logged by phase commands, not cook stages
   case "$STAGE" in
-    domain-engineer|devs|tech-lead|tester|pm) ;; # skip for cook stages
+    domain-engineer|devs|spec-reviewer|tech-lead|tester|pm) ;; # skip for cook stages
     *) fail "PROGRESS.md missing — each phase must log progress" ;;
   esac
 fi
@@ -175,6 +175,22 @@ case "$STAGE" in
       else
         pass "DECISIONS.md: exists, no entries (OK)"
       fi
+    fi
+    ;;
+
+  spec-reviewer)
+    # SPEC-REVIEW.md must exist
+    if [[ -f "$MILESTONE_DIR/SPEC-REVIEW.md" ]]; then
+      pass "SPEC-REVIEW.md exists"
+      # Check all REQ-IDs are PASS (no PARTIAL or MISSING)
+      PARTIAL=$(grep -ci 'PARTIAL\|MISSING' "$MILESTONE_DIR/SPEC-REVIEW.md" 2>/dev/null || echo 0)
+      if [[ "$PARTIAL" -gt 0 ]]; then
+        fail "SPEC-REVIEW.md has $PARTIAL PARTIAL/MISSING REQ-IDs — devs must fix before tech-lead review"
+      else
+        pass "SPEC-REVIEW.md: all REQ-IDs verified"
+      fi
+    else
+      fail "SPEC-REVIEW.md missing — spec-reviewer must produce compliance report"
     fi
     ;;
 

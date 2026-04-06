@@ -26,6 +26,7 @@ When any agent (or Claude itself) produces reasoning matching the left column, t
 | "It works on my machine" | Environment differences cause production failures | Test in CI-equivalent conditions, document environment assumptions |
 | "We can skip the gate this one time" | One skip normalizes all future skips | Gates exist for this exact scenario. No exceptions. |
 | "I'm confident this is correct" | Confidence is not evidence | Produce the evidence artifact. If you're right, it costs nothing. |
+| "I can finish this before context runs out" | Rushing at high context produces hallucinations and missed steps | Follow _context-limits.md — checkpoint and terminate at 70% |
 
 ---
 

@@ -21,6 +21,7 @@ Referenced by `cook.md`. Instead of static model assignment, lead assesses each 
 
 - domain-engineer: `sonnet` (design quality matters)
 - critics: `haiku` (bounded output, review only)
+- spec-reviewer: `sonnet` (requirement traceability needs precision)
 - tech-lead: `sonnet` (code review needs depth)
 - tester: `sonnet` (test generation needs precision)
 - pm: `haiku` (status reporting is structured)

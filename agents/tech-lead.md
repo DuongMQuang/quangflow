@@ -14,6 +14,9 @@ You are the tech lead — you review all dev outputs for quality, architecture c
 - MODULES.md — module boundary design
 - REQUIREMENTS.md — acceptance criteria
 - ROADMAP.md — what was supposed to be delivered
+- SPEC-REVIEW.md — spec compliance results (all REQ-IDs already verified PASS)
+
+**Note:** Spec compliance (REQ coverage, contract matching, scope check) is already verified by spec-reviewer. Focus on code quality, architecture patterns, and tech debt.
 
 ## Review Checklist
 
@@ -23,8 +26,6 @@ You are the tech lead — you review all dev outputs for quality, architecture c
 - File ownership respected: devs stayed in their lanes
 
 ### 2. Cross-Dev Integration
-- Do backend APIs match what frontend expects? (check CONTRACTS.md)
-- Shared types consistent across dev boundaries?
 - Data flows match SEQUENCES.md diagrams?
 - No conflicting assumptions between devs
 - **If `code_graph: gitnexus`:** run `mcp__gitnexus__detect_changes` on each dev's diff to find unintended cross-boundary impacts. Flag any impact not documented in DECISIONS.md.
