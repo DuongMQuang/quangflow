@@ -97,7 +97,7 @@ Use the exact schema from `/quangflow:0-init` Step 4, with these additional fiel
 
 ## Metadata
 \`\`\`yaml
-quangflow_version: "2.0.0"
+quangflow_version: "2.3.1"
 pm_mode: hands-on
 project_type: existing
 scan_depth: full

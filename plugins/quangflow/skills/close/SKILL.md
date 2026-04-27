@@ -65,10 +65,10 @@ Create `plans/{slug}/milestone-{N}/MILESTONE.yml` with this exact schema:
 
 ```yaml
 status: CLOSED
-closed_at: 2026-04-27T13:11:00Z      # ISO 8601 UTC
+closed_at: <ISO-8601-UTC>             # e.g. 2026-04-27T13:11:00Z
 closed_reason: completed              # or user-provided --reason
 closed_by: quangflow:close            # always this literal string
-quangflow_version: 2.3.0              # read from .claude/.quangflow-version
+quangflow_version: <plugin-version>   # read from .claude-plugin/plugin.json
 artifacts:
   - STATUS.md
   - QA-REPORT.md                      # or CERTIFICATION.md or SOLO-LOG.md

@@ -111,7 +111,7 @@ See GAPS.md for details.
 
 ## GOTCHAs Logging
 For each **major** finding written to GAPS.md, also log a gotcha entry to `plans/{feature-slug}/GOTCHAS.md`.
-See `_shared.md → GOTCHAs System → Logging Protocol` (in commands/qf/_shared.md).
+See `_shared.md → GOTCHAs System → Logging Protocol` (in `skills/_protocols/_shared.md`).
 
 ## Completion
 - Mark task completed via `TaskUpdate` only when:
