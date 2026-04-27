@@ -1,7 +1,7 @@
 {
   "name": "quangflow",
   "description": "5-phase workflow framework — structured project management with TDD, verification gates, team orchestration, and systematic debugging",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "author": {
     "name": "Duong M Quang"
   },

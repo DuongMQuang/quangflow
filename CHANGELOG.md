@@ -2,6 +2,51 @@
 
 All notable changes to QuangFlow are documented here.
 
+## [2.3.1] — 2026-04-27
+
+### Fixed — v2.3.0 Audit Cleanup
+- **Plugin source `/qf:` sweep** (commits c0dfe65 + ad1391a): v2.3.0 initial sed only ran on stock-dashboard repo; plugin source retained 28 `/qf:*` refs across 20 SKILL.md + 4 agents + 1 CLAUDE.md.template + 3 bash scripts. Doc-only fix (lexical, behavior unchanged).
+- **`3-handoff/SKILL.md` solo contradiction**: removed line "multi-agent is the only mode" — directly contradicted v2.3.0 solo reintroduction. Replaced auto-flip `team_mode: true` with branched logic (let cook Stage 0 auto-triage when unset). Added solo SHIP/REFINE branch alongside team gate.
+- **`cook/SKILL.md` description + dead pre-flight**: description reworded from "agent team pipeline orchestrator" to smart-routing entry point. Removed dead `team_mode: false` rejection check (Stage 0 already handles).
+- **`1-brainstorm/SKILL.md` Quick option**: routes to `/quangflow:cook --light` with deprecation note instead of deprecated `/quangflow:quick`.
+- **`quick/SKILL.md` flag bug**: line 94 `quick-mode flag` → `--light` (the actual cook flag).
+- **`_complexity-triage.md` framing**: tier table no longer frames `/quangflow:quick` as "current"; backward-compat note rewritten with deprecation context.
+- **Tech-lead/spec-reviewer dead path**: 3 files referenced `commands/qf/_shared.md` (deleted in v2.3.0). Updated to `skills/_protocols/_shared.md` (current location).
+
+### Added — v2.3.0 Awareness
+- **`/quangflow:close M_{N}` discoverability**: appears in `4-verify/SKILL.md` next-step suggestions, `pm.md` Next Steps + Resume command, `guide/SKILL.md` Step 8 demo. PM agent now suggests close after all REQs PASS.
+- **`/quangflow:cook --solo` shortcut**: surfaced in `0-init/SKILL.md` for trivial features (skip brainstorm).
+- **`guide/SKILL.md` v2.3.0 tour stops**: smart-routing demo, milestone close, quick deprecation note.
+- **`test/SKILL.md` v2.3.0 fixtures** (6 added): solo/light/team triage decisions, `--solo` flag override, sensitive keyword escalation, `/quangflow:close` validation.
+
+### Changed
+- **`status/SKILL.md`**: solo milestone display rewritten with explicit detection rules; `--all` filter parity with team-pipeline milestones documented.
+- **CHANGELOG, `5-maintain/SKILL.md`**: typo `qf:1→4` fixed.
+
+### Removed — Legacy Bash Install (Breaking)
+Per Q6 brainstorm decision, dropped legacy bash install entirely. Plugin install (Claude Code marketplace) is the only supported path going forward.
+
+Top-level legacy duplicates had drifted significantly from plugin source — missing v2.3.0 features (`close/`, `_complexity-triage`, `_solo-handoff`), all other files contained pre-v2.3.0 content + `/qf:` refs. Sync would have required ~4-6h of file-by-file reconciliation; user chose drop instead.
+
+Deleted:
+- `agents/`, `skills/`, `commands/`, `scripts/` (top-level dirs, parallel copies)
+- `CLAUDE.md.template` (top-level)
+- `install.sh`
+- `plugins/quangflow/scripts/validate/validate-install.sh`
+
+README updated: removed One-liner / Manual install / What-Gets-Installed / Global-vs-Project sections; added Migration from Legacy Bash Install subsection. Old `~/.claude/commands/qf/` may be safely removed by users after switching to plugin install.
+
+**Breaking**: Users who installed via `bash install.sh` will not receive future updates without migrating to plugin install via `/plugin marketplace add`.
+
+### Cosmetic
+- `adopt-scaffolder.md` template: `quangflow_version: "2.0.0"` → `"2.3.1"`.
+- `close/SKILL.md` MILESTONE.yml schema: hardcoded ISO timestamp + version replaced with `<ISO-8601-UTC>` + `<plugin-version>` placeholders.
+
+### Stock-Dashboard Sync (`fix(quangflow-sync)` 88b3c7a)
+- Project-scope `tech-lead.md`, `spec-reviewer.md` dead path mirror.
+- Project-scope `pm.md` close awareness mirror.
+- Project-scope `adopt-scaffolder.md` version bump.
+
 ## [2.3.0] — 2026-04-27
 
 ### Added — Smart Routing + Solo Mode + Milestone Close
