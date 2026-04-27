@@ -71,7 +71,7 @@ if [[ -f "$CTX" ]]; then
     warn "CONTEXT.md: missing pm_mode"
   fi
 else
-  warn "CONTEXT.md: not found (run /qf:0-init first)"
+  warn "CONTEXT.md: not found (run /quangflow:0-init first)"
 fi
 
 # --- REQUIREMENTS.md ---
@@ -99,7 +99,7 @@ if [[ -f "$REQ" ]]; then
     warn "REQUIREMENTS.md: missing team_mode"
   fi
 else
-  warn "REQUIREMENTS.md: not found (run /qf:1-brainstorm first)"
+  warn "REQUIREMENTS.md: not found (run /quangflow:1-brainstorm first)"
 fi
 
 # --- OPEN_QUESTIONS.md ---
@@ -150,7 +150,7 @@ else
         warn "$m_name/DESIGN.md: no rejected options documented"
       fi
     else
-      warn "$m_name/DESIGN.md: not found (run /qf:2-design)"
+      warn "$m_name/DESIGN.md: not found (run /quangflow:2-design)"
     fi
 
     # --- ROADMAP.md ---
@@ -171,7 +171,7 @@ else
         warn "$m_name/ROADMAP.md: missing deliverable or done criteria"
       fi
     else
-      warn "$m_name/ROADMAP.md: not found (run /qf:3-handoff)"
+      warn "$m_name/ROADMAP.md: not found (run /quangflow:3-handoff)"
     fi
 
     # --- QA-REPORT.md ---

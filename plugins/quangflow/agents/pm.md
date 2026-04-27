@@ -62,7 +62,7 @@ Generated: {timestamp}
 - {changelog entries to add}
 
 ## Next Steps
-- {recommended actions before /qf:4-verify}
+- {recommended actions before /quangflow:4-verify}
 - {if more milestones: what's needed for milestone-{N+1}}
 
 ## Session Resume
@@ -70,7 +70,7 @@ Generated: {timestamp}
 - **Current milestone:** {N} of {total}
 - **Pipeline stage:** {domain-engineer/devs/tech-lead/tester/done}
 - **Last completed:** {what finished before session ended}
-- **Resume command:** `{exact /qf:* command to run next}`
+- **Resume command:** `{exact /quangflow:* command to run next}`
 - **Blockers:** {anything needing user attention or "none"}
 ```
 

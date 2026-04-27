@@ -12,9 +12,9 @@ Does NOT touch real project code. Everything happens in a temp sandbox.
 
 ## Arguments
 ```
-/qf:test              — Full test: phases 1→5 in sandbox
-/qf:test quick        — Quick test: validate file structure + command availability only
-/qf:test phase N      — Test a specific phase (1-5) in isolation
+/quangflow:test              — Full test: phases 1→5 in sandbox
+/quangflow:test quick        — Quick test: validate file structure + command availability only
+/quangflow:test phase N      — Test a specific phase (1-5) in isolation
 ```
 
 ---
@@ -51,7 +51,7 @@ These stubs need only be syntactically valid, not functional. They exist to give
 
 ---
 
-## Quick Test (`/qf:test quick`)
+## Quick Test (`/quangflow:test quick`)
 
 Validate structural prerequisites without running phases.
 
@@ -69,7 +69,7 @@ If the script passes, report its output. If it fails, report failures and stop �
 | 1 | Command files exist | Glob for `qf/*.md` in commands dir — verify all 13 files present |
 | 2 | Agent files exist | Glob for `agents/*.md` (domain-engineer, dev-teammate, tech-lead, tester, pm) |
 | 3 | CLAUDE.md template valid | Read template, verify all 5 phases referenced |
-| 4 | No broken cross-references | Grep all command files for `/qf:` references, verify each target exists |
+| 4 | No broken cross-references | Grep all command files for `/quangflow:` references, verify each target exists |
 | 5 | Severity levels consistent | Grep 5-maintain for CRITICAL/ERROR/WARNING/INFO, verify all 4 present |
 | 6 | Gate keywords present | Verify each phase has its gate: APPROVE (1-brainstorm), choice (2-design), CONFIRM (3-handoff), SHIP (4-verify) |
 | 7 | Status command covers all phases | Read status.md, verify it references phases 1-5 + maintain |
@@ -100,7 +100,7 @@ Or if failures:
 
 ---
 
-## Full Test (`/qf:test`)
+## Full Test (`/quangflow:test`)
 
 Runs each phase in sequence against the sandbox, validating inputs/outputs.
 
@@ -318,10 +318,10 @@ None detected.
 **Result:** PASS if correct bug count + severity + dedup
 
 ### Status Simulation
-After all phases, validate `/qf:status` would produce correct output:
+After all phases, validate `/quangflow:status` would produce correct output:
 - [ ] Detects "all milestones shipped"
 - [ ] Reports bug log state from BUGLOG.md
-- [ ] Suggests `/qf:5-maintain scan` as next command
+- [ ] Suggests `/quangflow:5-maintain scan` as next command
 
 ---
 
@@ -358,12 +358,12 @@ Phase 5 (maintain):    [FAIL] BUGLOG.md — expected 3 bugs, found 5 (dedup brok
 
 ---
 
-## Phase Isolation Test (`/qf:test phase N`)
+## Phase Isolation Test (`/quangflow:test phase N`)
 
 Test a single phase. Creates minimal prerequisites for that phase:
-- `/qf:test phase 1` — just sandbox + stubs, run phase 1 validation
-- `/qf:test phase 3` — creates REQUIREMENTS.md + DESIGN.md, then validates phase 3 output
-- `/qf:test phase 5` — creates all prior artifacts + log files, validates maintain phase
+- `/quangflow:test phase 1` — just sandbox + stubs, run phase 1 validation
+- `/quangflow:test phase 3` — creates REQUIREMENTS.md + DESIGN.md, then validates phase 3 output
+- `/quangflow:test phase 5` — creates all prior artifacts + log files, validates maintain phase
 
 Useful for iterating on a specific phase after making changes.
 
@@ -374,7 +374,7 @@ Useful for iterating on a specific phase after making changes.
 - The test validates the **expected contract** of each phase: what files it should create, what sections they contain, what cross-references exist
 - Test does NOT validate prompt quality or agent behavior — only structural contracts
 - Sandbox is preserved after test for manual inspection
-- Run `/qf:test` after modifying any command file to catch regressions
+- Run `/quangflow:test` after modifying any command file to catch regressions
 
 ## Output Rule
 When writing files, save silently. Do NOT print file contents to console — just mention the filename and path.

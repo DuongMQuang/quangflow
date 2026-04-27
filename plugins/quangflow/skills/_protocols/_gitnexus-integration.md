@@ -94,4 +94,4 @@ To enable GitNexus in your project:
      }
    }
    ```
-4. Restart Claude Code — GitNexus tools will be auto-detected by `/qf:cook`
+4. Restart Claude Code — GitNexus tools will be auto-detected by `/quangflow:cook`

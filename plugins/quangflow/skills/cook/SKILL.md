@@ -108,7 +108,7 @@ Current default. Run full pipeline below.
 
 ## Pre-flight
 1. Read REQUIREMENTS.md for `team_mode` and `team_composition`
-2. If `team_mode: false` or missing: "Team mode not enabled. Enable in `/qf:1-brainstorm` or `/qf:3-handoff`."
+2. If `team_mode: false` or missing: "Team mode not enabled. Enable in `/quangflow:1-brainstorm` or `/quangflow:3-handoff`."
 3. Read ROADMAP.md for the current milestone
 4. Read DESIGN.md for architecture context
 5. Read CONTEXT.md if exists (locked decisions)
@@ -131,15 +131,15 @@ Current default. Run full pipeline below.
 
 ## Arguments
 ```
-/qf:cook                                          — Auto-triage tier, run pipeline (auto-detect milestone)
-/qf:cook ./plans/{slug}/milestone-{N}/ROADMAP.md  — Triage + run for specific milestone
-/qf:cook --team                                   — Force team tier (bypass triage)
-/qf:cook --light                                  — Force light tier (dev + tester only)
-/qf:cook --solo                                   — Force solo tier (no spawn, main agent edits) [WARN: bypass keyword guard]
-/qf:cook --dry-run                                — Run triage, print decision, do NOT execute
-/qf:cook --skip domain-engineer                   — Skip specific stage(s) — bypass triage, run team
-/qf:cook --only tester                            — Run only specific stage(s) — bypass triage
-/qf:cook --from tech-lead                         — Resume from a specific stage — bypass triage
+/quangflow:cook                                          — Auto-triage tier, run pipeline (auto-detect milestone)
+/quangflow:cook ./plans/{slug}/milestone-{N}/ROADMAP.md  — Triage + run for specific milestone
+/quangflow:cook --team                                   — Force team tier (bypass triage)
+/quangflow:cook --light                                  — Force light tier (dev + tester only)
+/quangflow:cook --solo                                   — Force solo tier (no spawn, main agent edits) [WARN: bypass keyword guard]
+/quangflow:cook --dry-run                                — Run triage, print decision, do NOT execute
+/quangflow:cook --skip domain-engineer                   — Skip specific stage(s) — bypass triage, run team
+/quangflow:cook --only tester                            — Run only specific stage(s) — bypass triage
+/quangflow:cook --from tech-lead                         — Resume from a specific stage — bypass triage
 ```
 If no argument provided, auto-detect from `./plans/` (latest milestone without QA-REPORT.md / CERTIFICATION.md).
 
@@ -322,8 +322,8 @@ Append to STATUS.md under `## Agent Usage`. Print after pipeline completes.
 ## Completion
 "Team pipeline complete for milestone-{N}.
 - STATUS.md: `plans/{slug}/milestone-{N}/STATUS.md`
-- Next: `/qf:4-verify` for QA/QC
-- Smoke test: `/qf:test`"
+- Next: `/quangflow:4-verify` for QA/QC
+- Smoke test: `/quangflow:test`"
 
 ## CK Context Block
 Every teammate prompt MUST include:

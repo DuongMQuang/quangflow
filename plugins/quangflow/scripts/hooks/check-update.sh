@@ -79,5 +79,5 @@ fi
 # --- Notify user ---
 echo ""
 echo "  QuangFlow update available: v${LOCAL_VERSION} → v${REMOTE_VERSION}"
-echo "  Run /qf:update to upgrade, or see CHANGELOG.md for what's new."
+echo "  Run /quangflow:update to upgrade, or see CHANGELOG.md for what's new."
 echo ""

@@ -5,7 +5,7 @@
 
 ## Conventions
 - All phase artifacts save to ./plans/{feature-slug}/
-- Feature slug derived from `/qf:1-brainstorm` arguments (kebab-case)
+- Feature slug derived from `/quangflow:1-brainstorm` arguments (kebab-case)
 - Milestone artifacts save to ./plans/{feature-slug}/milestone-{N}/
 
 ## Milestone System
@@ -75,7 +75,7 @@ Each milestone runs the full phase flow but scoped to its subset of requirements
 ```
 
 ### Bug Log Convention
-Log files organized by source. Configure paths in CONTEXT.md or let `/qf:5-maintain` auto-discover:
+Log files organized by source. Configure paths in CONTEXT.md or let `/quangflow:5-maintain` auto-discover:
 ```
 ./logs/
 ├── backend/error.log            <- BE errors + exceptions
@@ -83,7 +83,7 @@ Log files organized by source. Configure paths in CONTEXT.md or let `/qf:5-maint
 ├── frontend/error.log           <- FE errors (JS, build failures)
 └── infra/ci.log                 <- CI/CD logs (optional)
 ```
-Severity: CRITICAL > ERROR > WARNING > INFO. See `/qf:5-maintain` for full protocol.
+Severity: CRITICAL > ERROR > WARNING > INFO. See `/quangflow:5-maintain` for full protocol.
 
 ### Structured Logging Standard
 All application code must use structured JSON logging (see `_structured-logging.md`):
@@ -96,23 +96,23 @@ Frontend errors bridge to backend via `/api/logs`. `trace_id` links FE→BE requ
 This project uses a 5-phase QuangFlow lifecycle:
 
 **Build phases (per milestone):**
-0. `/qf:0-init <idea>` — project setup, codebase scan, create CONTEXT.md (run once per feature)
-1. `/qf:1-brainstorm` — requirements discovery + milestone split + team suggestion
-2. `/qf:2-design` — structural options + trade-offs + team refinement (per milestone)
-3. `/qf:3-handoff` — execution artifacts + SHIP/REFINE gate, TDD/logging/verification mandates (per milestone)
-4. `/qf:4-verify` — TDD compliance audit, evidence certification, gap detection (per milestone)
+0. `/quangflow:0-init <idea>` — project setup, codebase scan, create CONTEXT.md (run once per feature)
+1. `/quangflow:1-brainstorm` — requirements discovery + milestone split + team suggestion
+2. `/quangflow:2-design` — structural options + trade-offs + team refinement (per milestone)
+3. `/quangflow:3-handoff` — execution artifacts + SHIP/REFINE gate, TDD/logging/verification mandates (per milestone)
+4. `/quangflow:4-verify` — TDD compliance audit, evidence certification, gap detection (per milestone)
 
 **Post-ship (ongoing):**
-5. `/qf:5-maintain` — bug log scan, triage, hotfix, dependency failure recovery
+5. `/quangflow:5-maintain` — bug log scan, triage, hotfix, dependency failure recovery
 
 ### Supporting Commands
-- `/qf:quick <task>` — Streamlined flow for small tasks (minimal team: dev + tester, TDD enforced)
-- `/qf:cook` — Team pipeline orchestrator (domain-engineer -> devs -> tech-lead -> tester -> PM)
-- `/qf:status` — NPC status reporter: progress, session resume, next command
-- `/qf:test` — Smoke test: auto-detect stack, start project, verify it runs
+- `/quangflow:quick <task>` — Streamlined flow for small tasks (minimal team: dev + tester, TDD enforced)
+- `/quangflow:cook` — Team pipeline orchestrator (domain-engineer -> devs -> tech-lead -> tester -> PM)
+- `/quangflow:status` — NPC status reporter: progress, session resume, next command
+- `/quangflow:test` — Smoke test: auto-detect stack, start project, verify it runs
 
 For milestone-2+, Phase 1 runs as scoped confirmation (not full brainstorm from scratch).
-After all milestones shipped, project enters maintain mode (`/qf:5-maintain`).
+After all milestones shipped, project enters maintain mode (`/quangflow:5-maintain`).
 
 ### Team Pipeline (when team_mode: true)
 ```
@@ -161,14 +161,14 @@ When cook triage selects `solo` (trivial tasks: 1 REQ, 1 phase, 1 file, no sensi
    - Pick one. Explain (in SOLO-LOG.md) why others rejected.
 2. **During implementation**:
    - Ask "what if this assumption is wrong?" for each non-trivial decision.
-   - If a hidden coupling surfaces or a sensitive keyword (auth/payment/migration) appears: STOP, escalate to `/qf:cook --team`.
+   - If a hidden coupling surfaces or a sensitive keyword (auth/payment/migration) appears: STOP, escalate to `/quangflow:cook --team`.
 3. **After implementation**:
    - Self-review the diff for KISS / YAGNI / DRY violations.
    - Record findings in SOLO-LOG.md `## Critical Thinking Notes`.
 4. **Solo Log mandatory**:
    - Every solo task writes `plans/{slug}/milestone-{N}/SOLO-LOG.md`. Schema: `_protocols/_solo-handoff.md`.
    - Required fields: REQ-IDs done, files changed, TDD evidence paths, alternatives considered (≥2, ≥1 rejected), commit hash.
-   - `/qf:status` reads SOLO-LOG.md to display solo work.
+   - `/quangflow:status` reads SOLO-LOG.md to display solo work.
 
 Sensitive keywords (auth, oauth, payment, crypto, migration, etc.) FORCE escalation to team tier — solo is unavailable. See `_protocols/_complexity-triage.md → Sensitive Keywords` for the full list.
 

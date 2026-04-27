@@ -38,7 +38,7 @@ devs
 tech-lead (started {timestamp})
 
 ## Resume Command
-`/qf:cook --from tech-lead`
+`/quangflow:cook --from tech-lead`
 
 ## Team Config
 ```yaml
@@ -91,6 +91,6 @@ This happens ONCE at pipeline start. The config persists across sessions.
 ## On Crash/Interruption
 
 - PIPELINE-STATE.md preserves what completed, what's in progress, AND team config
-- User runs `/qf:status` to see resume command
-- User runs `/qf:cook --from {interrupted-or-next-stage}` to continue
+- User runs `/quangflow:status` to see resume command
+- User runs `/quangflow:cook --from {interrupted-or-next-stage}` to continue
 - Resumed pipeline uses persisted team config — no re-derivation surprises

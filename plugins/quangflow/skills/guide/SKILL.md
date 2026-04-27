@@ -12,7 +12,7 @@ Be conversational, encouraging, and concise. Walk them through one step at a tim
 Greet the user and offer two paths:
 
 **Option A — Guided Tour:** Walk through each phase step-by-step with a sample project (task tracker).
-**Option B — Quick Start:** Jump straight into `/qf:0-init <their idea>` with their own idea.
+**Option B — Quick Start:** Jump straight into `/quangflow:0-init <their idea>` with their own idea.
 
 Ask which they prefer. If they just say "hi" or seem unsure, default to the guided tour.
 
@@ -25,7 +25,7 @@ Walk through these **one at a time**. After each step, briefly explain what was 
 ### Step 1: Init
 Tell user to run:
 ```
-/qf:0-init task tracker with categories and priorities
+/quangflow:0-init task tracker with categories and priorities
 ```
 Explain: Scans project, creates CONTEXT.md — the foundation for everything. Pick "technical" and "new project" when asked.
 
@@ -34,7 +34,7 @@ After done: Point them to `plans/task-tracker/CONTEXT.md` and explain it holds l
 ### Step 2: Brainstorm
 Tell user to run:
 ```
-/qf:1-brainstorm
+/quangflow:1-brainstorm
 ```
 Explain: Claude asks clarifying questions in batches to surface edge cases and define scope. Answer honestly — no wrong answers. Type `APPROVE` when satisfied.
 
@@ -45,7 +45,7 @@ After done: Point them to `plans/task-tracker/REQUIREMENTS.md` — should see RE
 ### Step 3: Design
 Tell user to run:
 ```
-/qf:2-design
+/quangflow:2-design
 ```
 Explain: Proposes 2-3 architecture options with trade-offs. Pick whichever feels right — this is about understanding the decision.
 
@@ -54,7 +54,7 @@ After done: Point them to `plans/task-tracker/milestone-1/DESIGN.md` — chosen 
 ### Step 4: Handoff
 Tell user to run:
 ```
-/qf:3-handoff
+/quangflow:3-handoff
 ```
 Explain: Generates the execution plan (ROADMAP.md) with specific files, deliverables, and done criteria. Type `CONFIRM` when ready. Pick `SOLO` for the tour.
 
@@ -70,7 +70,7 @@ Repeat for each phase. They can also implement manually if preferred.
 ### Step 6: Verify
 Tell user to run:
 ```
-/qf:4-verify
+/quangflow:4-verify
 ```
 Explain: Runs tests, checks requirement coverage, detects gaps. Type `SHIP` when everything passes.
 
@@ -81,13 +81,13 @@ Congratulate them! Then mention these additional commands they can explore:
 
 | Command | What it does |
 |---------|-------------|
-| `/qf:status` | Check progress, resume after a break |
-| `/qf:quick <task>` | Fast mode for small tasks (skips design) |
-| `/qf:5-maintain` | Post-ship bug tracking and hotfixes |
-| `/qf:cook` | Launch parallel agent team for bigger projects |
-| `/qf:test` | Smoke test — verify the project actually runs |
+| `/quangflow:status` | Check progress, resume after a break |
+| `/quangflow:quick <task>` | Fast mode for small tasks (skips design) |
+| `/quangflow:5-maintain` | Post-ship bug tracking and hotfixes |
+| `/quangflow:cook` | Launch parallel agent team for bigger projects |
+| `/quangflow:test` | Smoke test — verify the project actually runs |
 
-End with: "You've completed the full QuangFlow cycle! For your next project, start with `/qf:0-init <your idea>` and let the workflow guide you."
+End with: "You've completed the full QuangFlow cycle! For your next project, start with `/quangflow:0-init <your idea>` and let the workflow guide you."
 
 ---
 

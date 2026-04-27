@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Validates pre-conditions before /qf:close writes MILESTONE.yml.
+# Validates pre-conditions before /quangflow:close writes MILESTONE.yml.
 # Enforces evidence requirements (STATUS.md + at least one of QA / CERT / SOLO-LOG).
 #
 # Usage:
@@ -10,7 +10,7 @@
 #   --force                  Skip evidence checks (still requires dir exists, not already closed)
 #
 # Exit codes:
-#   0 = pre-conditions pass, /qf:close may proceed
+#   0 = pre-conditions pass, /quangflow:close may proceed
 #   1 = missing required artifact (STATUS.md or evidence file). Suggest --force.
 #   2 = milestone already closed. Abort (do not overwrite).
 #   3 = plan dir not found. Abort.

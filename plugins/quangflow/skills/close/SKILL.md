@@ -1,23 +1,23 @@
 ---
 name: close
-description: "Use when closing a finished milestone — writes MILESTONE.yml so /qf:status hides it from default view"
+description: "Use when closing a finished milestone — writes MILESTONE.yml so /quangflow:status hides it from default view"
 ---
 
 You are the milestone close command — a lightweight finalize step that marks a milestone CLOSED without moving any files.
 
 ## Purpose
 
-After a milestone ships (QA-REPORT.md / CERTIFICATION.md / SOLO-LOG.md present), user wants to "archive" it from the default `/qf:status` view to focus on active work. `/qf:close M_N` writes `plans/{slug}/milestone-{N}/MILESTONE.yml` with status=CLOSED. `/qf:status` filters CLOSED milestones unless `--all` flag passed.
+After a milestone ships (QA-REPORT.md / CERTIFICATION.md / SOLO-LOG.md present), user wants to "archive" it from the default `/quangflow:status` view to focus on active work. `/quangflow:close M_N` writes `plans/{slug}/milestone-{N}/MILESTONE.yml` with status=CLOSED. `/quangflow:status` filters CLOSED milestones unless `--all` flag passed.
 
 KISS: no directory moves (preserves git blame + cross-references). No `--reopen` flag (manual delete of MILESTONE.yml if user wants to reopen).
 
 ## Arguments
 
 ```
-/qf:close M_1                      — Close milestone-1 (validate pre-conditions)
-/qf:close M_1 --reason "shipped"   — Close with custom reason (default: "completed")
-/qf:close M_1 --force              — Skip pre-condition validation (use with care)
-/qf:close M_1 --feature my-slug    — Disambiguate when multiple plan dirs exist
+/quangflow:close M_1                      — Close milestone-1 (validate pre-conditions)
+/quangflow:close M_1 --reason "shipped"   — Close with custom reason (default: "completed")
+/quangflow:close M_1 --force              — Skip pre-condition validation (use with care)
+/quangflow:close M_1 --feature my-slug    — Disambiguate when multiple plan dirs exist
 ```
 
 `M_N` syntax: `M_1`, `M_2`, `M_10`, etc. The number must match an existing milestone directory (`milestone-1`, `milestone-2`, ...).
@@ -76,7 +76,7 @@ notes: ""                             # optional, user can edit later
 ```
 
 Fields:
-- `status`: always `CLOSED` (the only value `/qf:close` writes).
+- `status`: always `CLOSED` (the only value `/quangflow:close` writes).
 - `closed_at`: ISO 8601 UTC timestamp at write time.
 - `closed_reason`: from `--reason` flag, default `"completed"`.
 - `closed_by`: always `"quangflow:close"`.
@@ -91,13 +91,13 @@ Print:
 Milestone {N} closed.
 - File: plans/{slug}/milestone-{N}/MILESTONE.yml
 - Reason: {reason}
-- Hidden from /qf:status default view (use --all to show).
+- Hidden from /quangflow:status default view (use --all to show).
 - Reopen: delete MILESTONE.yml manually.
 ```
 
 ## Status Integration
 
-`/qf:status` reads each milestone's MILESTONE.yml:
+`/quangflow:status` reads each milestone's MILESTONE.yml:
 - Missing yml or `status != CLOSED` → milestone is OPEN, show in default view.
 - `status: CLOSED` → milestone is CLOSED, hide from default view.
 - `--all` flag → show CLOSED milestones grayed-out (e.g. with `(closed)` suffix).
@@ -111,44 +111,44 @@ User who wants to reopen a closed milestone:
 rm plans/{slug}/milestone-{N}/MILESTONE.yml
 ```
 
-Then `/qf:status` will show it as OPEN again. No `--reopen` flag in v2.3.0 (KISS — defer to v2.4.0+ if user demand surfaces).
+Then `/quangflow:status` will show it as OPEN again. No `--reopen` flag in v2.3.0 (KISS — defer to v2.4.0+ if user demand surfaces).
 
 ## Examples
 
 ### Close last shipped milestone
 
 ```
-/qf:close M_1
+/quangflow:close M_1
 → validates STATUS.md + QA-REPORT.md exist
 → writes MILESTONE.yml with status=CLOSED, reason=completed
-→ /qf:status no longer lists M_1 in default view
+→ /quangflow:status no longer lists M_1 in default view
 ```
 
 ### Close with custom reason
 
 ```
-/qf:close M_2 --reason "shipped to prod 2026-04-25"
+/quangflow:close M_2 --reason "shipped to prod 2026-04-25"
 → writes MILESTONE.yml with closed_reason="shipped to prod 2026-04-25"
 ```
 
 ### Force close (no QA-REPORT)
 
 ```
-/qf:close M_3 --force --reason "abandoned, not pursuing"
+/quangflow:close M_3 --force --reason "abandoned, not pursuing"
 → skips evidence check, writes yml
 ```
 
 ### Multiple features
 
 ```
-/qf:close M_1 --feature my-feature-slug
+/quangflow:close M_1 --feature my-feature-slug
 → targets plans/my-feature-slug/milestone-1/
 ```
 
 ### Already closed
 
 ```
-/qf:close M_1
+/quangflow:close M_1
 → validator exit 2: "Milestone 1 already closed at 2026-04-25T10:00:00Z."
 → Abort. To reopen: rm MILESTONE.yml.
 ```

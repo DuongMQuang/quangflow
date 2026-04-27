@@ -7,7 +7,7 @@ You are now entering Phase 4: Verify & Certify.
 
 ## State Check
 See `_protocols/_shared.md → State Check Template`. Required artifact: finalized REQUIREMENTS.md + ROADMAP.md.
-If missing: "No finalized requirements found. Run `/qf:3-handoff` first."
+If missing: "No finalized requirements found. Run `/quangflow:3-handoff` first."
 
 ## Milestone Detection
 See `_protocols/_shared.md → Milestone Detection`. Target artifact: `CERTIFICATION.md` (or `QA-REPORT.md` for legacy).
@@ -24,7 +24,7 @@ bash {quangflow-root}/scripts/validate/validate-artifacts.sh ./plans/{feature-sl
 
 ## Pre-flight: Implementation Check
 - Check if source code exists for this milestone's features
-- If no implementation found, tell user: "No implementation detected. Implement ROADMAP.md phases first, then re-run `/qf:4-verify`."
+- If no implementation found, tell user: "No implementation detected. Implement ROADMAP.md phases first, then re-run `/quangflow:4-verify`."
 - Do NOT proceed if there's nothing to verify
 
 ## Pre-flight: TDD Compliance Audit (auto — run BEFORE test generation)
@@ -151,7 +151,7 @@ Present QA-REPORT.md + GAPS.md summary to user.
 - "All milestone-{N} requirements verified. No major gaps. Type SHIP to finalize."
 
 **If any FAIL:**
-- "Found test failures. Fix code and re-run `/qf:4-verify`, or re-run `/qf:1-brainstorm` to revise requirements."
+- "Found test failures. Fix code and re-run `/quangflow:4-verify`, or re-run `/quangflow:1-brainstorm` to revise requirements."
 
 **If major gaps found:**
 - "Found {N} major gap(s) requiring attention:
@@ -164,7 +164,7 @@ Present QA-REPORT.md + GAPS.md summary to user.
 
 **If ADD selected for any gap:**
 - Append remediation phase(s) to ROADMAP.md
-- Tell user: "Remediation phase(s) added. Implement them, then re-run `/qf:4-verify` to validate."
+- Tell user: "Remediation phase(s) added. Implement them, then re-run `/quangflow:4-verify` to validate."
 - Agent waits for re-run — does NOT auto-SHIP
 
 **If all gaps resolved (DEFER/IGNORE/previously ADDed and verified):**
@@ -205,15 +205,15 @@ When user types SHIP:
 **If more milestones remain:**
 ```
 Milestone-{N} shipped!
-**Next:** `/qf:2-design` — Design architecture for milestone-{N+1}
-  ↳ Skip? Jump to `/qf:3-handoff` if reusing same architecture (confirm first)
-  ↳ Also available: `/qf:status` (check status), `/qf:status save` (save context)
+**Next:** `/quangflow:2-design` — Design architecture for milestone-{N+1}
+  ↳ Skip? Jump to `/quangflow:3-handoff` if reusing same architecture (confirm first)
+  ↳ Also available: `/quangflow:status` (check status), `/quangflow:status save` (save context)
 ```
 
 **If last milestone:**
 ```
 All milestones complete! Project enters maintenance mode.
-  => Report bugs: `/qf:5-maintain` (triage, investigate, fix)
-  => Smoke test: `/qf:test` (verify project runs end-to-end)
-  => Status: `/qf:status` (final status), `/qf:status save` (archive context)
+  => Report bugs: `/quangflow:5-maintain` (triage, investigate, fix)
+  => Smoke test: `/quangflow:test` (verify project runs end-to-end)
+  => Status: `/quangflow:status` (final status), `/quangflow:status save` (archive context)
 ```

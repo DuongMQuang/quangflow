@@ -13,7 +13,7 @@ This command can be run at ANY time, in ANY session.
 1. Find project root — see `_protocols/_shared.md → Project Root Detection`.
 2. Scan `{project-root}/plans/` for all feature directories
 3. For each feature, check for STATUS.md files in milestone directories
-4. If no plans exist: "No active projects. Run `/qf:1-brainstorm <idea>` to start."
+4. If no plans exist: "No active projects. Run `/quangflow:1-brainstorm <idea>` to start."
 5. If multiple features found: list them and ask which one
 
 ## Version Check
@@ -40,7 +40,7 @@ Then show current state from STATUS.md:
 **Phase:** {current PM phase: brainstorm/design/handoff/verify/maintain}
 **Pipeline:** {stage: domain-engineer/devs/tech-lead/tester/done}
 **Last Action:** {what was completed before session ended}
-**Next Command:** `{exact /qf:* command to run}`
+**Next Command:** `{exact /quangflow:* command to run}`
 **Blockers:** {any blockers or "none"}
 ```
 
@@ -49,13 +49,13 @@ Infer status from which artifacts exist:
 
 | Artifacts Present | Inferred Phase | Next Command |
 |-------------------|---------------|--------------|
-| Nothing | Not started | `/qf:0-init <idea>` |
-| CONTEXT.md only | Phase 0 done | `/qf:1-brainstorm` |
-| CONTEXT.md + REQUIREMENTS.md | Phase 1 done | `/qf:2-design` |
-| REQUIREMENTS.md + DESIGN.md | Phase 2 done | `/qf:3-handoff` |
-| REQUIREMENTS.md + DESIGN.md + ROADMAP.md | Phase 3 done | Implement ROADMAP, then `/qf:4-verify` |
+| Nothing | Not started | `/quangflow:0-init <idea>` |
+| CONTEXT.md only | Phase 0 done | `/quangflow:1-brainstorm` |
+| CONTEXT.md + REQUIREMENTS.md | Phase 1 done | `/quangflow:2-design` |
+| REQUIREMENTS.md + DESIGN.md | Phase 2 done | `/quangflow:3-handoff` |
+| REQUIREMENTS.md + DESIGN.md + ROADMAP.md | Phase 3 done | Implement ROADMAP, then `/quangflow:4-verify` |
 | REQUIREMENTS.md + DESIGN.md + ROADMAP.md + QA-REPORT.md | Phase 4 done | See Gap-Aware Logic below |
-| All milestones have QA-REPORT.md | All shipped | `/qf:5-maintain` (maintain mode) |
+| All milestones have QA-REPORT.md | All shipped | `/quangflow:5-maintain` (maintain mode) |
 
 ## Gap-Aware Next Command Logic (CRITICAL)
 When determining the next command, ALWAYS check GAPS.md and ROADMAP.md for unresolved work:
@@ -71,11 +71,11 @@ When determining the next command, ALWAYS check GAPS.md and ROADMAP.md for unres
 3. **Decision matrix:**
    | QA-REPORT exists? | Unresolved gaps? | Unchecked remediation tasks? | Next Command |
    |-------------------|-----------------|------------------------------|--------------|
-   | No | — | — | Implement ROADMAP, then `/qf:4-verify` |
-   | Yes | NEW gaps exist | — | "**Gaps need decisions.** Run `/qf:4-verify` to address ADD/DEFER/IGNORE per gap." |
-   | Yes | ADD gaps pending | Yes (tasks unchecked) | "**Remediation phases pending.** Implement Phase {N} tasks, then re-run `/qf:4-verify`." |
-   | Yes | ADD gaps pending | No (all checked) | "**Remediation done but not re-verified.** Run `/qf:4-verify` to re-verify." |
-   | Yes | No unresolved | — | "All requirements verified. Type SHIP or proceed to next milestone (`/qf:2-design`)." |
+   | No | — | — | Implement ROADMAP, then `/quangflow:4-verify` |
+   | Yes | NEW gaps exist | — | "**Gaps need decisions.** Run `/quangflow:4-verify` to address ADD/DEFER/IGNORE per gap." |
+   | Yes | ADD gaps pending | Yes (tasks unchecked) | "**Remediation phases pending.** Implement Phase {N} tasks, then re-run `/quangflow:4-verify`." |
+   | Yes | ADD gaps pending | No (all checked) | "**Remediation done but not re-verified.** Run `/quangflow:4-verify` to re-verify." |
+   | Yes | No unresolved | — | "All requirements verified. Type SHIP or proceed to next milestone (`/quangflow:2-design`)." |
 
 4. **Always report gap summary** when GAPS.md exists:
    ```
@@ -96,13 +96,13 @@ When ALL milestones have QA-REPORT.md (project is shipped), check for BUGLOG.md:
 **Phase:** maintain
 **Bug Log:** {X} active ({Y} critical, {Z} error), {W} deferred, {V} resolved
 **Last Scan:** {timestamp from BUGLOG.md metadata}
-**Next Command:** `/qf:5-maintain scan` (refresh bug log) or `/qf:5-maintain fix BUG-XXX`
+**Next Command:** `/quangflow:5-maintain scan` (refresh bug log) or `/quangflow:5-maintain fix BUG-XXX`
 ```
 
 **If BUGLOG.md does not exist:**
 ```
 **Phase:** maintain (no bug log yet)
-**Next Command:** `/qf:5-maintain scan` to scan logs and create bug log, or `/qf:5-maintain` to enter maintain mode
+**Next Command:** `/quangflow:5-maintain scan` to scan logs and create bug log, or `/quangflow:5-maintain` to enter maintain mode
 ```
 
 **Bug severity summary** (when BUGLOG.md has active bugs):
@@ -177,13 +177,13 @@ Apply CLOSED filter same way for solo milestones.
 ## Arguments
 
 ```
-/qf:status                 — Default view (CLOSED milestones hidden)
-/qf:status --all           — Show CLOSED milestones too
-/qf:status save            — Save context snapshot before /clear or /exit
+/quangflow:status                 — Default view (CLOSED milestones hidden)
+/quangflow:status --all           — Show CLOSED milestones too
+/quangflow:status save            — Save context snapshot before /clear or /exit
 ```
 
 ## Context Save Mode
-If invoked with argument `save` (i.e. `/qf:status save`), perform a context snapshot before session ends:
+If invoked with argument `save` (i.e. `/quangflow:status save`), perform a context snapshot before session ends:
 
 1. **Capture current state** to STATUS.md:
    - Current phase and pipeline stage
@@ -204,7 +204,7 @@ If invoked with argument `save` (i.e. `/qf:status save`), perform a context snap
    - Assumptions made but not yet validated
    - TODO items mentioned but not tracked elsewhere
 
-4. Print: "Context saved. Safe to /clear or /exit. Resume with `/qf:status` in next session."
+4. Print: "Context saved. Safe to /clear or /exit. Resume with `/quangflow:status` in next session."
 
 This should be run before `/clear` or `/exit` to prevent context loss.
 
@@ -212,19 +212,19 @@ This should be run before `/clear` or `/exit` to prevent context loss.
 When presenting the next command, always use this format:
 
 ```
-**Next:** `/qf:{N}-{phase}` — {brief description of what this command does}
+**Next:** `/quangflow:{N}-{phase}` — {brief description of what this command does}
   ↳ Skip? {what happens if user skips this step}
-  ↳ Also available: `/qf:status save` (save context), `/qf:status` (re-check status)
+  ↳ Also available: `/quangflow:status save` (save context), `/quangflow:status` (re-check status)
 ```
 
 Examples:
-- **Next:** `/qf:4-verify` — Run QA/QC to verify implementation and detect gaps
+- **Next:** `/quangflow:4-verify` — Run QA/QC to verify implementation and detect gaps
   ↳ Skip? Gaps may go undetected. Not recommended.
-  ↳ Also available: `/qf:cook` (re-run team pipeline), `/qf:status save` (save context)
+  ↳ Also available: `/quangflow:cook` (re-run team pipeline), `/quangflow:status save` (save context)
 
-- **Next:** `/qf:5-maintain scan` — Scan logs for new bugs since last check
+- **Next:** `/quangflow:5-maintain scan` — Scan logs for new bugs since last check
   ↳ Skip? New errors may go unnoticed.
-  ↳ Also available: `/qf:5-maintain fix BUG-XXX` (fix specific bug), `/qf:status save` (save context)
+  ↳ Also available: `/quangflow:5-maintain fix BUG-XXX` (fix specific bug), `/quangflow:status save` (save context)
 
 ## Session Resume Protocol
 When a new session starts and user asks "where was I?", "status", or similar:

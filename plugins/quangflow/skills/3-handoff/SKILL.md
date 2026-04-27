@@ -7,8 +7,8 @@ You are now entering Phase 3: Execution Handoff.
 
 ## State Check
 See `_protocols/_shared.md → State Check Template`. Required artifacts: REQUIREMENTS.md + DESIGN.md.
-If missing DESIGN.md: "No design found. Run `/qf:2-design` first."
-If missing REQUIREMENTS.md: "No requirements found. Run `/qf:1-brainstorm <idea>` first."
+If missing DESIGN.md: "No design found. Run `/quangflow:2-design` first."
+If missing REQUIREMENTS.md: "No requirements found. Run `/quangflow:1-brainstorm <idea>` first."
 
 ## Milestone Detection
 See `_protocols/_shared.md → Milestone Detection`. Target artifact: `ROADMAP.md`.
@@ -124,7 +124,7 @@ After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` sett
    **Pipeline:** domain-engineer designs -> devs implement (parallel) -> [optional] tech-lead reviews -> tester tests
 
    Options:
-   - **SHIP** — Launch team pipeline (`/qf:cook`)
+   - **SHIP** — Launch team pipeline (`/quangflow:cook`)
    - **REFINE** — Adjust team composition"
 
 **Autopilot shortcut:** See `_protocols/_autopilot.md → Phase 3`. Auto-SHIP, skip REFINE.
@@ -137,7 +137,7 @@ After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` sett
    - Loop until user types SHIP
 
 5. On **SHIP**:
-   - Auto-invoke `/qf:cook` — cook.md is the single source of truth for pipeline orchestration
+   - Auto-invoke `/quangflow:cook` — cook.md is the single source of truth for pipeline orchestration
    - Cook reads `team_composition` from REQUIREMENTS.md and executes the full pipeline
 
 **If `team_mode: false` (or not set):**
@@ -156,9 +156,9 @@ Then suggest next command based on mode:
 
 **If team_mode: true:**
 ```
-**Next:** `/qf:cook` — Auto-triage + run pipeline (cook decides solo / light / team based on complexity)
-  => Override: `/qf:cook --team` to force full team, `/qf:cook --light` for dev+tester only
-  => Also available: `/qf:status` (check status), `/qf:status save` (save context)
+**Next:** `/quangflow:cook` — Auto-triage + run pipeline (cook decides solo / light / team based on complexity)
+  => Override: `/quangflow:cook --team` to force full team, `/quangflow:cook --light` for dev+tester only
+  => Also available: `/quangflow:status` (check status), `/quangflow:status save` (save context)
 ```
 
 **Solo mode is auto-selected by cook triage for trivial tasks** (1 REQ, 1 phase, 1 file, no sensitive keywords). Cook prints a solo handoff message and the main agent edits files directly. See `_protocols/_complexity-triage.md` and `_protocols/_solo-handoff.md` for details.

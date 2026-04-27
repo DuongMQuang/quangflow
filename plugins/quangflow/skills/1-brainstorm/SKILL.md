@@ -6,8 +6,8 @@ description: "Use when entering requirements phase — clarifying questions, edg
 You are now entering Phase 1: Requirements Brainstorm.
 
 ## State Check
-See `_protocols/_shared.md → State Check Template`. Required artifact: CONTEXT.md (from `/qf:0-init`).
-If none found: "No project context found. Run `/qf:0-init <idea>` first."
+See `_protocols/_shared.md → State Check Template`. Required artifact: CONTEXT.md (from `/quangflow:0-init`).
+If none found: "No project context found. Run `/quangflow:0-init <idea>` first."
 
 Read CONTEXT.md to get: `pm_mode`, `project_type`, scan results, and feature slug.
 
@@ -24,12 +24,12 @@ Before starting the full brainstorm, analyze $ARGUMENTS for scope:
 **If small task detected:**
 "This sounds like a small task. I can handle it in quick mode (skip design, milestones, team setup) or run the full brainstorm.
 
-- **Quick** — `/qf:quick {arguments}` (single-pass, solo, fast)
+- **Quick** — `/quangflow:quick {arguments}` (single-pass, solo, fast)
 - **Full** — Continue with full Phase 1 brainstorm (thorough, multi-round)
 
 Which do you prefer?"
 
-If user picks Quick: tell them to run `/qf:quick {arguments}` and stop.
+If user picks Quick: tell them to run `/quangflow:quick {arguments}` and stop.
 If user picks Full: proceed below.
 If ambiguous scope: proceed with full brainstorm (err on thorough side).
 
@@ -58,7 +58,7 @@ This is a scoped confirmation, NOT a full brainstorm. Skip:
    Any changes to these requirements? Or type APPROVE to proceed to design."
 
 4. If user wants changes: accept additions/removals/modifications, update REQUIREMENTS.md
-5. If user types APPROVE: proceed to Next Step (suggest `/qf:2-design`)
+5. If user types APPROVE: proceed to Next Step (suggest `/quangflow:2-design`)
 
 **If no REQUIREMENTS.md exists:** proceed with full brainstorm below.
 
@@ -301,9 +301,9 @@ Tell user: "Phase 1 complete. Draft saved to `./plans/{feature-slug}/REQUIREMENT
 
 Then suggest next command:
 ```
-**Next:** `/qf:2-design` — Explore architecture options for milestone-1
-  ↳ Skip? Jump to `/qf:3-handoff` if you already know the architecture (not recommended for complex projects)
-  ↳ Also available: `/qf:status` (check status), `/qf:status save` (save context)
+**Next:** `/quangflow:2-design` — Explore architecture options for milestone-1
+  ↳ Skip? Jump to `/quangflow:3-handoff` if you already know the architecture (not recommended for complex projects)
+  ↳ Also available: `/quangflow:status` (check status), `/quangflow:status save` (save context)
 ```
 
 Start by asking the first batch of clarifying questions about:

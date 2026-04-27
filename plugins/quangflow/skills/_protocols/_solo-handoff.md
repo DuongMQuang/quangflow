@@ -59,8 +59,8 @@ You will edit files directly. No agent team will spawn.
 After implementation:
 - Verify SOLO-LOG.md exists with all required fields.
 - Commit changes (conventional format).
-- Run `/qf:status` to see updated state.
-- Run `/qf:4-verify` if you want certification.
+- Run `/quangflow:status` to see updated state.
+- Run `/quangflow:4-verify` if you want certification.
 
 ================================================================================
 ```
@@ -71,7 +71,7 @@ After printing this message, cook exits with status 0. Main agent reads the mess
 
 ## SOLO-LOG.md Schema
 
-Solo task MUST write this file at `plans/{feature-slug}/milestone-{N}/SOLO-LOG.md`. `/qf:status` reads it to display solo work in milestone view.
+Solo task MUST write this file at `plans/{feature-slug}/milestone-{N}/SOLO-LOG.md`. `/quangflow:status` reads it to display solo work in milestone view.
 
 ```markdown
 ---
@@ -135,11 +135,11 @@ A valid SOLO-LOG.md MUST contain:
 - Section `## Critical Thinking Notes` with `### Alternatives Considered` (≥2 alternatives, ≥1 rejected)
 - Section `## Commit` with hash + message (after commit)
 
-Missing any required field → SOLO-LOG.md is INVALID. `/qf:status` will flag it.
+Missing any required field → SOLO-LOG.md is INVALID. `/quangflow:status` will flag it.
 
 ## Status Integration
 
-`/qf:status` reads SOLO-LOG.md (if exists) and shows in milestone view:
+`/quangflow:status` reads SOLO-LOG.md (if exists) and shows in milestone view:
 
 ```
 **Milestone {N}: SOLO COMPLETED**
@@ -154,7 +154,7 @@ If `status: in_progress`: show as "SOLO IN PROGRESS — last update {timestamp}"
 ## Closing
 
 When solo work is complete:
-- User can run `/qf:close M_{N}` to mark milestone CLOSED (writes MILESTONE.yml).
+- User can run `/quangflow:close M_{N}` to mark milestone CLOSED (writes MILESTONE.yml).
 - See `close/SKILL.md` for close command.
 
 ## Borderline Note
@@ -163,13 +163,13 @@ Solo is for SMALL tasks only. If during implementation you discover the task is 
 
 1. STOP editing.
 2. Append to SOLO-LOG.md: `## Escalation` with reason.
-3. Tell user: "Task scope exceeded solo tier. Recommend `/qf:cook --team` to restart with full pipeline."
+3. Tell user: "Task scope exceeded solo tier. Recommend `/quangflow:cook --team` to restart with full pipeline."
 4. Do NOT continue solo. User decides whether to revert + restart or accept partial solo work.
 
 ## Anti-Patterns (DO NOT)
 
 - ❌ Skip TDD because "trivial" — TDD evidence is mandatory even for 1 LOC.
 - ❌ Skip critical-thinking alternatives — at least 2 must be listed and 1 rejected.
-- ❌ Skip SOLO-LOG.md — `/qf:status` and `/qf:close` depend on it.
+- ❌ Skip SOLO-LOG.md — `/quangflow:status` and `/quangflow:close` depend on it.
 - ❌ Spawn an agent (defeats the purpose of solo tier).
 - ❌ Edit files outside scope listed in handoff message — escalate instead.

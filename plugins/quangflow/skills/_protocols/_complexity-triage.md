@@ -11,8 +11,8 @@ Avoid agent overkill on small tasks (1 LOC fix → 3 agents wastes tokens). Avoi
 | Tier | Spawn | Behavior |
 |------|-------|----------|
 | **solo** | 0 agents | Main agent (Opus) edits files directly. SOLO-LOG.md written by main. |
-| **light** | 2 agents | dev + tester (current `/qf:quick` behavior). |
-| **team** | 4-6 agents | Full pipeline: domain-engineer → devs → tech-lead → tester → PM (current `/qf:cook` behavior). |
+| **light** | 2 agents | dev + tester (current `/quangflow:quick` behavior). |
+| **team** | 4-6 agents | Full pipeline: domain-engineer → devs → tech-lead → tester → PM (current `/quangflow:cook` behavior). |
 
 ## Heuristics
 
@@ -213,7 +213,7 @@ Reason: user explicit opt-out wins over auto-rubric
 Task: "fix typo"
 REQUIREMENTS.md: REQ-001 (1 REQ — rubric says solo)
 team_mode: false (config says solo)
-Invocation: /qf:cook --team (per-invocation flag)
+Invocation: /quangflow:cook --team (per-invocation flag)
 Algorithm step 1 fires (highest precedence)
 Expected tier: team
 Reason: per-invocation flag > config field
@@ -225,7 +225,7 @@ Reason: per-invocation flag > config field
 - `--from <stage>` (existing): bypass triage, resume team pipeline.
 - `--only <stage>` (existing): bypass triage, run specific stage in team mode.
 - `QUANGFLOW_FORCE_TEAM=1`: env override, always team.
-- Existing `/qf:quick` invocations route through triage with implicit `--light`.
+- Existing `/quangflow:quick` invocations route through triage with implicit `--light`.
 
 ## Cook Integration
 

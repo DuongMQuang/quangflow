@@ -1,6 +1,6 @@
 # Shared Protocols
 
-Referenced by all `/qf:*` commands. Do NOT duplicate — link here instead.
+Referenced by all `/quangflow:*` commands. Do NOT duplicate — link here instead.
 
 ---
 
@@ -59,9 +59,9 @@ Each phase follows this pattern (replace `{artifact}` with the phase-specific ch
 When presenting the next command, always use this format:
 
 ```
-**Next:** `/qf:{N}-{phase}` — {brief description}
+**Next:** `/quangflow:{N}-{phase}` — {brief description}
   ↳ Skip? {what happens if skipped}
-  ↳ Also available: `/qf:status save` (save context), `/qf:status` (re-check status)
+  ↳ Also available: `/quangflow:status save` (save context), `/quangflow:status` (re-check status)
 ```
 
 ## PIPELINE-STATE Schema
@@ -83,14 +83,14 @@ hands_free: {true | false}
 {stage-name}
 
 ## Resume Command
-`/qf:{N}-{phase}`
+`/quangflow:{N}-{phase}`
 ```
 
 **Usage:**
 - Created/updated after each stage completes (cook.md manages team stages)
-- Read by `/qf:status` for resume context
-- Read by `/qf:1-brainstorm` for hands-free resume
-- Read by `/qf:cook --from` for crash recovery
+- Read by `/quangflow:status` for resume context
+- Read by `/quangflow:1-brainstorm` for hands-free resume
+- Read by `/quangflow:cook --from` for crash recovery
 
 ## Review Gate Pattern
 All phases follow the same gate structure:
@@ -158,7 +158,7 @@ Each phase appends its row to the milestone table when it completes:
 - **Phase 0-4:** Each phase appends its own row after review gate passes
 - **Cook:** Appends the "cook" row with agent usage totals and gap count
 - **PM agent:** Updates Metrics section at pipeline end
-- **`/qf:status`:** Reads PROGRESS.md for timeline display
+- **`/quangflow:status`:** Reads PROGRESS.md for timeline display
 
 ## Code Quality Mandates
 Injected into every ROADMAP phase and verified in Phase 4:

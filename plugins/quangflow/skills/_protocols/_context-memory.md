@@ -73,7 +73,7 @@ When a phase file or agent prompt references a feature, load its FMU automatical
 ### Usage Examples
 
 ```
-/qf:1-brainstorm           → loads FMU for the current feature (from plans/ context)
+/quangflow:1-brainstorm           → loads FMU for the current feature (from plans/ context)
 @auth-system                → loads .memory/auth-system/CONTEXT.md + LINKS.md
 "Continue work on payment"  → resolves to @payment-flow, loads FMU
 ```
