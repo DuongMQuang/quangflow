@@ -2,6 +2,33 @@
 
 All notable changes to QuangFlow are documented here.
 
+## [2.2.0] — 2026-04-06
+
+### Added — Two-Pass Review Pipeline
+- **spec-reviewer agent**: REQ compliance check before tech-lead quality review (commit 35b49ab).
+- **Pipeline evolution**: `devs → spec-reviewer → tech-lead → tester` (Stage 2.5 inserted in cook).
+- **Task granularity gate**: Phase 3 auto-splits ROADMAP phases >150 LOC or >3 REQ-IDs into sub-phases.
+- **Context hard gate (70%)**: Auto-checkpoint + terminate + fresh agent resume when context window hits 70%.
+
+### Changed
+- `cook` pipeline updated with Stage 2.5 (spec-reviewer) and context monitoring.
+- `dev-teammate` agent updated for two-pass handoff.
+- Validation script updated for new spec-reviewer stage.
+
+## [2.1.0] — 2026-03-30
+
+### Added — Plugin Distribution
+- **Self-hosted marketplace**: New `plugins/quangflow/` substructure + `marketplace.json` enables Claude Code plugin install (`/plugin marketplace add ...`).
+- **`/qf:adopt` command**: Adaptive codebase scanning, feature extraction, and DRAFT doc generation for onboarding existing projects (commit 80face2). _Note: Now invoked as `/quangflow:adopt` when installed via plugin._
+- **Plugin manifest** (`plugin.json`) + flat `skills/` directory for Claude Code discovery.
+
+### Fixed
+- Skills directory flattened for Claude Code skill discovery (commit 7a50ac2).
+- `validate-evidence.sh` now correctly looks in `.evidence/verification/` instead of feature dir.
+
+### Documentation
+- README updated with working plugin install instructions.
+
 ## [2.0.0] — 2026-03-28
 
 ### Added — Discipline Layer
