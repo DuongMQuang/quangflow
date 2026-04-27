@@ -98,7 +98,7 @@ Issues that do NOT block advancement:
 
 ## GOTCHAs Logging
 For each **Spec Gap** written, also log a gotcha entry to `plans/{feature-slug}/GOTCHAS.md`.
-See `_shared.md → GOTCHAs System → Logging Protocol` (in commands/qf/_shared.md).
+See `_shared.md → GOTCHAs System → Logging Protocol` (in `skills/_protocols/_shared.md`).
 
 ## Documentation Research
 See `_shared.md → Documentation Research`. Use when looking up framework-specific contract or schema documentation.

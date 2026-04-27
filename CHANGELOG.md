@@ -42,10 +42,8 @@ README updated: removed One-liner / Manual install / What-Gets-Installed / Globa
 - `adopt-scaffolder.md` template: `quangflow_version: "2.0.0"` → `"2.3.1"`.
 - `close/SKILL.md` MILESTONE.yml schema: hardcoded ISO timestamp + version replaced with `<ISO-8601-UTC>` + `<plugin-version>` placeholders.
 
-### Stock-Dashboard Sync (`fix(quangflow-sync)` 88b3c7a)
-- Project-scope `tech-lead.md`, `spec-reviewer.md` dead path mirror.
-- Project-scope `pm.md` close awareness mirror.
-- Project-scope `adopt-scaffolder.md` version bump.
+### Note for Consumer Projects
+Project-scope `.claude/agents/{tech-lead,spec-reviewer,pm,adopt-scaffolder}.md` files in consumer projects (those installed via `/plugin install quangflow`) inherit the same fixes from this release. If a project locally forked agent files, re-sync from `~/.claude/plugins/cache/quangflow/quangflow/2.3.1/agents/` after upgrade.
 
 ## [2.3.0] — 2026-04-27
 
