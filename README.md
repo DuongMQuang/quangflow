@@ -31,8 +31,6 @@ Adds 12 slash commands to Claude Code:
 
 ## Install
 
-### As a Plugin (recommended)
-
 ```bash
 # Step 1: Add QuangFlow marketplace (one-time)
 claude plugin marketplace add https://github.com/DuongMQuang/quangflow
@@ -46,104 +44,24 @@ claude plugin update quangflow
 
 Plugin benefits: one-command install, auto-updates, no file conflicts.
 
-### One-liner (remote)
+### Migration from Legacy Bash Install
+
+Previous releases installed via `bash install.sh`. Starting v2.3.1, only the plugin install is supported:
 
 ```bash
-# Interactive — asks global or project
-curl -fsSL https://raw.githubusercontent.com/DuongMQuang/quangflow/main/remote-install.sh | bash
-
-# Global install (available in all projects)
-curl -fsSL https://raw.githubusercontent.com/DuongMQuang/quangflow/main/remote-install.sh | bash -s -- --global
-
-# Project install (specific project only)
-curl -fsSL https://raw.githubusercontent.com/DuongMQuang/quangflow/main/remote-install.sh | bash -s -- --project /path/to/project
+claude plugin marketplace add https://github.com/DuongMQuang/quangflow
+claude plugin install quangflow
 ```
 
-### Manual
-
-```bash
-git clone https://github.com/DuongMQuang/quangflow.git
-cd quangflow
-bash install.sh              # interactive
-bash install.sh --global     # install to ~/.claude/
-bash install.sh --project    # install to current project
-bash install.sh --update     # update commands+agents only (keeps CLAUDE.md)
-```
-
-### Global vs Project Install
-
-| | Global (`~/.claude/`) | Project (`.claude/`) |
-|---|---|---|
-| **Scope** | All projects | This project only |
-| **Best for** | Personal workflow across all repos | Team repos (commit `.claude/` to git) |
-| **CLAUDE.md** | `~/.claude/CLAUDE.md` | `./CLAUDE.md` (project root) |
-| **Plans dir** | Each project manages own `./plans/` | `./plans/` created automatically |
-
-### What Gets Installed
-
-```
-{target}/.claude/
-├── commands/
-│   └── qf/
-│       ├── _protocols/          # Internal protocols (not user-facing commands)
-│       │   ├── _shared.md              #   State check, gates, output rules
-│       │   ├── _autopilot.md           #   Autopilot mode protocol
-│       │   ├── _tdd-enforcement.md     #   RED-GREEN-REFACTOR cycle
-│       │   ├── _systematic-debugging.md #  4-phase root cause process
-│       │   ├── _verification-gates.md  #   Evidence-before-assertions
-│       │   ├─��� _hard-gates.md          #   Red flag table, phase gate checklists
-│       │   ├── _structured-logging.md  #   Log format standard, FE→BE bridge
-│       │   ├── _context-memory.md      #   Feature Memory Units (@mention)
-│       │   └── ...                     #   Context scoping, model routing, etc.
-│       ├── 0-init.md            # Phase 0: Project init
-│       ├── 1-brainstorm.md      # Phase 1: Requirements
-│       ├── 2-design.md          # Phase 2: Design
-│       ├── 3-handoff.md         # Phase 3: Handoff
-│       ├── 4-verify.md          # Phase 4: Verify
-│       ├── 5-maintain.md        # Phase 5: Maintain
-│       ├── guide.md             # Interactive guided tour
-│       ├── quick.md             # Quick mode
-│       ├── cook.md              # Team orchestrator
-│       ├── status.md            # Status reporter
-│       ├── test.md              # Smoke test
-│       └── update.md            # Self-update
-├── agents/
-│   ├── _shared.md            # Shared agent protocols
-│   ├── domain-engineer.md    # Design docs producer
-│   ├── dev-teammate.md       # Implementation agent
-│   ├── tech-lead.md          # Code reviewer
-│   ├── tester.md             # Test generator
-│   ├── pm.md                 # Status tracker
-│   ├── critic.md             # Design debate critic (feasibility/simplicity)
-│   ├── adopt-scanner.md      # /qf:adopt — adaptive codebase scanner
-│   ├── adopt-scaffolder.md   # /qf:adopt — directory scaffolder + .memory/ populator
-│   ├── adopt-feature-extractor.md  # /qf:adopt — feature detection + memory units
-│   └── adopt-doc-generator.md     # /qf:adopt — Mermaid diagrams + module map
-└── scripts/
-    ├── validate/
-    │   ├── validate-install.sh        # Verify QuangFlow installation integrity
-    │   ├── validate-artifacts.sh      # Verify plan artifacts structure
-    │   ├── validate-tdd-coverage.sh   # Verify red+green TDD logs per REQ-ID
-    │   ├── validate-evidence.sh       # Verify .evidence/ per phase transition
-    │   ├── validate-memory.sh         # Verify FMU structure, bidirectional links
-    │   └── validate-stage-completion.sh # Pipeline stage advancement checks
-    └── hooks/
-        ├── enforce-ownership.sh       # PreToolUse: file ownership boundaries
-        ├── detect-gotcha-trigger.sh   # Lesson detection
-        ├── auto-checkpoint.sh         # PostToolUse: auto-save agent progress
-        ├── evidence-tracker.sh        # PostToolUse: track evidence in PIPELINE-STATE
-        └── save-feature-memory.sh     # Phase transition: auto-update FMU
-```
+Old install artifacts at `~/.claude/commands/qf/` and `~/.claude/agents/*` (from bash installer) may be safely removed after switching to plugin install. Plugin assets live in `~/.claude/plugins/cache/quangflow/` and are managed by Claude Code automatically.
 
 ## Uninstall
 
 ```bash
-bash /path/to/quangflow/uninstall.sh              # interactive (auto-detects)
-bash /path/to/quangflow/uninstall.sh --global      # remove from ~/.claude/
-bash /path/to/quangflow/uninstall.sh --project     # remove from current project
+claude plugin remove quangflow
 ```
 
-Removes only QuangFlow files. Leaves CLAUDE.md and plans/ intact.
+Leaves CLAUDE.md and plans/ intact.
 
 ## Quick Start
 
