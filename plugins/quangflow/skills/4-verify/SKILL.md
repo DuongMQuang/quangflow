@@ -216,4 +216,5 @@ All milestones complete! Project enters maintenance mode.
   => Report bugs: `/quangflow:5-maintain` (triage, investigate, fix)
   => Smoke test: `/quangflow:test` (verify project runs end-to-end)
   => Status: `/quangflow:status` (final status), `/quangflow:status save` (archive context)
+  => Mark milestone CLOSED: `/quangflow:close M_{N}` — writes MILESTONE.yml so `/quangflow:status` hides this milestone from default view (still visible with --all). Use after final SHIP.
 ```

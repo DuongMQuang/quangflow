@@ -64,13 +64,14 @@ Generated: {timestamp}
 ## Next Steps
 - {recommended actions before /quangflow:4-verify}
 - {if more milestones: what's needed for milestone-{N+1}}
+- If ALL REQ-IDs show ✅ PASS and smoke test passed: suggest user run `/quangflow:close M_{N}` to mark milestone CLOSED. This writes MILESTONE.yml so `/quangflow:status` hides it from default view (reduces noise for active milestones). Still visible with `--all`.
 
 ## Session Resume
 - **Current phase:** {brainstorm/design/handoff/verify}
 - **Current milestone:** {N} of {total}
 - **Pipeline stage:** {domain-engineer/devs/tech-lead/tester/done}
 - **Last completed:** {what finished before session ended}
-- **Resume command:** `{exact /quangflow:* command to run next}`
+- **Resume command:** `{exact /quangflow:* command to run next}` (if milestone complete + all REQs PASS: `/quangflow:close M_{N}` to mark CLOSED, then `/quangflow:5-maintain` for maintenance)
 - **Blockers:** {anything needing user attention or "none"}
 ```
 

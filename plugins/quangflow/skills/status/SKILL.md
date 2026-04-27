@@ -166,13 +166,17 @@ Maintain: {X} active bugs, last scan {date}
 
 ### Solo Milestones in View
 
-If a milestone has SOLO-LOG.md (no STATUS.md from team pipeline), display as:
-```
-Milestone-N: SOLO COMPLETED — {commit hash short} ({REQ count} REQs, {file count} files)
-```
-(or `SOLO IN PROGRESS — last update {timestamp}` if SOLO-LOG.md `status: in_progress`).
+Detection: milestone used solo tier if SOLO-LOG.md exists (no STATUS.md from team pipeline).
 
-Apply CLOSED filter same way for solo milestones.
+Display rules:
+- SOLO-LOG.md present + `completion: done` (or commit hash present) → `SOLO COMPLETED — {commit hash short} ({REQ count} REQs, {file count} files)`
+- SOLO-LOG.md present + `status: in_progress` (no commit hash) → `SOLO IN PROGRESS — last update {timestamp from SOLO-LOG.md}`
+- SOLO-LOG.md missing but MILESTONE.yml present → treat as team milestone (normal display)
+
+**CLOSED filter applies equally to solo milestones:**
+- Default view: solo CLOSED milestones hidden same as team CLOSED.
+- `--all` view: solo CLOSED shown grayed, labeled `(closed YYYY-MM-DD)` same as team.
+- A solo milestone becomes CLOSED when `/quangflow:close M_{N}` writes MILESTONE.yml — same command, same effect regardless of solo vs team execution tier.
 
 ## Arguments
 

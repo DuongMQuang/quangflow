@@ -104,6 +104,24 @@ See `_protocols/_shared.md → Output Rule`.
 ## Execution Gate
 After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` settings.
 
+**If `team_mode: false` (solo selected in brainstorm):**
+
+Surface:
+```
+ROADMAP.md ready. Execution mode: solo.
+
+- **SHIP** — Run `/quangflow:cook --solo` (force solo, no spawn) or `/quangflow:cook` (Stage 0 auto-triage, will confirm solo).
+  Main agent (Opus) edits files directly. Critical-advocate mindset enforced — list ≥2 alternatives per decision, log to SOLO-LOG.md.
+  SOLO-LOG.md required: plans/{slug}/milestone-{N}/SOLO-LOG.md with REQ-IDs, files, TDD evidence, alternatives considered.
+  NOT for sensitive areas (auth/payment/crypto/migration) — sensitive keywords force escalation to team.
+- **REFINE** — Change execution mode: run `/quangflow:1-brainstorm` to re-scope, or type SWITCH to move to light/team mode now.
+```
+
+Agent waits for SHIP or REFINE.
+
+On SHIP: auto-invoke `/quangflow:cook` (or `/quangflow:cook --solo` if user specifies). Cook handles the rest.
+On REFINE: ask what they want to change; update `team_mode` in REQUIREMENTS.md; loop back to gate.
+
 **If `team_mode: true`:**
 
 1. Read `team_composition` from REQUIREMENTS.md
@@ -140,10 +158,13 @@ After CONFIRM, check REQUIREMENTS.md for `team_mode` and `team_composition` sett
    - Auto-invoke `/quangflow:cook` — cook.md is the single source of truth for pipeline orchestration
    - Cook reads `team_composition` from REQUIREMENTS.md and executes the full pipeline
 
-**If `team_mode: false` (or not set):**
-- Set `team_mode: true` automatically — multi-agent is the only mode
-- Auto-compose minimal team: 1 dev + tester + pm
-- Present team table and proceed to SHIP/REFINE gate
+**If `team_mode: false` (user explicitly opted out):**
+- Leave `team_mode: false` — cook Stage 0 will route this to solo tier automatically.
+- Surface: "Solo mode selected. Run `/quangflow:cook` (auto-triage) or `/quangflow:cook --solo` to execute. Main agent (Opus) edits files directly with critical-advocate mindset. SOLO-LOG.md required. NOT for sensitive areas (auth/payment/crypto/migration) — those force escalation to team."
+
+**If `team_mode` unset (not specified):**
+- Leave `team_mode` unset — cook Stage 0 auto-triages solo / light / team based on REQ count, phase count, file estimate, and sensitive keywords.
+- Surface: "Execution mode not set. Run `/quangflow:cook` — Stage 0 will auto-select the right tier. Override with `--solo`, `--light`, or `--team` flags."
 
 ## Progress Logging
 See `_protocols/_shared.md → Progress Tracking`. Append Phase 3 row to `plans/{feature-slug}/PROGRESS.md`.
@@ -156,9 +177,23 @@ Then suggest next command based on mode:
 
 **If team_mode: true:**
 ```
-**Next:** `/quangflow:cook` — Auto-triage + run pipeline (cook decides solo / light / team based on complexity)
+**Next:** `/quangflow:cook` — Auto-triage + run pipeline (cook Stage 0 decides solo / light / team based on complexity)
   => Override: `/quangflow:cook --team` to force full team, `/quangflow:cook --light` for dev+tester only
   => Also available: `/quangflow:status` (check status), `/quangflow:status save` (save context)
 ```
 
-**Solo mode is auto-selected by cook triage for trivial tasks** (1 REQ, 1 phase, 1 file, no sensitive keywords). Cook prints a solo handoff message and the main agent edits files directly. See `_protocols/_complexity-triage.md` and `_protocols/_solo-handoff.md` for details.
+**If team_mode: false (solo):**
+```
+**Next:** `/quangflow:cook --solo` — Solo execution: main agent edits directly, no spawn.
+  => Or: `/quangflow:cook` to let Stage 0 confirm solo via auto-triage.
+  => Also available: `/quangflow:status` (check status)
+```
+
+**If team_mode unset:**
+```
+**Next:** `/quangflow:cook` — Stage 0 auto-triages: solo / light / team based on REQ count, phases, file estimate, keywords.
+  => Override: `--solo` / `--light` / `--team` flags.
+  => Also available: `/quangflow:status` (check status)
+```
+
+**Note:** Solo mode is auto-selected by cook Stage 0 triage for trivial tasks (1 REQ, 1 phase, 1 file, no sensitive keywords). Cook prints a solo handoff message and the main agent edits files directly. See `_protocols/_complexity-triage.md` and `_protocols/_solo-handoff.md` for details.

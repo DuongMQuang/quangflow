@@ -369,8 +369,89 @@ Useful for iterating on a specific phase after making changes.
 
 ---
 
+## v2.3.0 Feature Fixtures
+
+### Fixture: cook smart-routing → solo decision
+```
+Input: REQUIREMENTS.md with 1 REQ, ROADMAP.md with 1 phase, 1 file estimate, no sensitive keywords
+Invocation: /quangflow:cook (no flags)
+Expected:
+  - Stage 0 reads inputs, computes tier = solo
+  - Prints solo handoff message (from _solo-handoff.md template)
+  - Writes .triage-decision.yml with tier: solo
+  - Exits cook WITHOUT spawning any agent (no TeamCreate)
+  - Main agent (Opus) receives handoff and edits directly
+```
+
+### Fixture: cook smart-routing → light decision
+```
+Input: REQUIREMENTS.md with 3 REQs, ROADMAP.md with 2 phases, 3 file estimate, no sensitive keywords
+Invocation: /quangflow:cook (no flags)
+Expected:
+  - Stage 0 computes tier = light
+  - Spawns dev + tester only (2 agents)
+  - Skips Stage 1 (domain-engineer), Stage 1.5 (debate), Stage 3 (tech-lead)
+  - .triage-decision.yml: tier: light
+```
+
+### Fixture: cook smart-routing → team decision
+```
+Input: REQUIREMENTS.md with 6 REQs, ROADMAP.md with 4 phases, 6+ file estimate
+OR: task description contains "auth"
+Invocation: /quangflow:cook (no flags)
+Expected:
+  - Stage 0 computes tier = team (either by thresholds OR keyword match)
+  - Full pipeline: domain-engineer → devs → tech-lead → tester → PM
+  - .triage-decision.yml: tier: team
+```
+
+### Fixture: --solo flag overrides triage
+```
+Input: REQUIREMENTS.md with 6 REQs (would be team by rubric)
+Invocation: /quangflow:cook --solo "trivial fix"
+Expected:
+  - Flag override fires (step 1 in triage algorithm)
+  - tier = solo regardless of REQ count
+  - No keyword match → proceeds normally
+  - .triage-decision.yml: tier: solo, reason: "flag override (--solo)"
+```
+
+### Fixture: sensitive keyword escalates solo to team
+```
+Input: 1 REQ, 1 phase, 1 file (solo thresholds met)
+Invocation: /quangflow:cook --solo "fix auth bug"
+Expected:
+  - --solo flag fires BUT keyword "auth" detected
+  - Warning printed: "User forced solo despite keyword match: auth. Proceeding." (per cook Stage 0 spec)
+  - tier = solo (flag wins, but warning shown to user)
+Negative case (no --solo flag):
+  - Invocation: /quangflow:cook (no flags)
+  - "auth" keyword → borderline_keyword = true
+  - Prompt printed with solo = NOT available, default = light
+```
+
+### Fixture: /quangflow:close validation
+```
+Positive case — prerequisites met:
+  Input: milestone-1/ has STATUS.md + QA-REPORT.md
+  Invocation: /quangflow:close M_1
+  Expected:
+    - MILESTONE.yml written to plans/{slug}/milestone-1/MILESTONE.yml
+    - Content: status: CLOSED, closed_at: <ISO-8601>, closed_by: user
+    - /quangflow:status (default) hides milestone-1
+    - /quangflow:status --all shows milestone-1 as grayed (closed YYYY-MM-DD)
+
+Negative case — missing STATUS.md:
+  Input: milestone-1/ has QA-REPORT.md but no STATUS.md
+  Expected: reject with reason "STATUS.md missing — cannot verify milestone completion"
+
+--force flag:
+  Input: /quangflow:close M_1 --force (STATUS.md missing)
+  Expected: skip pre-condition check, write MILESTONE.yml anyway, print warning
+```
+
 ## Important Notes
-- All artifacts are **written directly** (synthetic data), NOT by running actual qf:1→4 interactively
+- All artifacts are **written directly** (synthetic data), NOT by running actual quangflow:1→4 interactively
 - The test validates the **expected contract** of each phase: what files it should create, what sections they contain, what cross-references exist
 - Test does NOT validate prompt quality or agent behavior — only structural contracts
 - Sandbox is preserved after test for manual inspection

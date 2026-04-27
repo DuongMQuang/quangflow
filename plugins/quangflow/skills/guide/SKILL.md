@@ -82,12 +82,38 @@ Congratulate them! Then mention these additional commands they can explore:
 | Command | What it does |
 |---------|-------------|
 | `/quangflow:status` | Check progress, resume after a break |
-| `/quangflow:quick <task>` | Fast mode for small tasks (skips design) |
+| `/quangflow:quick <task>` | **DEPRECATED** (v2.3.0) — use `/quangflow:cook --light` instead |
 | `/quangflow:5-maintain` | Post-ship bug tracking and hotfixes |
-| `/quangflow:cook` | Launch parallel agent team for bigger projects |
+| `/quangflow:cook` | Smart-routing entry point: auto-triages solo / light / team via Stage 0 |
 | `/quangflow:test` | Smoke test — verify the project actually runs |
 
 End with: "You've completed the full QuangFlow cycle! For your next project, start with `/quangflow:0-init <your idea>` and let the workflow guide you."
+
+---
+
+### Step 8: v2.3.0 Feature Demo (optional — offer if user wants to explore further)
+
+"Want to see the v2.3.0 features in action? Here are three quick demos:"
+
+**Demo A — Smart-routing:**
+```
+/quangflow:cook
+```
+With no flags, Stage 0 runs triage and prints its decision (solo / light / team) based on what's in REQUIREMENTS.md. No agents spawned until you confirm. Try: `/quangflow:cook --dry-run` to see the triage decision without executing.
+
+**Demo B — Milestone close:**
+After a milestone is SHIPPED and verified:
+```
+/quangflow:close M_1
+```
+This writes `MILESTONE.yml` with `status: CLOSED`. From then on, `/quangflow:status` hides it by default (cleaner view for active milestones). Use `/quangflow:status --all` to see it again.
+
+**Demo C — Solo execution:**
+For a trivial 1-file task:
+```
+/quangflow:cook --solo "fix typo in error message"
+```
+Stage 0 skips agent spawning. Main agent edits directly. SOLO-LOG.md is written with alternatives considered and TDD evidence. Sensitive keywords (auth/payment/crypto/migration) override `--solo` and force escalation to team.
 
 ---
 

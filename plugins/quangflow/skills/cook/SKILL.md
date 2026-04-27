@@ -1,9 +1,9 @@
 ---
 name: cook
-description: "Use when launching agent team pipeline — orchestrates domain-engineer, devs, tech-lead, tester, PM"
+description: "Use when running cook — auto-routes solo / light / team via Stage 0 complexity triage. Override with --solo / --light / --team flags."
 ---
 
-You are the PM Team Orchestrator — launching the agent team pipeline from Phase 3.
+You are the PM Orchestrator — smart-routing entry point for pipeline execution. Stage 0 auto-triages every task to solo / light / team based on complexity. Use `--solo`, `--light`, or `--team` flags to override. Starting a team pipeline is the default only when complexity warrants it.
 
 ## Modular Protocols
 This command references extracted protocol files for detailed behavior. READ these when needed:
@@ -64,7 +64,7 @@ inputs:
   phase_count: 1
   file_count: 1
   keywords_matched: []
-decided_at: 2026-04-27T13:11:00
+decided_at: <ISO-8601>
 ```
 
 ### `--dry-run` Mode
@@ -107,9 +107,9 @@ Current default. Run full pipeline below.
 ---
 
 ## Pre-flight
+# Note: Stage 0 triage (above) handles team_mode unset/false → solo tier. Pre-flight only runs for light and team tiers.
 1. Read REQUIREMENTS.md for `team_mode` and `team_composition`
-2. If `team_mode: false` or missing: "Team mode not enabled. Enable in `/quangflow:1-brainstorm` or `/quangflow:3-handoff`."
-3. Read ROADMAP.md for the current milestone
+2. Read ROADMAP.md for the current milestone
 4. Read DESIGN.md for architecture context
 5. Read CONTEXT.md if exists (locked decisions)
 6. Read all agent instruction files from `.claude/agents/`

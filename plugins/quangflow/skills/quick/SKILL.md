@@ -91,7 +91,7 @@ Mode: quick
 
 ## Step 4: Implement (minimal team dispatch)
 - Auto-compose minimal team: 1 dev agent + 1 tester agent
-- Dispatch via `/quangflow:cook` with quick-mode flag (no domain-engineer, no tech-lead)
+- Dispatch via `/quangflow:cook --light` (no domain-engineer, no tech-lead, no PM — just dev + tester)
 - Dev agent implements tasks from ROADMAP.md using TDD (RED-GREEN-REFACTOR)
 - Tester agent validates after dev completes
 - Evidence saved to `.evidence/tdd/` automatically

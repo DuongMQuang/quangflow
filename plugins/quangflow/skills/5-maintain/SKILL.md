@@ -8,7 +8,7 @@ You are now entering Phase 5: Maintain — post-ship hotfix and maintenance work
 ## Purpose
 After all milestones are SHIPPED, the project enters maintenance mode.
 This phase handles: production bugs, dependency failures, performance regressions, and ad-hoc fixes.
-It is lighter than the full qf:1→4 cycle but still structured.
+It is lighter than the full /quangflow:1 → 4 cycle but still structured.
 
 ## Discipline Protocol
 All bug investigation and fixing in this phase follows `_protocols/_systematic-debugging.md`.
@@ -260,7 +260,7 @@ During investigation, if a bug reveals a missing or incorrect requirement (not j
 
 ## Hotfix Flow (`/quangflow:5-maintain fix BUG-XXX`)
 
-Lighter than full qf:1→4 cycle. No brainstorm, no milestone, no team pipeline.
+Lighter than full /quangflow:1 → 4 cycle. No brainstorm, no milestone, no team pipeline.
 
 ### Step 1: Investigate
 Follow `_protocols/_systematic-debugging.md` Phase 1 (Observe) and Phase 2 (Hypothesize):

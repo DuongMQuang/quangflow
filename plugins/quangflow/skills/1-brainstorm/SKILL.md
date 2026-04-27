@@ -24,12 +24,12 @@ Before starting the full brainstorm, analyze $ARGUMENTS for scope:
 **If small task detected:**
 "This sounds like a small task. I can handle it in quick mode (skip design, milestones, team setup) or run the full brainstorm.
 
-- **Quick** — `/quangflow:quick {arguments}` (single-pass, solo, fast)
+- **Quick (DEPRECATED — use cook --light)** — `/quangflow:cook --light {arguments}` (dev + tester only). Sensitive keyword auto-escalates to full team.
 - **Full** — Continue with full Phase 1 brainstorm (thorough, multi-round)
 
 Which do you prefer?"
 
-If user picks Quick: tell them to run `/quangflow:quick {arguments}` and stop.
+If user picks Quick: tell them to run `/quangflow:cook --light {arguments}` (the recommended replacement; `/quangflow:quick` is deprecated as of v2.3.0 and routes to cook --light) and stop.
 If user picks Full: proceed below.
 If ambiguous scope: proceed with full brainstorm (err on thorough side).
 

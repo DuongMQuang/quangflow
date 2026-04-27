@@ -140,3 +140,10 @@ Then suggest next command:
   ↳ Skip? Jump to `/quangflow:2-design` only if you already have REQUIREMENTS.md written manually
   ↳ Also available: `/quangflow:status` (check status)
 ```
+
+**Trivial feature shortcut:** For 1-file tasks with no design needed, skip brainstorm entirely:
+```
+/quangflow:cook --solo "<task description>"
+```
+Cook Stage 0 routes through solo handoff — main agent edits directly, SOLO-LOG.md required.
+NOT for sensitive areas (auth/payment/crypto/migration) — those force escalation to team regardless of flag.

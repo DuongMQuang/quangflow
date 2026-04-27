@@ -11,8 +11,8 @@ Avoid agent overkill on small tasks (1 LOC fix → 3 agents wastes tokens). Avoi
 | Tier | Spawn | Behavior |
 |------|-------|----------|
 | **solo** | 0 agents | Main agent (Opus) edits files directly. SOLO-LOG.md written by main. |
-| **light** | 2 agents | dev + tester (current `/quangflow:quick` behavior). |
-| **team** | 4-6 agents | Full pipeline: domain-engineer → devs → tech-lead → tester → PM (current `/quangflow:cook` behavior). |
+| **light** | 2 agents | dev + tester. Replaces deprecated `/quangflow:quick` (which now shims to cook --light). |
+| **team** | 4-6 agents | Full pipeline: domain-engineer → devs → tech-lead → tester → PM. Triggered explicitly via --team or by sensitive keyword escalation. |
 
 ## Heuristics
 
@@ -225,7 +225,7 @@ Reason: per-invocation flag > config field
 - `--from <stage>` (existing): bypass triage, resume team pipeline.
 - `--only <stage>` (existing): bypass triage, run specific stage in team mode.
 - `QUANGFLOW_FORCE_TEAM=1`: env override, always team.
-- Existing `/quangflow:quick` invocations route through triage with implicit `--light`.
+- `/quangflow:quick` (deprecated v2.3.0) shims to cook --light, bypassing Stage 0 triage.
 
 ## Cook Integration
 
@@ -253,7 +253,7 @@ Format in STATUS.md:
 ## Triage
 - Tier: light
 - Reason: 3 REQs, 2 phases, no sensitive keywords
-- Decided: 2026-04-27T13:11:00 (auto)
+- Decided: <ISO-8601> (auto)
 ```
 
 For solo, this is appended by SOLO-LOG.md instead.
