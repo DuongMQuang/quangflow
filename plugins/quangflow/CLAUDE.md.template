@@ -151,7 +151,26 @@ All implementation follows these mandatory protocols:
 - **Verification gates**: Every phase transition needs saved proof in `.evidence/verification/`.
 - **Structured logging**: All app code uses JSON log format. No raw console.log/print.
 - **Feature Memory**: Load context via `@feature-name` mention before working. Save on phase transitions.
-- **Multi-agent only**: Solo mode removed. All tasks run through agent team pipeline.
+- **Smart routing**: Cook triages each task as solo / light / team based on complexity. Solo = main agent edits directly (no spawn). Light = dev + tester. Team = full pipeline.
+
+### Solo Critical-Advocate Mindset
+When cook triage selects `solo` (trivial tasks: 1 REQ, 1 phase, 1 file, no sensitive keywords), the main agent (Opus) takes over directly — no critic spawned. The critical-advocate role becomes a MINDSET enforced by these checkpoints:
+
+1. **Before writing code**:
+   - List ≥2 alternative approaches.
+   - Pick one. Explain (in SOLO-LOG.md) why others rejected.
+2. **During implementation**:
+   - Ask "what if this assumption is wrong?" for each non-trivial decision.
+   - If a hidden coupling surfaces or a sensitive keyword (auth/payment/migration) appears: STOP, escalate to `/qf:cook --team`.
+3. **After implementation**:
+   - Self-review the diff for KISS / YAGNI / DRY violations.
+   - Record findings in SOLO-LOG.md `## Critical Thinking Notes`.
+4. **Solo Log mandatory**:
+   - Every solo task writes `plans/{slug}/milestone-{N}/SOLO-LOG.md`. Schema: `_protocols/_solo-handoff.md`.
+   - Required fields: REQ-IDs done, files changed, TDD evidence paths, alternatives considered (≥2, ≥1 rejected), commit hash.
+   - `/qf:status` reads SOLO-LOG.md to display solo work.
+
+Sensitive keywords (auth, oauth, payment, crypto, migration, etc.) FORCE escalation to team tier — solo is unavailable. See `_protocols/_complexity-triage.md → Sensitive Keywords` for the full list.
 
 ### Review Gates
 - Agent NEVER self-advances between phases

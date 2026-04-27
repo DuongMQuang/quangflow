@@ -7,6 +7,8 @@ You are the PM Team Orchestrator — launching the agent team pipeline from Phas
 
 ## Modular Protocols
 This command references extracted protocol files for detailed behavior. READ these when needed:
+- `_protocols/_complexity-triage.md` — Stage 0 triage: solo / light / team decision
+- `_protocols/_solo-handoff.md` — handoff template + SOLO-LOG.md schema (when tier=solo)
 - `_protocols/_context-scoping.md` — what context each agent receives (scoping matrix)
 - `_protocols/_model-routing.md` — complexity-based model assignment per dev task
 - `_protocols/_worktree-isolation.md` — git worktree setup for parallel devs
@@ -25,6 +27,84 @@ Each teammate receives role-specific instructions from `.claude/agents/`:
 - `pm.md` — progress tracking, session resume
 
 When spawning a teammate, READ their instruction file and include it in the prompt.
+
+## Stage 0: Complexity Triage (FIRST step)
+
+Before pre-flight, run the triage protocol. See `_protocols/_complexity-triage.md` for full algorithm + heuristics + fixtures.
+
+### Triage Decision Order (Precedence: highest → lowest)
+
+1. **Flag override** (per-invocation, strongest):
+   - `--team` → tier = team, skip prompt. Overrides team_mode field.
+   - `--light` → tier = light, skip prompt. Overrides team_mode field.
+   - `--solo` → tier = solo, skip prompt. Overrides team_mode field. WARN if sensitive keywords present: "User forced solo despite keyword match: {kw}. Proceeding."
+   - `--skip` / `--only` / `--from` → bypass triage, treat as team.
+2. **Env override** — If no per-invocation flags, but `QUANGFLOW_FORCE_TEAM=1`: tier = team, skip prompt, log reason "env override". (Env is config-level, weaker than explicit flags.)
+3. **team_mode field** (config from REQUIREMENTS.md, weaker than flag/env):
+   - `team_mode: false` → tier = solo. User opted out of team explicitly. Skip rubric, emit solo handoff. Reasoning: smart routing must respect explicit user opt-out, not contradict.
+   - `team_mode: true` (or unset/missing) → continue to auto-triage rubric (step 4).
+4. **Auto-triage** (no flags, no env, team_mode true/unset) — apply heuristics from `_complexity-triage.md`:
+   - Read REQUIREMENTS.md (or task description if no plans dir yet).
+   - Read ROADMAP.md if exists.
+   - Compute (req_count, phase_count, file_count, keywords_matched).
+   - Apply tier thresholds.
+   - If borderline: print decision matrix prompt, wait for user choice.
+
+**Precedence summary**: `--team`/`--light`/`--solo` flag > `QUANGFLOW_FORCE_TEAM=1` env > `team_mode` field > triage rubric > default (light).
+
+### Triage Output
+
+After tier decided, write `plans/{slug}/milestone-{N}/.triage-decision.yml`:
+
+```yaml
+tier: solo | light | team
+reason: "1 REQ, 1 phase, 1 file, no keywords (auto)"
+inputs:
+  req_count: 1
+  phase_count: 1
+  file_count: 1
+  keywords_matched: []
+decided_at: 2026-04-27T13:11:00
+```
+
+### `--dry-run` Mode
+
+If `--dry-run` flag passed: print triage decision + `.triage-decision.yml` content, then EXIT without executing pipeline. User reviews and re-runs without `--dry-run` to proceed.
+
+### Branch on Tier
+
+| Tier | Action |
+|------|--------|
+| solo | Print solo handoff message (template from `_solo-handoff.md`), EXIT cook. Main agent (Opus) takes over directly. |
+| light | Skip Stage 1 (domain-engineer), Stage 1.5 (debate), Stage 3 (tech-lead). Run Stage 2 (devs, 1 dev only) + Stage 4 (tester) + Stage 5 (PM). |
+| team | Run full pipeline (Stages 1 → 5). Current default behavior. |
+
+### Solo Tier Behavior
+
+If tier=solo:
+1. Read `_protocols/_solo-handoff.md` for the handoff message template.
+2. Substitute `{slug}`, `{N}`, `{file 1..n}`, `{REQ-id}`, `{description}`, `{criterion}` from REQUIREMENTS.md / ROADMAP.md.
+3. Print the rendered handoff message.
+4. EXIT cook with status 0. Do NOT spawn any agent. Do NOT create TeamCreate.
+5. Append to STATUS.md (or create if missing) with `## Triage` section.
+
+Main agent (Opus) reads handoff, edits files, writes SOLO-LOG.md per schema in `_solo-handoff.md`.
+
+### Light Tier Behavior
+
+If tier=light:
+1. Continue to pre-flight (next section).
+2. Skip Stage 1 (domain-engineer) — no design docs needed for small tasks.
+3. Skip Stage 1.5 (debate).
+4. Skip Stage 3 (tech-lead) by default. User can opt-in with explicit prompt.
+5. Run Stage 2 with single dev agent (no worktree, no parallel).
+6. Run Stage 4 (tester) and Stage 5 (PM).
+
+### Team Tier Behavior
+
+Current default. Run full pipeline below.
+
+---
 
 ## Pre-flight
 1. Read REQUIREMENTS.md for `team_mode` and `team_composition`
@@ -51,13 +131,19 @@ When spawning a teammate, READ their instruction file and include it in the prom
 
 ## Arguments
 ```
-/qf:cook                                          — Full pipeline (auto-detect milestone)
-/qf:cook ./plans/{slug}/milestone-{N}/ROADMAP.md  — Full pipeline for specific milestone
-/qf:cook --skip domain-engineer                   — Skip specific stage(s)
-/qf:cook --only tester                            — Run only specific stage(s)
-/qf:cook --from tech-lead                         — Resume from a specific stage
+/qf:cook                                          — Auto-triage tier, run pipeline (auto-detect milestone)
+/qf:cook ./plans/{slug}/milestone-{N}/ROADMAP.md  — Triage + run for specific milestone
+/qf:cook --team                                   — Force team tier (bypass triage)
+/qf:cook --light                                  — Force light tier (dev + tester only)
+/qf:cook --solo                                   — Force solo tier (no spawn, main agent edits) [WARN: bypass keyword guard]
+/qf:cook --dry-run                                — Run triage, print decision, do NOT execute
+/qf:cook --skip domain-engineer                   — Skip specific stage(s) — bypass triage, run team
+/qf:cook --only tester                            — Run only specific stage(s) — bypass triage
+/qf:cook --from tech-lead                         — Resume from a specific stage — bypass triage
 ```
-If no argument provided, auto-detect from `./plans/` (latest milestone without QA-REPORT.md).
+If no argument provided, auto-detect from `./plans/` (latest milestone without QA-REPORT.md / CERTIFICATION.md).
+
+Env: `QUANGFLOW_FORCE_TEAM=1` forces team tier regardless of flags (escape hatch).
 
 ## Partial Pipeline
 Supports `--skip`, `--only`, and `--from` flags for partial execution.

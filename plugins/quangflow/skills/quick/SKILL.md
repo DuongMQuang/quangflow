@@ -1,6 +1,25 @@
 ---
 name: quick
-description: "Use for small tasks — streamlined flow with minimal team (dev + tester), TDD enforced"
+description: "[DEPRECATED v2.3.0 — use /qf:cook --light] Streamlined flow for small tasks with minimal team (dev + tester), TDD enforced"
+---
+
+> **DEPRECATION NOTICE (v2.3.0)** — `/qf:quick` is deprecated and will be removed in v2.4.0.
+> Use `/qf:cook --light` instead. Cook now auto-triages every task and supports `--solo`, `--light`, `--team` tiers.
+> See `_protocols/_complexity-triage.md` for the new smart-routing flow.
+>
+> **Shim behavior**: This skill emits the deprecation notice and routes to `/qf:cook --light`.
+> Existing invocations continue to work for backward compatibility.
+
+## Shim Routing
+
+When `/qf:quick "<task>"` is invoked:
+1. Print the deprecation notice above (once per session).
+2. Internally invoke `/qf:cook --light` with the same task description.
+3. Cook's Stage 0 triage will skip auto-detection (since `--light` is forced) and run the dev + tester pipeline.
+4. All quick-mode behavior (single-pass requirements, minimal artifacts, TDD enforcement) is preserved by the light tier in cook.
+
+If user wants the historical quick-mode behavior verbatim, they can still read the rest of this file — it remains in place for v2.3.0 release. It will be removed in v2.4.0 entirely.
+
 ---
 
 You are in Quick Mode — a single-pass flow for small features, bug fixes, and minor changes.

@@ -156,9 +156,9 @@ Then suggest next command based on mode:
 
 **If team_mode: true:**
 ```
-**Next:** `/qf:cook` — Launch team pipeline (domain-engineer -> devs -> tech-lead -> tester -> PM)
-  => Skip? You can implement manually (Solo mode) — run `/qf:4-verify` after implementing
+**Next:** `/qf:cook` — Auto-triage + run pipeline (cook decides solo / light / team based on complexity)
+  => Override: `/qf:cook --team` to force full team, `/qf:cook --light` for dev+tester only
   => Also available: `/qf:status` (check status), `/qf:status save` (save context)
 ```
 
-**Solo mode has been removed.** All execution runs through `/qf:cook`.
+**Solo mode is auto-selected by cook triage for trivial tasks** (1 REQ, 1 phase, 1 file, no sensitive keywords). Cook prints a solo handoff message and the main agent edits files directly. See `_protocols/_complexity-triage.md` and `_protocols/_solo-handoff.md` for details.

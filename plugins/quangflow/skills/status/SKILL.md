@@ -126,14 +126,60 @@ If REQUIREMENTS.md has `team_mode: true`:
 - If pipeline was interrupted: show resume command from PIPELINE-STATE.md
 
 ## Multi-Milestone View
-If project has multiple milestones, show overview:
+If project has multiple milestones, show overview.
+
+### Closed Milestone Filter (v2.3.0+)
+
+For each milestone, check `MILESTONE.yml`:
+- If file exists AND contains `status: CLOSED` → milestone is CLOSED.
+- Otherwise → milestone is OPEN.
+
+**Default view** (no flag): show OPEN milestones only. Skip CLOSED.
+
+**With `--all` flag**: show CLOSED milestones too, grayed-out (e.g. `(closed YYYY-MM-DD)` suffix).
+
+Header line shows count when CLOSED milestones are hidden:
+```
+3 active milestones (2 closed — use `--all` to show)
+```
+
+### Default View (CLOSED hidden)
 
 ```
-Milestone-1: SHIPPED
 Milestone-2: IN PROGRESS — Phase 3 (devs implementing)
 Milestone-3: NOT STARTED
 ---
+2 active milestones (1 closed — use `--all` to show)
 Maintain: {X} active bugs, last scan {date}
+```
+
+### `--all` View
+
+```
+Milestone-1: CLOSED 2026-04-25 (completed)
+Milestone-2: IN PROGRESS — Phase 3 (devs implementing)
+Milestone-3: NOT STARTED
+---
+3 milestones total (1 closed)
+Maintain: {X} active bugs, last scan {date}
+```
+
+### Solo Milestones in View
+
+If a milestone has SOLO-LOG.md (no STATUS.md from team pipeline), display as:
+```
+Milestone-N: SOLO COMPLETED — {commit hash short} ({REQ count} REQs, {file count} files)
+```
+(or `SOLO IN PROGRESS — last update {timestamp}` if SOLO-LOG.md `status: in_progress`).
+
+Apply CLOSED filter same way for solo milestones.
+
+## Arguments
+
+```
+/qf:status                 — Default view (CLOSED milestones hidden)
+/qf:status --all           — Show CLOSED milestones too
+/qf:status save            — Save context snapshot before /clear or /exit
 ```
 
 ## Context Save Mode
